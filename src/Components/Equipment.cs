@@ -21,6 +21,7 @@ namespace temp1.Components
     {
         public Slot[] Slots = new[] { Slot.Head, Slot.Chest, Slot.Hands, Slot.Legs, Slot.Spine };
         public Item[] List = new Item[5];
+        
         public Stats Apply(Stats stats)
         {
 

@@ -13,8 +13,7 @@ namespace temp1.Systems
         ComponentMapper<Stats> _statsMapper;
 
         public ProtectionSystem() : base(Aspect.All(typeof(Attack)))
-        {
-        }
+        {}
 
         public override void Initialize(IComponentMapperService mapperService)
         {

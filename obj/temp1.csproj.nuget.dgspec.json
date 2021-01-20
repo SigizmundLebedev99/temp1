@@ -38,6 +38,10 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "BrainAI": {
+              "target": "Package",
+              "version": "[*, )"
+            },
             "MonoGame.Content.Builder.Task": {
               "target": "Package",
               "version": "[3.8.0.1641, )"
@@ -49,6 +53,10 @@
             "MonoGame.Framework.DesktopGL": {
               "target": "Package",
               "version": "[3.8.0.1641, )"
+            },
+            "RoyT.AStar": {
+              "target": "Package",
+              "version": "[3.0.2, )"
             }
           },
           "imports": [
