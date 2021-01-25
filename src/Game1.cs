@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Screens;
+using MonoGame.Extended.Screens.Transitions;
+using temp1.Screens;
 
 namespace temp1
 {
@@ -8,18 +11,20 @@ namespace temp1
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-
+        private ScreenManager _screenManager;
+        
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            _screenManager = new ScreenManager();
+            Components.Add(_screenManager);
         }
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            _screenManager.LoadScreen(new MenuScreen(this), new FadeTransition(this.GraphicsDevice, Color.White, 0.5f));
             base.Initialize();
         }
 

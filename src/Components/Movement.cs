@@ -34,9 +34,9 @@ namespace temp1.Components
 
         public Vector2 Move()
         {
-            k += _speed;
+            k += _change;
             var result = this.Target * k + this.From * (1 - k);
-            if(k >= 1){
+            if(k >= 1 && !IsCompleted){
                 MoveTo(_path[currentSegment], _path[currentSegment + 1], _speed);
             }
             return result;

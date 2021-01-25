@@ -4,11 +4,11 @@ using MonoGame.Extended.Entities.Systems;
 
 namespace temp1.Systems
 {
-    class PlayerSystem : EntityProcessingSystem
+    class SelectionSystem : EntityUpdateSystem
     {
-        public PlayerSystem() : base(Aspect.All())
+        public SelectionSystem() : base(Aspect.All())
         {
-
+            
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -16,9 +16,9 @@ namespace temp1.Systems
 
         }
 
-        public override void Process(GameTime gameTime, int entityId)
+        public override void Update(GameTime gameTime)
         {
-
+            throw new System.NotImplementedException();
         }
     }
 }
