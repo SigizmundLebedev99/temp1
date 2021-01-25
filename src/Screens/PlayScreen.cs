@@ -61,6 +61,8 @@ namespace temp1.Screens
         {
             world.Update(gameTime);
             state = Mouse.GetState();
+            if(!this.Game.IsActive)
+                return;
             if (state.X <= 0 && camera.Position.X >= -(_map.WidthInPixels / 2))
                 camera.Move(new Vector2(-5, 0));
             if (state.Y <= 0 && camera.Position.Y >= 0)

@@ -1,4 +1,1 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"c:/Users/dmlebedev/Desktop/Новая папка/temp1/Content/map.tmx","c:/Users/dmlebedev/Desktop/Новая папка/temp1/Content/bin/DesktopGL/Content/map.xnb","TiledMapProcessor","TiledMapContentItem",8855,32986,0,1697776
-"c:/Users/dmlebedev/Desktop/Новая папка/temp1/Content/motw.png","c:/Users/dmlebedev/Desktop/Новая папка/temp1/Content/bin/DesktopGL/Content/motw.xnb","TextureProcessor","Texture2DContent",24060,1437781,0,0261727
-"c:/Users/dmlebedev/Desktop/Новая папка/temp1/Content/tiled/Безымянный.png","c:/Users/dmlebedev/Desktop/Новая папка/temp1/Content/bin/DesktopGL/Content/tiled/Безымянный_0.xnb","TextureProcessor","Texture2DContent",873,16469,0,1053634

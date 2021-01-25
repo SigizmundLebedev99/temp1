@@ -2,7 +2,7 @@
   "textureAtlas": {
     "texture": "motw.png",
     "regionWidth": 52,
-    "regionHeight": 72
+    "regionHeight": 73
   },
   "cycles": {
     "idle": {
