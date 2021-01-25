@@ -29,9 +29,10 @@ namespace temp1.Systems
             var state = Mouse.GetState();
             if(state.LeftButton == ButtonState.Pressed){
                 var to = _camera.ScreenToWorld(state.X, state.Y);
+                var from = _boxMapper.Get(entityId).Position;
                 _movementMapper.Put(entityId,
                     new PolylineMovement(
-                        new []{_boxMapper.Get(entityId).Position, to}, 
+                        new []{from, to}, 
                     4f));
             }
         }

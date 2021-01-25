@@ -41,12 +41,15 @@ namespace temp1.Screens
             world = new WorldBuilder()
                 .AddSystem(new PlayerControlSystem(camera))
                 .AddSystem(new MoveSystem())
+                .AddSystem(new DirectionSystem())
+                .AddSystem(new DirectionToAnimationSystem())
                 .AddSystem(new AnimationRenderSystem(_sb))
                 .Build();
             player = world.CreateEntity();
             player.Attach(sprite);
             player.Attach(new Player());
             player.Attach(new AllowedToAct());
+            player.Attach(new Direction());
             player.Attach<Box>(new Box
             {
                 SelectionBounds = new Point(sprite.TextureRegion.Width, sprite.TextureRegion.Height),

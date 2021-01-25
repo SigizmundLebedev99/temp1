@@ -1,28 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\Desktop\\Новая папка\\temp1\\temp1.csproj": {}
+    "C:\\Users\\dmlebedev\\Desktop\\Новая папка\\temp1\\temp1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\Desktop\\Новая папка\\temp1\\temp1.csproj": {
+    "C:\\Users\\dmlebedev\\Desktop\\Новая папка\\temp1\\temp1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\Desktop\\Новая папка\\temp1\\temp1.csproj",
+        "projectUniqueName": "C:\\Users\\dmlebedev\\Desktop\\Новая папка\\temp1\\temp1.csproj",
         "projectName": "temp1",
-        "projectPath": "C:\\Users\\User\\Desktop\\Новая папка\\temp1\\temp1.csproj",
-        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\Desktop\\Новая папка\\temp1\\obj\\",
+        "projectPath": "C:\\Users\\dmlebedev\\Desktop\\Новая папка\\temp1\\temp1.csproj",
+        "packagesPath": "C:\\Users\\dmlebedev\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\dmlebedev\\Desktop\\Новая папка\\temp1\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\dmlebedev\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -59,6 +58,10 @@
               "target": "Package",
               "version": "[3.8.0.1641, )"
             },
+            "Monogame.Extended.Content.Pipeline": {
+              "target": "Package",
+              "version": "[3.8.0, )"
+            },
             "Myra": {
               "target": "Package",
               "version": "[1.2.2, )"
@@ -79,7 +82,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.200\\RuntimeIdentifierGraph.json"
         }
       }
     }
