@@ -14,11 +14,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin map.tmx
-/importer:TiledMapImporter
-/processor:TiledMapProcessor
-/build:map.tmx
-
 #begin motw.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -30,4 +25,9 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:motw.png
+
+#begin tiled/map.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:tiled/map.tmx
 

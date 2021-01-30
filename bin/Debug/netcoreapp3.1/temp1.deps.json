@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v3.1": {
       "temp1/1.0.0": {
         "dependencies": {
+          "EpPathFinding.cs": "1.4.2",
           "MonoGame.Content.Builder.Task": "3.8.0.1641",
           "MonoGame.Extended.Animations": "3.7.0",
           "MonoGame.Extended.Input": "3.8.0",
@@ -36,11 +37,30 @@
           }
         }
       },
+      "C5/2.4.5947.17249": {
+        "runtime": {
+          "lib/net45/C5.dll": {
+            "assemblyVersion": "2.4.5947.17248",
+            "fileVersion": "2.4.0.0"
+          }
+        }
+      },
       "Cyotek.Drawing.BitmapFont/2.0.0": {
         "runtime": {
           "lib/netcoreapp3.1/Cyotek.Drawing.BitmapFont.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "2.0.0.0"
+          }
+        }
+      },
+      "EpPathFinding.cs/1.4.2": {
+        "dependencies": {
+          "C5": "2.4.5947.17249"
+        },
+        "runtime": {
+          "lib/EpPathFinding.cs.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
           }
         }
       },
@@ -908,12 +928,26 @@
       "path": "autofac/5.2.0",
       "hashPath": "autofac.5.2.0.nupkg.sha512"
     },
+    "C5/2.4.5947.17249": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-L3mnv9plHyn73iCPVeoDvkbm76BXnClJ3yyxEa6W/gGqgthOj8Jumj6TIdp/H/3YyWxAHRdVxMPayW0Wl+2I6g==",
+      "path": "c5/2.4.5947.17249",
+      "hashPath": "c5.2.4.5947.17249.nupkg.sha512"
+    },
     "Cyotek.Drawing.BitmapFont/2.0.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-t6vYF0sXgNb6dP9QNbJxJWw3RdCEWC6Llv47oPYpobYAhmKcgmAZJv6HXK03DEUmo7ff6yPvsyEWTkia+UAONw==",
       "path": "cyotek.drawing.bitmapfont/2.0.0",
       "hashPath": "cyotek.drawing.bitmapfont.2.0.0.nupkg.sha512"
+    },
+    "EpPathFinding.cs/1.4.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2T4+Qe/pX701pIvtrXCTEbiD1w2nXzreokA1IKSwJmjTeD4hrmC0j6tUp5dric4+axoOXZgr0NV7E4qMMGiF7Q==",
+      "path": "eppathfinding.cs/1.4.2",
+      "hashPath": "eppathfinding.cs.1.4.2.nupkg.sha512"
     },
     "FontStashSharp.MonoGame/0.9.1.1": {
       "type": "package",

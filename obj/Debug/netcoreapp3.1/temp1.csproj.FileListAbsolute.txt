@@ -83,11 +83,9 @@ C:\Users\User\Desktop\Новая папка\temp1\obj\Debug\netcoreapp3.1\temp1.
 C:\Users\User\Desktop\Новая папка\temp1\obj\Debug\netcoreapp3.1\temp1.dll
 C:\Users\User\Desktop\Новая папка\temp1\obj\Debug\netcoreapp3.1\temp1.pdb
 C:\Users\User\Desktop\Новая папка\temp1\obj\Debug\netcoreapp3.1\temp1.genruntimeconfig.cache
-C:\Users\User\Desktop\Новая папка\temp1\bin\Debug\netcoreapp3.1\Content\tiled\Безымянный_0.xnb
 C:\Users\User\Desktop\Новая папка\temp1\bin\Debug\netcoreapp3.1\Content\tiled\Безымянный_1.xnb
 C:\Users\User\Desktop\Новая папка\temp1\bin\Debug\netcoreapp3.1\MonoGame.Extended.Graphics.dll
 C:\Users\User\Desktop\Новая папка\temp1\bin\Debug\netcoreapp3.1\MonoGame.Extended.Tiled.dll
-C:\Users\User\Desktop\Новая папка\temp1\bin\Debug\netcoreapp3.1\Content\map.xnb
 C:\Users\User\Desktop\Новая папка\temp1\bin\Debug\netcoreapp3.1\MonoGame.Extended.Animations.dll
 C:\Users\User\Desktop\Новая папка\temp1\bin\Debug\netcoreapp3.1\Content\motw.sf
 C:\Users\User\Desktop\Новая папка\temp1\bin\Debug\netcoreapp3.1\Content\motw.xnb
@@ -106,3 +104,8 @@ C:\Users\dmlebedev\Desktop\Новая папка\temp1\bin\Debug\netcoreapp3.1\M
 C:\Users\dmlebedev\Desktop\Новая папка\temp1\bin\Debug\netcoreapp3.1\Myra.dll
 C:\Users\dmlebedev\Desktop\Новая папка\temp1\bin\Debug\netcoreapp3.1\StbImageSharp.dll
 C:\Users\dmlebedev\Desktop\Новая папка\temp1\bin\Debug\netcoreapp3.1\StbTrueTypeSharp.dll
+C:\Users\User\Desktop\Новая папка\temp1\bin\Debug\netcoreapp3.1\Autofac.dll
+C:\Users\User\Desktop\Новая папка\temp1\bin\Debug\netcoreapp3.1\Content\tiled\hex1_0.xnb
+C:\Users\User\Desktop\Новая папка\temp1\bin\Debug\netcoreapp3.1\Content\tiled\map.xnb
+C:\Users\User\Desktop\Новая папка\temp1\bin\Debug\netcoreapp3.1\C5.dll
+C:\Users\User\Desktop\Новая папка\temp1\bin\Debug\netcoreapp3.1\EpPathFinding.cs.dll
