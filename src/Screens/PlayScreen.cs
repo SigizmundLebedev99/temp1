@@ -1,16 +1,12 @@
-using System;
 using System.Linq;
 using EpPathFinding.cs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using MonoGame.Extended.Content;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Screens;
-using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Shapes;
-using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using temp1.Components;
@@ -24,7 +20,6 @@ namespace temp1.Screens
         private SpriteBatch _sb;
         TiledMap _map;
         TiledMapRenderer _tiledMapRenderer;
-        AnimatedSprite sprite;
         World world;
         Entity player;
         BaseGrid _searchGrid;
@@ -41,9 +36,7 @@ namespace temp1.Screens
             camera = new OrthographicCamera(GraphicsDevice);
             _map = Content.Load<TiledMap>("tiled/map");
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _map);
-            var spriteSheet = Content.Load<SpriteSheet>("motw.sf", new JsonContentLoader());
-            sprite = new AnimatedSprite(spriteSheet);
-            sprite.Play("idle");
+            ContentStorage.Load(Content);
             ConfigureObstacles();
             CreateWorld();
             CreatePlayer();
@@ -53,10 +46,13 @@ namespace temp1.Screens
         {
             world = new WorldBuilder()
                 .AddSystem(new PlayerControlSystem(camera, _searchGrid))
+                .AddSystem(new AISystem(_searchGrid))
                 .AddSystem(new MoveSystem())
+                .AddSystem(new ExpirationSystem())
                 .AddSystem(new DirectionSystem())
                 .AddSystem(new DirectionToAnimationSystem())
                 .AddSystem(new AnimationRenderSystem(_sb))
+                .AddSystem(new SpawnSystem(_searchGrid, null))
                 .Build();
         }
 
@@ -64,6 +60,7 @@ namespace temp1.Screens
         {
             var pos = _map.GetLayer<TiledMapObjectLayer>("markers").Objects.First(e => e.Type == "player");
             player = world.CreateEntity();
+            var sprite = ContentStorage.Player;
             player.Attach(sprite);
             player.Attach(new Player());
             player.Attach(new AllowedToAct());
@@ -117,7 +114,7 @@ namespace temp1.Screens
         public override void Draw(GameTime gameTime)
         {
             var matrix = camera.GetViewMatrix();
-            _sb.Begin(transformMatrix: matrix);
+            _sb.Begin(SpriteSortMode.BackToFront, transformMatrix: matrix);
             _tiledMapRenderer.Draw(matrix);
             world.Draw(gameTime);
             _sb.End();

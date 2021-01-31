@@ -51,7 +51,5 @@ namespace temp1.Components
             _change = Math.Clamp(speed / v.Length(), 0, 1);
             currentSegment ++;
         }
-
-        
     }
 }

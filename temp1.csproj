@@ -6,7 +6,7 @@
         <TieredCompilation>false</TieredCompilation>
     </PropertyGroup>
     <ItemGroup>
-        <None Update="Content\motw.sf">
+        <None Update="Content\*.sf">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>

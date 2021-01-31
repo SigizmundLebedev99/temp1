@@ -6,5 +6,6 @@ namespace temp1.Components
     {
         public Point SelectionBounds;
         public Vector2 Position;
+        public Point MapPosition => (Position / 32).ToPoint();
     }
 }
