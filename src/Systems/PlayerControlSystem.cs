@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
+using MonoGame.Extended.Input;
 using MonoGame.Extended.Sprites;
 using temp1.Components;
 
@@ -13,32 +14,32 @@ namespace temp1.Systems
     class PlayerControlSystem : EntityProcessingSystem
     {
         ComponentMapper<IMovement> _movementMapper;
-        ComponentMapper<Box> _boxMapper;
+        ComponentMapper<Dot> _boxMapper;
         OrthographicCamera _camera;
         JumpPointParam jpParam;
-        BaseGrid _grid;
+        GameContext _context;
 
-        public PlayerControlSystem(OrthographicCamera camera, BaseGrid searchGrid) : base(Aspect.All(typeof(Player), typeof(AnimatedSprite)))
+        public PlayerControlSystem(OrthographicCamera camera, GameContext context) : base(Aspect.All(typeof(Player), typeof(AnimatedSprite)))
         {
             _camera = camera;
-            _grid = searchGrid;
-            jpParam = new JumpPointParam(searchGrid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
+            _context = context;
+            jpParam = new JumpPointParam(_context.Grid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
         }
 
         public override void Initialize(IComponentMapperService mapperService)
         {
             _movementMapper = mapperService.GetMapper<IMovement>();
-            _boxMapper = mapperService.GetMapper<Box>();
+            _boxMapper = mapperService.GetMapper<Dot>();
         }
 
         public override void Process(GameTime gameTime, int entityId)
         {
-            var state = Mouse.GetState();
-            if (state.LeftButton != ButtonState.Pressed)
+            var state = MouseExtended.GetState();
+            if (!state.WasButtonJustUp(MouseButton.Left))
                 return;
             var pointOnMap = _camera.ScreenToWorld(state.X, state.Y);
             var to = (pointOnMap / 32).ToPoint();
-            if(!_grid.IsWalkableAt(to.X, to.Y))
+            if (!_context.Grid.Contains(to) || !_context.Grid.IsWalkableAt(to.X, to.Y))
                 return;
 
             var from = _boxMapper.Get(entityId).MapPosition;
@@ -46,22 +47,27 @@ namespace temp1.Systems
             var result = JumpPointFinder.FindPath(jpParam);
             if (result.Count < 2)
                 return;
-            
+
             var movement = new PolylineMovement(
                     result.Select(e => new Vector2(e.x * 32 + 16, e.y * 32 + 16)).ToArray(),
                 3f);
-            
+
+            CreateMarker(to);
+
+            _movementMapper.Put(entityId, movement);
+        }
+
+        void CreateMarker(Point to)
+        {
             var marker = CreateEntity();
             marker.Attach<IExpired>(new TimeExpired(1.2f));
-            marker.Attach(new Box
+            marker.Attach(new Dot
             {
                 Position = to.ToVector2() * 32 + new Vector2(16)
             });
-            var sprite = ContentStorage.Circles;
+            var sprite = _context.GetAnimatedSprite("animations/circles.sf");
             sprite.Play("idle");
             marker.Attach(sprite);
-            
-            _movementMapper.Put(entityId,movement);
         }
     }
 }

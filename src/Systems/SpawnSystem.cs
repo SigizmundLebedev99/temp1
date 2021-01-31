@@ -9,10 +9,10 @@ namespace temp1.Systems
 {
     class SpawnSystem : EntityUpdateSystem
     {
-        BaseGrid _searchGrid;
-        public SpawnSystem(BaseGrid searchGrid, Box playerPos) : base(Aspect.One(typeof(Enemy), typeof(Portal)))
+        GameContext _context;
+        public SpawnSystem(GameContext context) : base(Aspect.One(typeof(Enemy), typeof(Portal)))
         {
-            _searchGrid = searchGrid;
+            _context = context;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -25,26 +25,20 @@ namespace temp1.Systems
                 return;
             var portal = CreateEntity();
             var random = new Random();
-            Point point = new Point(random.Next(0, _searchGrid.width), random.Next(0, _searchGrid.height));
-            if (!_searchGrid.IsWalkableAt(point.X, point.Y))
+            var grid = _context.Grid;
+            Point point = new Point(random.Next(0, grid.width), random.Next(0, grid.height));
+            if (!grid.IsWalkableAt(point.X, point.Y))
                 return;
             
-            portal.Attach(new Box
+            portal.Attach(new Dot
             {
                 Position = point.ToVector2() * 32 + new Vector2(16)
             });
-            portal.Attach(ContentStorage.Portal);
+            portal.Attach(_context.GetAnimatedSprite("animations/portal.sf"));
             portal.Attach(new Portal());
-            portal.Attach<IExpired>(new ExpiretionCallback(1.5f, () =>
+            portal.Attach<IExpired>(new Timer(1.5f, () =>
             {
-                var enemy = CreateEntity();
-                enemy.Attach(ContentStorage.Enemy);
-                enemy.Attach(new Box{
-                    Position = point.ToVector2() * 32 + new Vector2(16)
-                });
-                enemy.Attach(new Enemy());
-                enemy.Attach(new AllowedToAct());
-                enemy.Attach(new Direction());
+                _context.CreateEntity("enemy", point.ToVector2() * 32 + new Vector2(16));
             }, true));
         }
     }

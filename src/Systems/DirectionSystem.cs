@@ -7,17 +7,17 @@ namespace temp1.Systems
 {
     class DirectionSystem : EntityProcessingSystem
     {
-        ComponentMapper<Box> _boxMapper;
+        ComponentMapper<Dot> _boxMapper;
         ComponentMapper<Direction> _directionMapper;
 
-        public DirectionSystem() : base(Aspect.All(typeof(AllowedToAct), typeof(Box), typeof(Direction)))
+        public DirectionSystem() : base(Aspect.All(typeof(AllowedToAct), typeof(Dot), typeof(Direction)))
         {
         }
 
         public override void Initialize(IComponentMapperService mapperService)
         {
             _directionMapper = mapperService.GetMapper<Direction>();
-            _boxMapper = mapperService.GetMapper<Box>();
+            _boxMapper = mapperService.GetMapper<Dot>();
         }
 
         public override void Process(GameTime gameTime, int entityId)

@@ -7,32 +7,23 @@ using temp1.Components;
 
 namespace temp1.Systems
 {
-    class AnimationRenderSystem : EntitySystem, IDrawSystem, IUpdateSystem
+    class StaticSpriteRenderSystem : EntityDrawSystem
     {
-        private ComponentMapper<AnimatedSprite> _spriteMapper;
+        private ComponentMapper<Sprite> _spriteMapper;
         private ComponentMapper<Dot> _boxMapper;
         private SpriteBatch _spriteBatch;
-        public AnimationRenderSystem(SpriteBatch sb) : base(Aspect.All(typeof(AnimatedSprite), typeof(Dot)))
+        public StaticSpriteRenderSystem(SpriteBatch sb) : base(Aspect.All(typeof(Sprite), typeof(Dot)))
         {
             _spriteBatch = sb;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _spriteMapper = mapperService.GetMapper<AnimatedSprite>();
+            _spriteMapper = mapperService.GetMapper<Sprite>();
             _boxMapper = mapperService.GetMapper<Dot>();
         }
 
-        public void Update(GameTime gameTime)
-        {
-            var entities = this.ActiveEntities;
-            for(var i = 0; i < entities.Count; i ++){
-                var sprite = _spriteMapper.Get(entities[i]);
-                sprite.Update(gameTime);
-            }
-        }
-
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
             var entities = this.ActiveEntities;
             for(var i = 0; i < entities.Count; i ++){

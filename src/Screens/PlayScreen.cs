@@ -16,14 +16,10 @@ namespace temp1.Screens
 {
     class PlayScreen : GameScreen
     {
-        private MouseState state;
         private SpriteBatch _sb;
-        TiledMap _map;
         TiledMapRenderer _tiledMapRenderer;
-        World world;
-        Entity player;
-        BaseGrid _searchGrid;
-        Polygon[] _obstacles;
+        World _world;
+        GameContext _context;
         private OrthographicCamera camera;
 
         public PlayScreen(Game game) : base(game)
@@ -31,83 +27,48 @@ namespace temp1.Screens
             _sb = new SpriteBatch(Game.GraphicsDevice);
         }
 
-        public override void LoadContent()
+        public override void Initialize()
         {
             camera = new OrthographicCamera(GraphicsDevice);
-            _map = Content.Load<TiledMap>("tiled/map");
-            _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice, _map);
-            ContentStorage.Load(Content);
-            ConfigureObstacles();
-            CreateWorld();
-            CreatePlayer();
+            _world = new World();
+            _context = new GameContext(Content, _world);
+            _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice);
         }
 
-        private void CreateWorld()
+        public override void LoadContent()
         {
-            world = new WorldBuilder()
-                .AddSystem(new PlayerControlSystem(camera, _searchGrid))
-                .AddSystem(new AISystem(_searchGrid))
-                .AddSystem(new MoveSystem())
-                .AddSystem(new ExpirationSystem())
-                .AddSystem(new DirectionSystem())
-                .AddSystem(new DirectionToAnimationSystem())
-                .AddSystem(new AnimationRenderSystem(_sb))
-                .AddSystem(new SpawnSystem(_searchGrid, null))
-                .Build();
+            _context.Load();
+            _tiledMapRenderer.LoadMap(_context.Map);
+            ConfigureWorld();
         }
 
-        private void CreatePlayer()
+        private void ConfigureWorld()
         {
-            var pos = _map.GetLayer<TiledMapObjectLayer>("markers").Objects.First(e => e.Type == "player");
-            player = world.CreateEntity();
-            var sprite = ContentStorage.Player;
-            player.Attach(sprite);
-            player.Attach(new Player());
-            player.Attach(new AllowedToAct());
-            player.Attach(new Direction());
-            player.Attach<Box>(new Box
-            {
-                SelectionBounds = new Point(sprite.TextureRegion.Width, sprite.TextureRegion.Height),
-                Position = pos.Position
-            });
+                _world.RegisterSystem(new PlayerControlSystem(camera, _context));
+                _world.RegisterSystem(new AISystem(_context.Grid));
+                _world.RegisterSystem(new MoveSystem());
+                _world.RegisterSystem(new ExpirationSystem());
+                _world.RegisterSystem(new DirectionSystem());
+                _world.RegisterSystem(new DirectionToAnimationSystem());
+                _world.RegisterSystem(new AnimationRenderSystem(_sb));
+                _world.RegisterSystem(new StaticSpriteRenderSystem(_sb));
+                _world.RegisterSystem(new MarkSystem(_sb, _context, camera));
+                _world.RegisterSystem(new SpawnSystem(_context));
         }
-
-        void ConfigureObstacles()
-        {
-            _searchGrid = new StaticGrid(_map.Width, _map.Height);
-            var obstacles = _map.GetLayer<TiledMapObjectLayer>("obstacles").Objects.Select(e =>
-                new Polygon((e as TiledMapPolygonObject).Points.Select(p => new Vector2(p.X, p.Y) + e.Position)))
-                .ToArray();
-            _obstacles = obstacles;
-            for (var x = 0; x < _map.Width; x++)
-            {
-                for (var y = 0; y < _map.Height; y++)
-                {
-                    var isIn = false;
-                    for (var i = 0; i < obstacles.Length; i++){
-                        if(obstacles[i].Contains(x * _map.TileWidth + _map.TileWidth / 2, y * _map.TileHeight + _map.TileHeight / 2)){
-                            isIn = true;
-                            break;
-                        }
-                    }
-                    _searchGrid.SetWalkableAt(x,y,!isIn);
-                }
-            }
-        }
-
+        
         public override void Update(GameTime gameTime)
         {
-            world.Update(gameTime);
-            state = Mouse.GetState();
+            _world.Update(gameTime);
+            var state = Mouse.GetState();
             if (!this.Game.IsActive)
                 return;
-            if (state.X <= 0 && camera.Position.X >= -(_map.WidthInPixels / 2))
+            if (state.X <= 0)
                 camera.Move(new Vector2(-5, 0));
             if (state.Y <= 0 && camera.Position.Y >= 0)
                 camera.Move(new Vector2(0, -5));
-            if (state.X > this.GraphicsDevice.Viewport.Width && camera.Position.X < this.GraphicsDevice.Viewport.Width - _map.WidthInPixels)
+            if (state.X > this.GraphicsDevice.Viewport.Width)
                 camera.Move(new Vector2(5, 0));
-            if (state.Y > this.GraphicsDevice.Viewport.Height && camera.Position.Y < _map.HeightInPixels - this.GraphicsDevice.Viewport.Height)
+            if (state.Y > this.GraphicsDevice.Viewport.Height)
                 camera.Move(new Vector2(0, 5));
         }
 
@@ -116,7 +77,7 @@ namespace temp1.Screens
             var matrix = camera.GetViewMatrix();
             _sb.Begin(SpriteSortMode.BackToFront, transformMatrix: matrix);
             _tiledMapRenderer.Draw(matrix);
-            world.Draw(gameTime);
+            _world.Draw(gameTime);
             _sb.End();
         }
     }

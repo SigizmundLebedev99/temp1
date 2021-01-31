@@ -6,7 +6,12 @@
         <TieredCompilation>false</TieredCompilation>
     </PropertyGroup>
     <ItemGroup>
-        <None Update="Content\*.sf">
+        <None Update="Content\**\*.sf">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
+        <None Update="Content\**\*.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>

@@ -13,12 +13,13 @@ namespace temp1.Components
     {
         private float _seconds;
         private float elapsed = 0;
-        public TimeExpired(float seconds)
+        public TimeExpired(float seconds, bool shouldDestroy = true)
         {
             _seconds = seconds;
+            ShouldDestroy = shouldDestroy;
         }
 
-        public bool ShouldDestroy => true;
+        public bool ShouldDestroy { get; }
 
         public bool Update(GameTime time)
         {
@@ -27,12 +28,12 @@ namespace temp1.Components
         }
     }
 
-    class ExpiretionCallback : IExpired
+    class Timer : IExpired
     {
         private float _seconds;
         private float elapsed = 0;
         private Action action;
-        public ExpiretionCallback(float seconds, Action callback, bool shouldDestroy = true)
+        public Timer(float seconds, Action callback, bool shouldDestroy = false)
         {
             _seconds = seconds;
             action = callback;

@@ -11,7 +11,7 @@ namespace temp1.Systems
     class AISystem : EntityProcessingSystem
     {
         ComponentMapper<IMovement> _moveMapper;
-        ComponentMapper<Box> _boxMapper;
+        ComponentMapper<Dot> _boxMapper;
         BaseGrid _grid;
         JumpPointParam jpParam;
         public AISystem(BaseGrid grid) : base(Aspect.All(typeof(Enemy)))
@@ -23,7 +23,7 @@ namespace temp1.Systems
         public override void Initialize(IComponentMapperService mapperService)
         {
             _moveMapper = mapperService.GetMapper<IMovement>();
-            _boxMapper = mapperService.GetMapper<Box>();
+            _boxMapper = mapperService.GetMapper<Dot>();
         }
 
         public override void Process(GameTime gameTime, int entityId)
@@ -46,7 +46,7 @@ namespace temp1.Systems
                 result.Select(e =>
                     new Vector2(e.x * 32 + 16, e.y * 32 + 16))
                     .ToArray(),
-                2f));
+                1f));
         }
     }
 }

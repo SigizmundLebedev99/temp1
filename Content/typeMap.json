@@ -1,0 +1,31 @@
+[
+    {
+        "type": "player",
+        "animated": true,
+        "path": "animations/player.sf",
+        "origin": {
+            "x": 26,
+            "y": 65
+        },
+        "factoryMethod": "Player"
+    },
+    {
+        "type": "enemy",
+        "animated": true,
+        "path": "animations/enemy.sf",
+        "origin": {
+            "x": 26,
+            "y": 65
+        },
+        "factoryMethod": "Enemy"
+    },
+    {
+        "type": "tree",
+        "animated": false,
+        "path": "images/tree",
+        "origin": {
+            "x": 64,
+            "y": 160
+        }
+    }
+]

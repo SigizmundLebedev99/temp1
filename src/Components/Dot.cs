@@ -2,10 +2,15 @@ using Microsoft.Xna.Framework;
 
 namespace temp1.Components
 {
-    class Box
+    class Dot
     {
-        public Point SelectionBounds;
         public Vector2 Position;
         public Point MapPosition => (Position / 32).ToPoint();
+
+        public Dot(){}
+
+        public Dot(Vector2 position){
+            Position = position;
+        }
     }
 }

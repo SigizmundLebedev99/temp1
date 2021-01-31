@@ -8,16 +8,16 @@ namespace temp1.Systems
     class MoveSystem : EntityProcessingSystem
     {
         ComponentMapper<IMovement> _moveMapper;
-        ComponentMapper<Box> _boxMapper;
+        ComponentMapper<Dot> _boxMapper;
 
-        public MoveSystem() : base(Aspect.All(typeof(AllowedToAct), typeof(IMovement), typeof(Box)))
+        public MoveSystem() : base(Aspect.All(typeof(AllowedToAct), typeof(IMovement), typeof(Dot)))
         {
         }
 
         public override void Initialize(IComponentMapperService mapperService)
         {
             _moveMapper = mapperService.GetMapper<IMovement>();
-            _boxMapper = mapperService.GetMapper<Box>();
+            _boxMapper = mapperService.GetMapper<Dot>();
         }
 
         public override void Process(GameTime gameTime, int entityId)
