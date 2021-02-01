@@ -9,8 +9,8 @@ namespace temp1.Systems
 {
     class DirectionToAnimationSystem : EntityProcessingSystem
     {
-        ComponentMapper<AnimatedSprite> _spriteMapper;
-        ComponentMapper<Direction> _directionMapper;
+        Mapper<AnimatedSprite> _spriteMapper;
+        Mapper<Direction> _directionMapper;
 
         public DirectionToAnimationSystem() : base(Aspect.All(typeof(AnimatedSprite), typeof(Direction)))
         {
@@ -18,8 +18,8 @@ namespace temp1.Systems
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _directionMapper = mapperService.GetMapper<Direction>();
-            _spriteMapper = mapperService.GetMapper<AnimatedSprite>();
+            _directionMapper = mapperService.Get<Direction>();
+            _spriteMapper = mapperService.Get<AnimatedSprite>();
         }
 
         public override void Process(GameTime gameTime, int entityId)

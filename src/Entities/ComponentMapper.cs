@@ -17,12 +17,12 @@ namespace MonoGame.Extended.Entities
         public abstract void Delete(int entityId);
     }
 
-    public class ComponentMapper<T> : ComponentMapper
+    public class Mapper<T> : ComponentMapper
         where T : class
     {
         private readonly Action<int> _onCompositionChanged;
 
-        public ComponentMapper(int id, Action<int> onCompositionChanged)
+        public Mapper(int id, Action<int> onCompositionChanged)
             : base(id, typeof(T))
         {
             _onCompositionChanged = onCompositionChanged;

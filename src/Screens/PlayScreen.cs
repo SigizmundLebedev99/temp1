@@ -26,34 +26,36 @@ namespace temp1.Screens
         {
             camera = new OrthographicCamera(GraphicsDevice);
             _world = new World();
-            _context = new GameContext(Content, _world);
+            _context = new GameContext(Content);
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice);
         }
 
         public override void LoadContent()
         {
             _context.LoadTypes();
-            _context.LoadMap("tiled/map");
+            _context.LoadMap("tiled/map", _world);
             _tiledMapRenderer.LoadMap(_context.Map);
             ConfigureWorld();
         }
 
         private void ConfigureWorld()
         {
-                _world.RegisterSystem(new PlayerControlSystem(camera, _context));
-                _world.RegisterSystem(new AISystem(_context.Grid));
-                _world.RegisterSystem(new MoveSystem());
-                _world.RegisterSystem(new ExpirationSystem());
-                _world.RegisterSystem(new DirectionSystem());
-                _world.RegisterSystem(new DirectionToAnimationSystem());
-                _world.RegisterSystem(new AnimationRenderSystem(_sb));
-                _world.RegisterSystem(new StaticSpriteRenderSystem(_sb));
-                _world.RegisterSystem(new MarkSystem(_sb, _context, camera));
-                _world.RegisterSystem(new SpawnSystem(_context));
+            _world.RegisterSystem(new PointerSystem(_sb, _context, camera));
+            _world.RegisterSystem(new PlayerControlSystem(camera, _context));
+            _world.RegisterSystem(new AISystem(_context.Grid));
+            _world.RegisterSystem(new MoveSystem());
+            _world.RegisterSystem(new ExpirationSystem());
+            _world.RegisterSystem(new DirectionSystem());
+            _world.RegisterSystem(new DirectionToAnimationSystem());
+            _world.RegisterSystem(new AnimationRenderSystem(_sb));
+            _world.RegisterSystem(new StaticSpriteRenderSystem(_sb));
+            _world.RegisterSystem(new SpawnSystem(_context));
         }
         
         public override void Update(GameTime gameTime)
         {
+            if(!Game.IsActive)
+                return;
             _world.Update(gameTime);
             _tiledMapRenderer.Update(gameTime);
             var state = Mouse.GetState();

@@ -9,8 +9,8 @@ namespace temp1.Systems
 {
     class AnimationRenderSystem : EntitySystem, IDrawSystem, IUpdateSystem
     {
-        private ComponentMapper<AnimatedSprite> _spriteMapper;
-        private ComponentMapper<Dot> _boxMapper;
+        private Mapper<AnimatedSprite> _spriteMapper;
+        private Mapper<Dot> _boxMapper;
         private SpriteBatch _spriteBatch;
         public AnimationRenderSystem(SpriteBatch sb) : base(Aspect.All(typeof(AnimatedSprite), typeof(Dot)))
         {
@@ -19,8 +19,8 @@ namespace temp1.Systems
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _spriteMapper = mapperService.GetMapper<AnimatedSprite>();
-            _boxMapper = mapperService.GetMapper<Dot>();
+            _spriteMapper = mapperService.Get<AnimatedSprite>();
+            _boxMapper = mapperService.Get<Dot>();
         }
 
         public void Update(GameTime gameTime)

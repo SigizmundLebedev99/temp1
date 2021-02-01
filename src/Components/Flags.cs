@@ -6,4 +6,6 @@ namespace temp1.Components
     class Player{}
     class Portal{}
     class Enemy{}
+    class Storage{}
+    class Pointed{}
 }

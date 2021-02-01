@@ -9,7 +9,7 @@ namespace MonoGame.Extended.Entities
 {
     public interface IComponentMapperService
     {
-        ComponentMapper<T> GetMapper<T>() where T : class;
+        Mapper<T> Get<T>() where T : class;
     }
 
     public class ComponentManager : UpdateSystem, IComponentMapperService
@@ -25,13 +25,13 @@ namespace MonoGame.Extended.Entities
 
         public Action<int> ComponentsChanged;
 
-        private ComponentMapper<T> CreateMapperForType<T>(int componentTypeId)
+        private Mapper<T> CreateMapperForType<T>(int componentTypeId)
             where T : class
         {
             if (componentTypeId >= 64)
                 throw new InvalidOperationException("Component type limit exceeded. We currently only allow 64 component types for performance reasons.");
 
-            var mapper = new ComponentMapper<T>(componentTypeId, ComponentsChanged);
+            var mapper = new Mapper<T>(componentTypeId, ComponentsChanged);
             _componentMappers[componentTypeId] = mapper;
             return mapper;
         }
@@ -41,13 +41,13 @@ namespace MonoGame.Extended.Entities
             return _componentMappers[componentTypeId];
         }
 
-        public ComponentMapper<T> GetMapper<T>() 
+        public Mapper<T> Get<T>() 
             where T : class
         {
             var componentTypeId = GetComponentTypeId(typeof(T));
 
             if (_componentMappers[componentTypeId] != null)
-                return _componentMappers[componentTypeId] as ComponentMapper<T>;
+                return _componentMappers[componentTypeId] as Mapper<T>;
 
             return CreateMapperForType<T>(componentTypeId);
         }

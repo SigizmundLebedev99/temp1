@@ -9,8 +9,8 @@ namespace temp1.Systems
 {
     class TurnBasedCombatSystem : EntityUpdateSystem
     {
-        private ComponentMapper<AllowedToAct> _allowanceMapper;
-        private ComponentMapper<TurnPartitioner> _tpMapper;
+        private Mapper<AllowedToAct> _allowanceMapper;
+        private Mapper<TurnPartitioner> _tpMapper;
         private List<int> _combatants = new List<int>();
 
         public TurnBasedCombatSystem() : base(Aspect.All(typeof(TurnPartitioner), typeof(AllowedToAct)))
@@ -18,8 +18,8 @@ namespace temp1.Systems
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _allowanceMapper = mapperService.GetMapper<AllowedToAct>();
-            _tpMapper = mapperService.GetMapper<TurnPartitioner>();
+            _allowanceMapper = mapperService.Get<AllowedToAct>();
+            _tpMapper = mapperService.Get<TurnPartitioner>();
         }
 
         public void StartBattle(List<int> combatants, int startFrom)

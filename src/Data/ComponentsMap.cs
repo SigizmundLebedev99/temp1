@@ -8,7 +8,8 @@ static class ComponentsMap{
         ("player", typeof(Player)),
         ("actor", typeof(AllowedToAct)),
         ("actor", typeof(Direction)),
-        ("enemy", typeof(Enemy))
+        ("enemy", typeof(Enemy)),
+        ("chest", typeof(Storage))
     };
     
     static ComponentsMap()
@@ -17,6 +18,4 @@ static class ComponentsMap{
     }
 
     public static ILookup<string, Type> Map;
-
-    
 }

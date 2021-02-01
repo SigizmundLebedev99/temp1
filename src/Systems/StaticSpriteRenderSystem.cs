@@ -9,8 +9,8 @@ namespace temp1.Systems
 {
     class StaticSpriteRenderSystem : EntityDrawSystem
     {
-        private ComponentMapper<Sprite> _spriteMapper;
-        private ComponentMapper<Dot> _boxMapper;
+        private Mapper<Sprite> _spriteMapper;
+        private Mapper<Dot> _boxMapper;
         private SpriteBatch _spriteBatch;
         public StaticSpriteRenderSystem(SpriteBatch sb) : base(Aspect.All(typeof(Sprite), typeof(Dot)))
         {
@@ -19,8 +19,8 @@ namespace temp1.Systems
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _spriteMapper = mapperService.GetMapper<Sprite>();
-            _boxMapper = mapperService.GetMapper<Dot>();
+            _spriteMapper = mapperService.Get<Sprite>();
+            _boxMapper = mapperService.Get<Dot>();
         }
 
         public override void Draw(GameTime gameTime)

@@ -9,6 +9,21 @@
       "frames": [0,1,2,3],
       "isLooping": true,
       "frameDuration": 0.2
+    },
+    "no": {
+      "frames": [4,5,6,7],
+      "isLooping": true,
+      "frameDuration": 0.2
+    },
+    "hand": {
+      "frames": [8,9,10,11],
+      "isLooping": true,
+      "frameDuration": 0.2
+    },
+    "sword": {
+      "frames": [12,13,14,15],
+      "isLooping": true,
+      "frameDuration": 0.2
     }
   }
 }

@@ -18,18 +18,20 @@ namespace temp1
 {
     class GameContext
     {
-        ContentManager _content;
         public World _world;
         public TiledMap Map;
         public BaseGrid Grid;
+
+        public int PlayerId;
+
+        ContentManager _content;
         Dictionary<string, SpriteSheet> SpriteSheets;
         Dictionary<string, Sprite> Sprites;
         Dictionary<string, MapObjectType> MapObjectTypes;
         JsonContentLoader loader = new JsonContentLoader();
 
-        public GameContext(ContentManager content, World world)
+        public GameContext(ContentManager content)
         {
-            _world = world;
             _content = content;
             MapObjectTypes = new Dictionary<string, MapObjectType>();
             Sprites = new Dictionary<string, Sprite>();
@@ -42,8 +44,9 @@ namespace temp1
             MapObjectTypes = types.ToDictionary(e => e.type);
         }
 
-        public void LoadMap(string map)
+        public void LoadMap(string map, World world)
         {
+            _world = world;
             Map = _content.Load<TiledMap>(map);
             ConfigureMapObjects();
             ConfigureObstacles();
@@ -128,11 +131,12 @@ namespace temp1
                     foreach (var _type in ComponentsMap.Map[flag])
                     {
                         var comp = Activator.CreateInstance(_type);
-                        
                         attachMethod.MakeGenericMethod(_type).Invoke(entity, new object[] { comp });
                     }
                 }
             }
+            if(type == "player")
+                PlayerId = entity.Id;
             return entity.Id;
         }
     }

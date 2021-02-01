@@ -7,9 +7,7 @@
             "x": 26,
             "y": 65
         },
-        "components":[
-            "player", "actor"
-        ]
+        "components":["player", "actor"]
     },
     {
         "type": "enemy",
@@ -19,9 +17,7 @@
             "x": 26,
             "y": 65
         },
-        "components":[
-            "enemy", "actor"
-        ]
+        "components":["enemy", "actor"]
     },
     {
         "type": "tree",
@@ -39,6 +35,6 @@
         "origin": {
             "x": 16,
             "y": 16
-        }
+        },"components":["chest"]
     }
 ]

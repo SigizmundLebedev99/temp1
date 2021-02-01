@@ -23,21 +23,21 @@ namespace MonoGame.Extended.Entities
         public void Attach<T>(T component)
             where T : class 
         {
-            var mapper = _componentManager.GetMapper<T>();
+            var mapper = _componentManager.Get<T>();
             mapper.Put(Id, component);
         }
 
         public void Detach<T>()
             where T : class
         {
-            var mapper = _componentManager.GetMapper<T>();
+            var mapper = _componentManager.Get<T>();
             mapper.Delete(Id);
         }
 
         public T Get<T>()
             where T : class 
         {
-            var mapper = _componentManager.GetMapper<T>();
+            var mapper = _componentManager.Get<T>();
             return mapper.Get(Id);
         }
 
@@ -45,7 +45,7 @@ namespace MonoGame.Extended.Entities
         public bool Has<T>() 
             where T : class
         {
-            return _componentManager.GetMapper<T>().Has(Id);
+            return _componentManager.Get<T>().Has(Id);
         }
 
         public void Destroy()

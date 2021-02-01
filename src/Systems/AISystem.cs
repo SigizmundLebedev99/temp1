@@ -10,8 +10,8 @@ namespace temp1.Systems
 {
     class AISystem : EntityProcessingSystem
     {
-        ComponentMapper<IMovement> _moveMapper;
-        ComponentMapper<Dot> _boxMapper;
+        Mapper<IMovement> _moveMapper;
+        Mapper<Dot> _boxMapper;
         BaseGrid _grid;
         JumpPointParam jpParam;
         public AISystem(BaseGrid grid) : base(Aspect.All(typeof(Enemy)))
@@ -22,8 +22,8 @@ namespace temp1.Systems
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _moveMapper = mapperService.GetMapper<IMovement>();
-            _boxMapper = mapperService.GetMapper<Dot>();
+            _moveMapper = mapperService.Get<IMovement>();
+            _boxMapper = mapperService.Get<Dot>();
         }
 
         public override void Process(GameTime gameTime, int entityId)

@@ -7,8 +7,8 @@ namespace temp1.Systems
 {
     class DamageSystem : EntityProcessingSystem
     {
-        ComponentMapper<Health> _stateMapper;
-        ComponentMapper<Attack> _attackMapper;
+        Mapper<Health> _stateMapper;
+        Mapper<Attack> _attackMapper;
 
         public DamageSystem() : base(Aspect.All(typeof(Attack)))
         {
@@ -16,8 +16,8 @@ namespace temp1.Systems
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _stateMapper = mapperService.GetMapper<Health>();
-            _attackMapper = mapperService.GetMapper<Attack>();
+            _stateMapper = mapperService.Get<Health>();
+            _attackMapper = mapperService.Get<Attack>();
         }
 
         public override void Process(GameTime gameTime, int entityId)
