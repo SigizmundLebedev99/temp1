@@ -7,7 +7,9 @@
             "x": 26,
             "y": 65
         },
-        "factoryMethod": "Player"
+        "components":[
+            "player", "actor"
+        ]
     },
     {
         "type": "enemy",
@@ -17,7 +19,9 @@
             "x": 26,
             "y": 65
         },
-        "factoryMethod": "Enemy"
+        "components":[
+            "enemy", "actor"
+        ]
     },
     {
         "type": "tree",
@@ -25,7 +29,16 @@
         "path": "images/tree",
         "origin": {
             "x": 64,
-            "y": 160
+            "y": 145
+        }
+    },
+    {
+        "type": "chest1",
+        "animated": true,
+        "path": "animations/chest1.sf",
+        "origin": {
+            "x": 16,
+            "y": 16
         }
     }
 ]

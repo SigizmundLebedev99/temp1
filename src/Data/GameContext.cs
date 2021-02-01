@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using EpPathFinding.cs;
@@ -24,7 +25,6 @@ namespace temp1
         Dictionary<string, SpriteSheet> SpriteSheets;
         Dictionary<string, Sprite> Sprites;
         Dictionary<string, MapObjectType> MapObjectTypes;
-
         JsonContentLoader loader = new JsonContentLoader();
 
         public GameContext(ContentManager content, World world)
@@ -36,11 +36,15 @@ namespace temp1
             SpriteSheets = new Dictionary<string, SpriteSheet>();
         }
 
-        public void Load()
+        public void LoadTypes()
         {
             var types = _content.Load<MapObjectType[]>("typeMap.json", loader);
-            Map = _content.Load<TiledMap>("tiled/map");
             MapObjectTypes = types.ToDictionary(e => e.type);
+        }
+
+        public void LoadMap(string map)
+        {
+            Map = _content.Load<TiledMap>(map);
             ConfigureMapObjects();
             ConfigureObstacles();
         }
@@ -52,7 +56,8 @@ namespace temp1
             return Sprites[name];
         }
 
-        public AnimatedSprite GetAnimatedSprite(string name){
+        public AnimatedSprite GetAnimatedSprite(string name)
+        {
             if (!SpriteSheets.ContainsKey(name))
                 SpriteSheets[name] = _content.Load<SpriteSheet>(name, loader);
             var sprite = new AnimatedSprite(SpriteSheets[name]);
@@ -115,25 +120,20 @@ namespace temp1
             }
             if (position.HasValue)
                 entity.Attach(new Dot(position.Value));
-            if (obj.factoryMethod != null)
+            if (obj.components != null && obj.components.Length > 0)
             {
-                this.GetType().GetMethod(obj.factoryMethod)?.Invoke(this, new[] { entity });
+                var attachMethod = typeof(Entity).GetMethod(nameof(entity.Attach));
+                foreach (var flag in obj.components)
+                {
+                    foreach (var _type in ComponentsMap.Map[flag])
+                    {
+                        var comp = Activator.CreateInstance(_type);
+                        
+                        attachMethod.MakeGenericMethod(_type).Invoke(entity, new object[] { comp });
+                    }
+                }
             }
             return entity.Id;
-        }
-
-        public void Player(Entity player)
-        {
-            player.Attach(new Player());
-            player.Attach(new AllowedToAct());
-            player.Attach(new Direction());
-        }
-
-        public void Enemy(Entity enemy)
-        {
-            enemy.Attach(new Enemy());
-            enemy.Attach(new AllowedToAct());
-            enemy.Attach(new Direction());
         }
     }
 }

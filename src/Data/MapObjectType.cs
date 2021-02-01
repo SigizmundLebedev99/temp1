@@ -13,7 +13,7 @@ namespace temp1.Data
         public bool animated;
         public string path;
         public Origin origin;
-        public string factoryMethod;
+        public string[] components;
     }
 }
 

@@ -1,15 +1,10 @@
-using System.Linq;
-using EpPathFinding.cs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Screens;
-using MonoGame.Extended.Shapes;
-using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
-using temp1.Components;
 using temp1.Systems;
 
 namespace temp1.Screens
@@ -37,7 +32,8 @@ namespace temp1.Screens
 
         public override void LoadContent()
         {
-            _context.Load();
+            _context.LoadTypes();
+            _context.LoadMap("tiled/map");
             _tiledMapRenderer.LoadMap(_context.Map);
             ConfigureWorld();
         }
@@ -59,6 +55,7 @@ namespace temp1.Screens
         public override void Update(GameTime gameTime)
         {
             _world.Update(gameTime);
+            _tiledMapRenderer.Update(gameTime);
             var state = Mouse.GetState();
             if (!this.Game.IsActive)
                 return;
