@@ -18,7 +18,7 @@ namespace temp1.Systems
         JumpPointParam jpParam;
         GameContext _context;
 
-        public PlayerControlSystem(OrthographicCamera camera, GameContext context) : base(Aspect.All(typeof(Pointed)))
+        public PlayerControlSystem(OrthographicCamera camera, GameContext context) : base(Aspect.All(typeof(Player)))
         {
             _camera = camera;
             _context = context;
@@ -36,7 +36,7 @@ namespace temp1.Systems
             var state = MouseExtended.GetState();
             if (state.LeftButton != ButtonState.Pressed)
                 return;
-            if(ActiveEntities.Count == 0){
+            if(_context.PointedId == -1){
                 CommitMovement(state);
                 return;
             }

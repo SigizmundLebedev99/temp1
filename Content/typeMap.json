@@ -17,7 +17,10 @@
             "x": 26,
             "y": 65
         },
-        "components":["enemy", "actor"]
+        "components":["enemy", "actor"],
+        "ai":{
+            "type":"randomMovement"
+        }
     },
     {
         "type": "tree",

@@ -2,6 +2,13 @@ using temp1.Components;
 
 namespace temp1.Data
 {
+    class AIParams
+    {
+        public string type;
+        public int targetMapId;
+        public float speed;
+    }
+
     class Origin{
         public float x;
         public float y;
@@ -14,6 +21,7 @@ namespace temp1.Data
         public string path;
         public Origin origin;
         public string[] components;
+        public AIParams ai;
     }
 }
 
