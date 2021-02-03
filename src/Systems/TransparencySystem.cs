@@ -17,7 +17,7 @@ namespace temp1.Systems
         Mapper<Hull> _hullMapper;
         GameContext _context;
 
-        Dictionary<int, (int, Color[])> _cache = new Dictionary<int, (int, Color[])>();
+        Dictionary<int, (int, int, Color[])> _cache = new Dictionary<int, (int, int, Color[])>();
 
         public TransparensySystem(GameContext context) : base(Aspect.All(typeof(Sprite), typeof(Hull)))
         {
@@ -56,16 +56,16 @@ namespace temp1.Systems
                 var texture = sprite.TextureRegion.Texture;
                 var data = new Color[texture.Width * texture.Height];
                 texture.GetData(data);
-                _cache.Add(id, (texture.Width, data));
+                _cache.Add(id, (texture.Width, texture.Height, data));
             }
-            var (textureWidth, pixels) = _cache[id];
+            var (textureWidth, textureHeight, pixels) = _cache[id];
             var center = new Vector2(player.Center.X, player.Center.Y);
 
             bool ContainsPoint(Vector2 v)
             {
                 var point = (v - new Vector2(hullRect.Left, hullRect.Top)).ToPoint();
                 var i = point.X + point.Y * textureWidth;
-                if (i >= pixels.Length || i < 0)
+                if (point.X > textureWidth || point.Y > textureHeight)
                     return false;
                 var a = pixels[i].A;
                 return a > 200;

@@ -33,7 +33,7 @@ namespace temp1.Systems
                 var box = _boxMapper.Get(entities[i]);
                 var hull = _hullMapper.Get(entities[i]);
                 if(hull != null && hull.IsPlayerIn)
-                    return;
+                    continue;
                 _spriteBatch.Draw(
                     sprite.TextureRegion.Texture,
                     box.Position,

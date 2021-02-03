@@ -7,8 +7,9 @@ using temp1.AI;
 using temp1.Components;
 using temp1.Data;
 
-static class ComponentsMap{
-    static ILookup<string, Type> _map = new []{
+static class ComponentsMap
+{
+    static ILookup<string, Type> _map = new[]{
         ("player", typeof(Player)),
         ("actor", typeof(AllowedToAct)),
         ("actor", typeof(Direction)),
@@ -21,24 +22,25 @@ static class ComponentsMap{
         {"randomMovement", typeof(RandomMovement)}
     };
 
-    public static void BuildComponents(Entity e, MapObjectType obj, GameContext context){
+    public static void BuildComponents(Entity e, MapObjectType obj, GameContext context)
+    {
         if (obj.components != null && obj.components.Length > 0)
+        {
+            var attachMethod = typeof(Entity).GetMethod(nameof(e.Attach));
+            foreach (var flag in obj.components)
             {
-                var attachMethod = typeof(Entity).GetMethod(nameof(e.Attach));
-                foreach (var flag in obj.components)
+                foreach (var _type in _map[flag])
                 {
-                    foreach (var _type in _map[flag])
-                    {
-                        var comp = Activator.CreateInstance(_type);
-                        attachMethod.MakeGenericMethod(_type).Invoke(e, new object[] { comp });
-                    }
+                    var comp = Activator.CreateInstance(_type);
+                    attachMethod.MakeGenericMethod(_type).Invoke(e, new object[] { comp });
                 }
             }
-            if (obj.ai != null)
-            {
-                var _type = _aiMap[obj.ai.type];
-                var ai = (BaseAI)Activator.CreateInstance(_type, new object[] { e.Id, context });
-                e.Attach(ai);
-            }
+        }
+        if (obj.ai != null)
+        {
+            var _type = _aiMap[obj.ai.type];
+            var ai = (BaseAI)Activator.CreateInstance(_type, new object[] { e.Id, context });
+            e.Attach(ai);
+        }
     }
 }
