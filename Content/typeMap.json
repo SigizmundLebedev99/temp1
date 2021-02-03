@@ -36,8 +36,8 @@
         "animated": true,
         "path": "animations/chest1.sf",
         "origin": {
-            "x": 16,
-            "y": 16
+            "x": 25,
+            "y": 35
         },"components":["chest"]
     },
     {
@@ -46,7 +46,7 @@
         "path": "images/house",
         "origin": {
             "x": 0,
-            "y": 541
+            "y": 464
         }, "components":["hull"]
     }
 ]

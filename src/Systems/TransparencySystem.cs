@@ -65,7 +65,7 @@ namespace temp1.Systems
             {
                 var point = (v - new Vector2(hullRect.Left, hullRect.Top)).ToPoint();
                 var i = point.X + point.Y * textureWidth;
-                if (point.X > textureWidth || point.Y > textureHeight)
+                if (point.X > textureWidth || point.Y > textureHeight || i < 0 || i >= pixels.Length)
                     return false;
                 var a = pixels[i].A;
                 return a > 200;
