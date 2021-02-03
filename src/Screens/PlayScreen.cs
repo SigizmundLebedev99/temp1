@@ -44,6 +44,7 @@ namespace temp1.Screens
             _world.RegisterSystem(new PlayerControlSystem(camera, _context));
             _world.RegisterSystem(new AISystem(_context.Grid));
             _world.RegisterSystem(new MoveSystem());
+            _world.RegisterSystem(new TransparensySystem(_context));
             _world.RegisterSystem(new ExpirationSystem());
             _world.RegisterSystem(new DirectionSystem());
             _world.RegisterSystem(new DirectionToAnimationSystem());

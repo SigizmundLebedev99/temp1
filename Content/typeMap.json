@@ -27,7 +27,7 @@
         "animated": false,
         "path": "images/tree",
         "origin": {
-            "x": 64,
+            "x": 65,
             "y": 160
         }
     },
@@ -39,5 +39,14 @@
             "x": 16,
             "y": 16
         },"components":["chest"]
+    },
+    {
+        "type": "house",
+        "animated": false,
+        "path": "images/house",
+        "origin": {
+            "x": 0,
+            "y": 541
+        }, "components":["hull"]
     }
 ]

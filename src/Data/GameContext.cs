@@ -90,24 +90,9 @@ namespace temp1
             }
             if (position.HasValue)
                 entity.Attach(new Dot(position.Value));
-            if (obj.components != null && obj.components.Length > 0)
-            {
-                var attachMethod = typeof(Entity).GetMethod(nameof(entity.Attach));
-                foreach (var flag in obj.components)
-                {
-                    foreach (var _type in ComponentsMap.Component_Map[flag])
-                    {
-                        var comp = Activator.CreateInstance(_type);
-                        attachMethod.MakeGenericMethod(_type).Invoke(entity, new object[] { comp });
-                    }
-                }
-            }
-            if (obj.ai != null)
-            {
-                var _type = ComponentsMap.AI_Map[obj.ai.type];
-                var ai = (BaseAI)Activator.CreateInstance(_type, new object[] { entity.Id, this });
-                entity.Attach(ai);
-            }
+
+            ComponentsMap.BuildComponents(entity, obj, this);
+            
             if (type == "player")
                 PlayerId = entity.Id;
             return entity.Id;

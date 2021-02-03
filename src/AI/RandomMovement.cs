@@ -15,7 +15,7 @@ namespace temp1.AI
         private Dot _dot;
         private JumpPointParam _jpParam;
         private IBehaviourTreeNode _tree;
-
+        float _time = 0;
         public RandomMovement(int entityId, GameContext context) : base(entityId, context)
         {
             var cm = context.World.ComponentManager;
@@ -24,18 +24,28 @@ namespace temp1.AI
             _jpParam = new JumpPointParam(context.Grid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
 
             _tree = new BehaviourTreeBuilder()
-                .Selector("start")
+                .Sequence("start")
                     .Do("checkMovement", t =>
                     {
                         if(_movement == null || _movement.IsCompleted)
-                            return BehaviourTreeStatus.Failure;
-                        return BehaviourTreeStatus.Success;
+                            return BehaviourTreeStatus.Success;
+                        return BehaviourTreeStatus.Running;
                     })
-                    .Do("createPath", t =>
-                    {
-                        SetMovement();
-                        return BehaviourTreeStatus.Success;
-                    })  
+                    .Sequence("createPath")
+                        .Do("await", t =>{
+                            if(_time <= 1){
+                                _time += 0.007f;
+                                return BehaviourTreeStatus.Running;
+                            }
+                            _time = 0;
+                            return BehaviourTreeStatus.Success;
+                        })
+                        .Do("create", t =>
+                        {
+                            SetMovement();
+                            return BehaviourTreeStatus.Success;
+                        })
+                    .End()
                 .End().Build();
         }
 

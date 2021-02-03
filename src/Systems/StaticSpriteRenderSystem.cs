@@ -11,6 +11,7 @@ namespace temp1.Systems
     {
         private Mapper<Sprite> _spriteMapper;
         private Mapper<Dot> _boxMapper;
+        private Mapper<Hull> _hullMapper;
         private SpriteBatch _spriteBatch;
         public StaticSpriteRenderSystem(SpriteBatch sb) : base(Aspect.All(typeof(Sprite), typeof(Dot)))
         {
@@ -21,6 +22,7 @@ namespace temp1.Systems
         {
             _spriteMapper = mapperService.Get<Sprite>();
             _boxMapper = mapperService.Get<Dot>();
+            _hullMapper = mapperService.Get<Hull>();
         }
 
         public override void Draw(GameTime gameTime)
@@ -29,6 +31,9 @@ namespace temp1.Systems
             for(var i = 0; i < entities.Count; i ++){
                 var sprite = _spriteMapper.Get(entities[i]);
                 var box = _boxMapper.Get(entities[i]);
+                var hull = _hullMapper.Get(entities[i]);
+                if(hull != null && hull.IsPlayerIn)
+                    return;
                 _spriteBatch.Draw(
                     sprite.TextureRegion.Texture,
                     box.Position,

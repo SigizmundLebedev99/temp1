@@ -18,7 +18,6 @@ namespace temp1.Systems
         private Mapper<Dot> _dotMapper;
         private Mapper<Storage> _storageMapper;
         private Mapper<Enemy> _enemyMapper;
-        private Mapper<Pointed> _pointedMapper;
         private Mapper<Sprite> _spriteMapper;
         private Mapper<AnimatedSprite> _aSpriteMapper;
 
@@ -39,7 +38,6 @@ namespace temp1.Systems
             _storageMapper = mapperService.Get<Storage>();
             _enemyMapper = mapperService.Get<Enemy>();
             _dotMapper = mapperService.Get<Dot>();
-            _pointedMapper = mapperService.Get<Pointed>();
             _spriteMapper = mapperService.Get<Sprite>();
             _aSpriteMapper = mapperService.Get<AnimatedSprite>();
         }

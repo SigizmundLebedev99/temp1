@@ -7,5 +7,8 @@ namespace temp1.Components
     class Portal{}
     class Enemy{}
     class Storage{}
-    class Pointed{}
+
+    class Hull{
+        public bool IsPlayerIn = false;
+    }
 }
