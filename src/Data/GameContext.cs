@@ -5,6 +5,7 @@ using EpPathFinding.cs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Serialization;
@@ -22,6 +23,7 @@ namespace temp1
         public World World;
         public TiledMap Map;
         public BaseGrid Grid;
+        public OrthographicCamera Camera;
 
         public int PlayerId;
         public int PointedId;
@@ -32,9 +34,10 @@ namespace temp1
         Dictionary<string, MapObjectType> MapObjectTypes;
         JsonContentLoader loader = new JsonContentLoader();
 
-        public GameContext(ContentManager content)
+        public GameContext(ContentManager content, OrthographicCamera camera)
         {
             _content = content;
+            Camera = camera;
             MapObjectTypes = new Dictionary<string, MapObjectType>();
             Sprites = new Dictionary<string, Sprite>();
             SpriteSheets = new Dictionary<string, SpriteSheet>();

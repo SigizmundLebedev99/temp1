@@ -26,7 +26,7 @@ namespace temp1.Screens
         {
             camera = new OrthographicCamera(GraphicsDevice);
             _world = new World();
-            _context = new GameContext(Content);
+            _context = new GameContext(Content, camera);
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice);
         }
 
