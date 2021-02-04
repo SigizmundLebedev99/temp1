@@ -59,6 +59,7 @@ namespace temp1.AI
                                 var sprite = aSpriteMap.Get(targetId);
                                 sprite.Play("open");
                                 targetId = -1;
+                                Context.IsInventoryOpen = true;
                                 return BehaviourTreeStatus.Success;
                             })
                         .End()

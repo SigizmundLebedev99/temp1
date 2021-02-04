@@ -24,7 +24,7 @@ namespace temp1
 
         protected override void Initialize()
         {
-            _screenManager.LoadScreen(new MenuScreen(this), new FadeTransition(this.GraphicsDevice, Color.White, 0.5f));
+            _screenManager.LoadScreen(new MenuScreen(_screenManager, this), new FadeTransition(this.GraphicsDevice, Color.White, 0.5f));
             base.Initialize();
         }
 

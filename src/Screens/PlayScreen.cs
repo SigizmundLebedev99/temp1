@@ -5,17 +5,21 @@ using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Tiled.Renderers;
+using Myra.Graphics2D.UI;
 using temp1.Systems;
+using temp1.UI;
 
 namespace temp1.Screens
 {
     class PlayScreen : GameScreen
     {
-        private SpriteBatch _sb;
+        SpriteBatch _sb;
         TiledMapRenderer _tiledMapRenderer;
         World _world;
         GameContext _context;
-        private OrthographicCamera camera;
+        OrthographicCamera camera;
+
+        Desktop inventory2;
 
         public PlayScreen(Game game) : base(game)
         {
@@ -32,6 +36,9 @@ namespace temp1.Screens
 
         public override void LoadContent()
         {
+            inventory2 = new Desktop();
+            inventory2.Root = new Inventory2(Content, _context);
+
             _context.LoadTypes();
             _context.LoadMap("tiled/map", _world);
             _tiledMapRenderer.LoadMap(_context.Map);
@@ -54,7 +61,7 @@ namespace temp1.Screens
         
         public override void Update(GameTime gameTime)
         {
-            if(!Game.IsActive)
+            if(!Game.IsActive || _context.IsInventoryOpen)
                 return;
             _world.Update(gameTime);
             _tiledMapRenderer.Update(gameTime);
@@ -78,6 +85,9 @@ namespace temp1.Screens
             _tiledMapRenderer.Draw(matrix);
             _world.Draw(gameTime);
             _sb.End();
+
+            if(_context.IsInventoryOpen)
+                inventory2.Render();
         }
     }
 }

@@ -28,6 +28,8 @@ namespace temp1
         public int PlayerId;
         public int PointedId;
 
+        public bool IsInventoryOpen = false;
+
         ContentManager _content;
         Dictionary<string, SpriteSheet> SpriteSheets;
         Dictionary<string, Sprite> Sprites;
