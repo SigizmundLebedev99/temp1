@@ -53,8 +53,8 @@ namespace temp1
         {
             World = world;
             Map = _content.Load<TiledMap>(map);
-            ConfigureMapObjects();
             ConfigureObstacles();
+            ConfigureMapObjects();
         }
 
         public Sprite GetSprite(string name)
