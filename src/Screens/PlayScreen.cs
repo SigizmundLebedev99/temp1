@@ -41,7 +41,6 @@ namespace temp1.Screens
         private void ConfigureWorld()
         {
             _world.RegisterSystem(new PointerSystem(_sb, _context, camera));
-            _world.RegisterSystem(new PlayerControlSystem(camera, _context));
             _world.RegisterSystem(new AISystem(_context.Grid));
             _world.RegisterSystem(new MoveSystem());
             _world.RegisterSystem(new TransparensySystem(_context));

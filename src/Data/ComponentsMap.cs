@@ -19,7 +19,8 @@ static class ComponentsMap
     }.ToLookup(e => e.Item1, e => e.Item2);
 
     static Dictionary<string, Type> _aiMap = new Dictionary<string, Type>{
-        {"randomMovement", typeof(RandomMovement)}
+        {"randomMovement", typeof(RandomMovement)},
+        {"player", typeof(PlayerControll)}
     };
 
     public static void BuildComponents(Entity e, MapObjectType obj, GameContext context)

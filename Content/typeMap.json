@@ -7,7 +7,10 @@
             "x": 26,
             "y": 65
         },
-        "components":["player", "actor"]
+        "components":["player", "actor"],
+        "ai":{
+            "type":"player"
+        }
     },
     {
         "type": "enemy",

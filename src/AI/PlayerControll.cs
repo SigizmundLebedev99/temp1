@@ -41,15 +41,22 @@ namespace temp1.AI
                         return BehaviourTreeStatus.Running;
                     })
                     .Sequence("Possible Actions")
-                        .Inverter("i1")
-                        .Sequence("Enemy")
-                            .Do("is enemy", t => {
-                                if(_enemyMap.Has(Context.PointedId))
-                                    return BehaviourTreeStatus.Success;
+                        .Do("justMove", t => {
+                            if(Context.PointedId == -1){
+                                CommitMovement(state);
                                 return BehaviourTreeStatus.Failure;
-                            })
+                            }
+                            return BehaviourTreeStatus.Success;
+                        })
+                        .Inverter("i1")
+                            .Sequence("Enemy")
+                                .Do("is enemy", t => {
+                                    if(_enemyMap.Has(Context.PointedId))
+                                        return BehaviourTreeStatus.Success;
+                                    return BehaviourTreeStatus.Failure;
+                                })
+                            .End()
                         .End()
-                        .Inverter("i2")
                         .Sequence("Store")
                             .Do("is store", t => {
                                 if(_storageMap.Has(Context.PointedId))
@@ -57,10 +64,6 @@ namespace temp1.AI
                                 return BehaviourTreeStatus.Failure;
                             })
                         .End()
-                        .Do("justMove", t => {
-                            CommitMovement(state);
-                            return BehaviourTreeStatus.Success;
-                        })
                     .End()
                 .End().Build();
         }
