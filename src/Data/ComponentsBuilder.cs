@@ -35,6 +35,7 @@ static class ComponentsBuilder
         var mapObj = e.Get<MapObject>();
         if (type.type == "player")
         {
+            e.Attach(new Storage());
             context.PlayerId = e.Id;
         }
         if (type.type == "enemy")

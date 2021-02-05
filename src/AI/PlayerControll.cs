@@ -57,8 +57,7 @@ namespace temp1.AI
                                 if (sprite == null || storage == null)
                                     return BehaviourTreeStatus.Failure;
                                 sprite.Play("open");
-                                Context.Inventory2.Build(storage);
-                                Context.GameState = GameState.Inventry2Opened;
+                                Context.Inventory2.Open(storage, _storageMap.Get(EntityId));
                                 targetId = -1;
                                 return BehaviourTreeStatus.Success;
                             })

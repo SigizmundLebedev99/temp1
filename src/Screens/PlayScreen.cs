@@ -85,7 +85,7 @@ namespace temp1.Screens
             if (state.Y > this.GraphicsDevice.Viewport.Height)
                 camera.Move(new Vector2(0, 5));
             if(state.RightButton == ButtonState.Pressed)
-                _context.GameState = GameState.Inventry1Opened;
+                _context.Inventory1.Open();
         }
 
         public override void Draw(GameTime gameTime)
