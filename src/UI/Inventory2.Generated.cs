@@ -26,7 +26,7 @@ namespace temp1.UI
 			scrollViewer1.Content = firstPanel;
 
 			var textBox2 = new TextBox();
-			textBox2.Text = "Playert";
+			textBox2.Text = "Player";
 			textBox2.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 			textBox2.GridColumn = 3;
 			textBox2.GridRow = 1;

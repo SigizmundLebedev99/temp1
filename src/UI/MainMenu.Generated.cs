@@ -16,7 +16,7 @@ namespace temp1.UI
 		{
 			var label1 = new Label();
 			label1.Text = "My Awesome Game";
-			label1.TextColor = Color.Orange;
+			label1.TextColor = Color.Violet;
 			label1.Padding = new Thickness(0, 25, 0, 0);
 			label1.HorizontalAlignment = Myra.Graphics2D.UI.HorizontalAlignment.Center;
 

@@ -1,0 +1,23 @@
+[
+    {
+        "type": "bread",
+        "Flags":1,
+        "HealingFrom":2,
+        "HealingTo":2,
+        "StackSize":5
+    },
+    {
+        "type": "red_potion",
+        "Flags":1,
+        "HealingFrom":7,
+        "HealingTo":7,
+        "StackSize":5
+    },
+    {
+        "type": "sword",
+        "Flags":8,
+        "HealingFrom":2,
+        "HealingTo":2,
+        "StackSize":1
+    }
+]

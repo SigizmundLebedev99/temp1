@@ -18,7 +18,7 @@
     <ScrollViewer GridColumn="1" GridRow="2">
       <VerticalStackPanel Background="#FF950362" Id="firstPanel" />
     </ScrollViewer>
-    <TextBox GridColumn="3" GridRow="1" Text="Playert" HorizontalAlignment="Center" Background="#00000000"/>
+    <TextBox GridColumn="3" GridRow="1" Text="Player" HorizontalAlignment="Center" Background="#00000000"/>
     <ScrollViewer GridColumn="3" GridRow="2">
       <VerticalStackPanel Background="#FF950362" Id="secondPanel" />
     </ScrollViewer>

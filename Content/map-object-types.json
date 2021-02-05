@@ -7,7 +7,7 @@
             "x": 26,
             "y": 65
         },
-        "components":["player", "actor"],
+        "handler":"ActorHandler",
         "ai":{
             "type":"player"
         }
@@ -20,7 +20,7 @@
             "x": 26,
             "y": 65
         },
-        "components":["enemy", "actor"],
+        "handler":"ActorHandler",
         "ai":{
             "type":"randomMovement"
         }
@@ -41,7 +41,8 @@
         "origin": {
             "x": 25,
             "y": 35
-        },"components":["chest"]
+        },
+        "handler":"ChestHandler"
     },
     {
         "type": "house",
@@ -50,6 +51,7 @@
         "origin": {
             "x": 0,
             "y": 464
-        }, "components":["hull"]
+        },
+        "handler":"HullHandler"
     }
 ]

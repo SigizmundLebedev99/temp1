@@ -24,6 +24,8 @@ namespace temp1
         public TiledMap Map;
         public BaseGrid Grid;
         public OrthographicCamera Camera;
+        public Dictionary<string, MapObjectType> MapObjectTypes;
+        public Dictionary<string, ItemType> ItemTypes;
 
         public int PlayerId;
         public int PointedId;
@@ -33,7 +35,6 @@ namespace temp1
         ContentManager _content;
         Dictionary<string, SpriteSheet> SpriteSheets;
         Dictionary<string, Sprite> Sprites;
-        Dictionary<string, MapObjectType> MapObjectTypes;
         JsonContentLoader loader = new JsonContentLoader();
 
         public GameContext(ContentManager content, OrthographicCamera camera)
@@ -47,8 +48,10 @@ namespace temp1
 
         public void LoadTypes()
         {
-            var types = _content.Load<MapObjectType[]>("typeMap.json", loader);
-            MapObjectTypes = types.ToDictionary(e => e.type);
+            var mapTypes = _content.Load<MapObjectType[]>("map-object-types.json", loader);
+            MapObjectTypes = mapTypes.ToDictionary(e => e.type);
+            var itemTypes = _content.Load<ItemType[]>("item-types.json", loader);
+            ItemTypes = itemTypes.ToDictionary(e => e.type);
         }
 
         public void LoadMap(string map, World world)
@@ -75,7 +78,7 @@ namespace temp1
             return sprite;
         }
 
-        public int CreateEntity(string type, Vector2? position = null)
+        public int CreateEntity(string type, Vector2? position = null, TiledMapObject mapObj = null)
         {
             var obj = MapObjectTypes[type];
             var entity = World.CreateEntity();
@@ -96,10 +99,8 @@ namespace temp1
             if (position.HasValue)
                 entity.Attach(new Dot(position.Value));
 
-            ComponentsMap.BuildComponents(entity, obj, this);
-            
-            if (type == "player")
-                PlayerId = entity.Id;
+            ComponentsMap.BuildComponents(entity, obj, mapObj, this);
+
             return entity.Id;
         }
 
@@ -132,9 +133,9 @@ namespace temp1
         void ConfigureMapObjects()
         {
             var mapObjects = Map.GetLayer<TiledMapObjectLayer>("markers").Objects;
-            foreach (var obj in mapObjects)
+            foreach (var mapObj in mapObjects)
             {
-                CreateEntity(obj.Type, obj.Position);
+                CreateEntity(mapObj.Type, mapObj.Position, mapObj);
             }
         }
     }
