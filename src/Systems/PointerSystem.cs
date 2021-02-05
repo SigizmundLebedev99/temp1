@@ -15,9 +15,7 @@ namespace temp1.Systems
         private bool inMap = false;
         AnimatedSprite mark;
 
-        private Mapper<Dot> _dotMapper;
-        private Mapper<Storage> _storageMapper;
-        private Mapper<Enemy> _enemyMapper;
+        private Mapper<MapObject> _dotMapper;
         private Mapper<Sprite> _spriteMapper;
         private Mapper<AnimatedSprite> _aSpriteMapper;
 
@@ -25,25 +23,25 @@ namespace temp1.Systems
         private GameContext _context;
         OrthographicCamera _camera;
 
-        public PointerSystem(SpriteBatch sb, GameContext context, OrthographicCamera camera) : base(Aspect.All(typeof(Dot)).One(typeof(Sprite), typeof(AnimatedSprite)))
+        public PointerSystem(SpriteBatch sb, GameContext context) : base(Aspect.All(typeof(MapObject)).One(typeof(Sprite), typeof(AnimatedSprite)))
         {
             _context = context;
             _spriteBatch = sb;
-            _camera = camera;
+            _camera = context.Camera;
             mark = _context.GetAnimatedSprite("animations/mark.sf");
         }
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _storageMapper = mapperService.Get<Storage>();
-            _enemyMapper = mapperService.Get<Enemy>();
-            _dotMapper = mapperService.Get<Dot>();
+            _dotMapper = mapperService.Get<MapObject>();
             _spriteMapper = mapperService.Get<Sprite>();
             _aSpriteMapper = mapperService.Get<AnimatedSprite>();
         }
 
         public void Update(GameTime gameTime)
         {
+            if( _context.GameState != GameState.Default)
+                return;
             var state = MouseExtended.GetState();
             var worldPos = _camera.ScreenToWorld(state.Position.X, state.Position.Y);
             var point = (worldPos / 32).ToPoint();
@@ -76,9 +74,9 @@ namespace temp1.Systems
 
                 if (bounds.Contains(pos - dot.Position + sprite.Origin))
                 {
-                    if (_storageMapper.Has(id))
+                    if (dot.Flag == MapObjectFlag.Storage)
                         mark.Play("hand");
-                    else if (_enemyMapper.Has(id))
+                    else if (dot.Flag == MapObjectFlag.Enemy)
                         mark.Play("sword");
                     else
                         continue;
@@ -92,7 +90,7 @@ namespace temp1.Systems
 
         public void Draw(GameTime gameTime)
         {
-            if (!inMap)
+            if (!inMap || _context.GameState != GameState.Default)
                 return;
             _spriteBatch.Draw(mark, position);
         }

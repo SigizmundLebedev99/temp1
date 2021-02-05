@@ -53,7 +53,7 @@ namespace temp1.Screens
 
         private void ConfigureWorld()
         {
-            _world.RegisterSystem(new PointerSystem(_sb, _context, camera));
+            _world.RegisterSystem(new PointerSystem(_sb, _context));
             _world.RegisterSystem(new AISystem(_context.CollisionGrid));
             _world.RegisterSystem(new MoveSystem());
             _world.RegisterSystem(new TransparensySystem(_context));
@@ -67,10 +67,12 @@ namespace temp1.Screens
         
         public override void Update(GameTime gameTime)
         {
-            if(!Game.IsActive || _context.GameState != GameState.Default)
+            if(!Game.IsActive)
                 return;
             _world.Update(gameTime);
             _tiledMapRenderer.Update(gameTime);
+            if(_context.GameState != GameState.Default)
+                return;
             var state = Mouse.GetState();
             if (!this.Game.IsActive)
                 return;

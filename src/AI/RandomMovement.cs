@@ -12,14 +12,14 @@ namespace temp1.AI
     {
         private Mapper<IMovement> _moveMapper;
         private IMovement _movement = null;
-        private Dot _dot;
+        private MapObject _dot;
         private JumpPointParam _jpParam;
         private IBehaviourTreeNode _tree;
         float _time = 0;
         public RandomMovement(int entityId, GameContext context) : base(entityId, context)
         {
             var cm = context.World.ComponentManager;
-            _dot = context.World.GetEntity(entityId).Get<Dot>();
+            _dot = context.World.GetEntity(entityId).Get<MapObject>();
             _moveMapper = cm.Get<IMovement>();
             _jpParam = new JumpPointParam(context.CollisionGrid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
 

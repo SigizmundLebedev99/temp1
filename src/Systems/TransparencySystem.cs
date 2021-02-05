@@ -13,7 +13,7 @@ namespace temp1.Systems
     {
         Mapper<AnimatedSprite> _aSpriteMapper;
         Mapper<Sprite> _spriteMapper;
-        Mapper<Dot> _dotMapper;
+        Mapper<MapObject> _dotMapper;
         Mapper<Hull> _hullMapper;
         GameContext _context;
 
@@ -26,7 +26,7 @@ namespace temp1.Systems
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _dotMapper = mapperService.Get<Dot>();
+            _dotMapper = mapperService.Get<MapObject>();
             _spriteMapper = mapperService.Get<Sprite>();
             _aSpriteMapper = mapperService.Get<AnimatedSprite>();
             _hullMapper = mapperService.Get<Hull>();

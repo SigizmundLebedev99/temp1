@@ -30,16 +30,16 @@ static class ComponentsBuilder
         method.Invoke(null, new object[] { e, obj, mapObj, context });
     }
 
-    static void ActorHandler(Entity e, MapObjectType type, TiledMapObject mapObject, GameContext context)
+    static void ActorHandler(Entity e, MapObjectType type, TiledMapObject tiledMapObj, GameContext context)
     {
+        var mapObj = e.Get<MapObject>();
         if (type.type == "player")
         {
-            e.Attach(new Player());
             context.PlayerId = e.Id;
         }
         if (type.type == "enemy")
         {
-            e.Attach(new Enemy());
+            mapObj.Flag = MapObjectFlag.Enemy;
         }
         e.Attach(new AllowedToAct());
         e.Attach(new Direction());
@@ -47,6 +47,8 @@ static class ComponentsBuilder
 
     static void ChestHandler(Entity e, MapObjectType obj, TiledMapObject mapObject, GameContext context)
     {
+        var mapObj = e.Get<MapObject>();
+        mapObj.Flag = MapObjectFlag.Storage;
         var storage = new Storage();
         foreach (var prop in mapObject.Properties)
         {

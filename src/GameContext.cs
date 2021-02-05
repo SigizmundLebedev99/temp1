@@ -87,28 +87,28 @@ namespace temp1
             return sprite;
         }
 
-        public int CreateEntity(string type, Vector2? position = null, TiledMapObject mapObj = null)
+        public int CreateEntity(string type, Vector2? position = null, TiledMapObject tiledMapObj = null)
         {
-            var obj = MapObjectTypes[type];
+            var objType = MapObjectTypes[type];
             var entity = World.CreateEntity();
-            if (obj.animated)
+            if (objType.animated)
             {
-                var sprite = GetAnimatedSprite(obj.path);
-                if (obj.origin != null)
-                    sprite.Origin = new Vector2(obj.origin.x, obj.origin.y);
+                var sprite = GetAnimatedSprite(objType.path);
+                if (objType.origin != null)
+                    sprite.Origin = new Vector2(objType.origin.x, objType.origin.y);
                 entity.Attach(sprite);
             }
             else
             {
-                var sprite = GetSprite(obj.path);
-                if (obj.origin != null)
-                    sprite.Origin = new Vector2(obj.origin.x, obj.origin.y);
+                var sprite = GetSprite(objType.path);
+                if (objType.origin != null)
+                    sprite.Origin = new Vector2(objType.origin.x, objType.origin.y);
                 entity.Attach(sprite);
             }
-            if (position.HasValue)
-                entity.Attach(new Dot(position.Value));
+            if (position!= null)
+                entity.Attach(new MapObject(position.Value, MapObjectFlag.None));
 
-            ComponentsBuilder.BuildComponents(entity, obj, mapObj, this);
+            ComponentsBuilder.BuildComponents(entity, objType, tiledMapObj, this);
 
             return entity.Id;
         }

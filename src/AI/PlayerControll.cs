@@ -15,8 +15,7 @@ namespace temp1.AI
     {
         Mapper<IMovement> _moveMapper;
         Mapper<Storage> _storageMap;
-        Mapper<Enemy> _enemyMap;
-        Mapper<Dot> _dotMapper;
+        Mapper<MapObject> _dotMapper;
 
         JumpPointParam _jpParam;
         IBehaviourTreeNode _tree;
@@ -24,10 +23,9 @@ namespace temp1.AI
         public PlayerControll(int entityId, GameContext context) : base(entityId, context)
         {
             var cm = context.World.ComponentManager;
-            _dotMapper = cm.Get<Dot>();
+            _dotMapper = cm.Get<MapObject>();
             _moveMapper = cm.Get<IMovement>();
             _storageMap = cm.Get<Storage>();
-            _enemyMap = cm.Get<Enemy>();
             var aSpriteMap = cm.Get<AnimatedSprite>();
 
             int targetId = -1;
@@ -54,12 +52,12 @@ namespace temp1.AI
                             })
                             .Do("performAction", t =>
                             {
-                                if (!_storageMap.Has(targetId) || !aSpriteMap.Has(targetId))
-                                    return BehaviourTreeStatus.Failure;
                                 var sprite = aSpriteMap.Get(targetId);
+                                var storage = _storageMap.Get(targetId);
+                                if (sprite == null || storage == null)
+                                    return BehaviourTreeStatus.Failure;
                                 sprite.Play("open");
-                                
-                                Context.Inventory2.Build(_storageMap.Get(targetId));
+                                Context.Inventory2.Build(storage);
                                 Context.GameState = GameState.Inventry2Opened;
                                 targetId = -1;
                                 return BehaviourTreeStatus.Success;
@@ -77,6 +75,12 @@ namespace temp1.AI
                         return BehaviourTreeStatus.Failure;
                     })
                     .Selector("Possible Actions")
+                        .Do("inventory open", t =>
+                        {
+                            if(Context.GameState == GameState.Default)
+                                return BehaviourTreeStatus.Failure;
+                            return BehaviourTreeStatus.Success;
+                        })
                         .Do("just move", t =>
                         {
                             if (Context.PointedId != -1)

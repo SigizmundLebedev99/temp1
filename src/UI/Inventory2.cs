@@ -46,10 +46,11 @@ namespace temp1.UI
                 var sprite = _context.GetSprite(from.Content[i].ItemType.image);
                 var slotBox = new Grid();
                 var item = new Image();
-                var label = new TextBox();
+                var label = new Label();
                 label.Background = null;
                 label.TextColor = Color.Black;
                 label.Text = slot.Count.ToString();
+                label.Margin = new Thickness(6,2);
                 item.Renderable = new TextureRegion(sprite.TextureRegion.Texture);
                 item.BorderThickness = new Myra.Graphics2D.Thickness(1);
                 slotBox.AddChild(item);

@@ -10,7 +10,8 @@ namespace temp1.Systems
     class SpawnSystem : EntityUpdateSystem
     {
         GameContext _context;
-        public SpawnSystem(GameContext context) : base(Aspect.One(typeof(Enemy), typeof(Portal)))
+        bool spawned = false;
+        public SpawnSystem(GameContext context) : base(Aspect.One())
         {
             _context = context;
         }
@@ -21,8 +22,9 @@ namespace temp1.Systems
 
         public override void Update(GameTime gameTime)
         {
-            if (ActiveEntities.Count > 0)
+            if (spawned)
                 return;
+            spawned = true;
             var portal = CreateEntity();
             var random = new Random();
             var grid = _context.CollisionGrid;
@@ -30,12 +32,11 @@ namespace temp1.Systems
             if (!grid.IsWalkableAt(point.X, point.Y))
                 return;
             
-            portal.Attach(new Dot
+            portal.Attach(new MapObject
             {
                 Position = point.ToVector2() * 32 + new Vector2(16)
             });
             portal.Attach(_context.GetAnimatedSprite("animations/portal.sf"));
-            portal.Attach(new Portal());
             portal.Attach<IExpired>(new Timer(1.5f, () =>
             {
                 _context.CreateEntity("enemy", point.ToVector2() * 32 + new Vector2(16));

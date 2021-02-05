@@ -10,10 +10,10 @@ namespace temp1.Systems
     class StaticSpriteRenderSystem : EntityDrawSystem
     {
         private Mapper<Sprite> _spriteMapper;
-        private Mapper<Dot> _boxMapper;
+        private Mapper<MapObject> _boxMapper;
         private Mapper<Hull> _hullMapper;
         private SpriteBatch _spriteBatch;
-        public StaticSpriteRenderSystem(SpriteBatch sb) : base(Aspect.All(typeof(Sprite), typeof(Dot)))
+        public StaticSpriteRenderSystem(SpriteBatch sb) : base(Aspect.All(typeof(Sprite), typeof(MapObject)))
         {
             _spriteBatch = sb;
         }
@@ -21,7 +21,7 @@ namespace temp1.Systems
         public override void Initialize(IComponentMapperService mapperService)
         {
             _spriteMapper = mapperService.Get<Sprite>();
-            _boxMapper = mapperService.Get<Dot>();
+            _boxMapper = mapperService.Get<MapObject>();
             _hullMapper = mapperService.Get<Hull>();
         }
 
