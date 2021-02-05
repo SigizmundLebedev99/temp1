@@ -2,11 +2,11 @@
   <Project.ExportOptions Namespace="temp1.UI" Class="Inventory2" OutputPath="C:\Users\dmlebedev\Desktop\Новая папка\temp1\src\UI" />
   <Grid >
     <Grid.ColumnsProportions>
-      <Proportion Type="Part" Value="0.5" />
       <Proportion Type="Part"/>
+      <Proportion Type="Pixels" Value="225" />
       <Proportion Type="Pixels" Value="34" />
-      <Proportion Type="Part"/>
-      <Proportion Type="Part" Value="0.5" />
+      <Proportion Type="Pixels" Value="225" />
+      <Proportion Type="Part" />
     </Grid.ColumnsProportions>
     <Grid.RowsProportions>
       <Proportion Type="Part" />
@@ -22,6 +22,6 @@
     <ScrollViewer GridColumn="3" GridRow="2">
       <VerticalStackPanel Background="#FF950362" Id="secondPanel" />
     </ScrollViewer>
-    <TextButton Text="X" Margin="12, 0, 0, 0" Padding="10, 2" GridColumn="4" GridRow="1" Background="#FE3930FF" Id="closeButton" />
+    <TextButton Text="X" PressedBackground="#CC3112FF" Margin="12, 0, 0, 0" Padding="10, 2" GridColumn="4" GridRow="1" Background="#B22922FF" OverBackground="#FE3930FF" Id="closeButton" />
   </Grid>
 </Project>

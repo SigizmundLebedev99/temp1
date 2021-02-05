@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Tiled;
@@ -9,7 +8,7 @@ using temp1.AI;
 using temp1.Components;
 using temp1.Data;
 
-static class ComponentsMap
+static class ComponentsBuilder
 {
     static Dictionary<string, Type> _aiMap = new Dictionary<string, Type>{
         {"randomMovement", typeof(RandomMovement)},
@@ -27,7 +26,7 @@ static class ComponentsMap
 
         if (obj.handler == null)
             return;
-        var method = typeof(ComponentsMap).GetMethod(obj.handler, BindingFlags.Static | BindingFlags.NonPublic);
+        var method = typeof(ComponentsBuilder).GetMethod(obj.handler, BindingFlags.Static | BindingFlags.NonPublic);
         method.Invoke(null, new object[] { e, obj, mapObj, context });
     }
 
@@ -51,13 +50,29 @@ static class ComponentsMap
         var storage = new Storage();
         foreach (var prop in mapObject.Properties)
         {
-            if (int.Parse(prop.Value) == 0)
+            var type = context.ItemTypes[prop.Key];
+            var count = int.Parse(prop.Value);
+            if (count == 0)
                 continue;
-            storage.Content.Add(new FilledSlot{
-                ItemType = context.ItemTypes[prop.Key],
-                count = int.Parse(prop.Value)
-            });
+            var _count = count;
+            while(_count > 0){
+                if(type.stackSize < _count){
+                    _count -= type.stackSize;
+                    storage.Content.Add(new FilledSlot{
+                        ItemType = type,
+                        Count = type.stackSize
+                    });
+                }
+                else{
+                    storage.Content.Add(new FilledSlot{
+                        ItemType = type,
+                        Count = _count
+                    });
+                    break;
+                }
+            }
         }
+        e.Attach(storage);
     }
 
     static void HullHandler(Entity e, MapObjectType type, TiledMapObject mapObject, GameContext context)

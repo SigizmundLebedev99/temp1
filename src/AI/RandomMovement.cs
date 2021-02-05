@@ -21,7 +21,7 @@ namespace temp1.AI
             var cm = context.World.ComponentManager;
             _dot = context.World.GetEntity(entityId).Get<Dot>();
             _moveMapper = cm.Get<IMovement>();
-            _jpParam = new JumpPointParam(context.Grid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
+            _jpParam = new JumpPointParam(context.CollisionGrid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
 
             _tree = new BehaviourTreeBuilder()
                 .Sequence("start")
@@ -56,7 +56,7 @@ namespace temp1.AI
 
         bool SetMovement(){
             var random = new Random();
-            var grid = Context.Grid;
+            var grid = Context.CollisionGrid;
             Point point = new Point(random.Next(0, grid.width), random.Next(0, grid.height));
             if (!grid.IsWalkableAt(point.X, point.Y))
                 return false;

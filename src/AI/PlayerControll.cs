@@ -32,7 +32,7 @@ namespace temp1.AI
 
             int targetId = -1;
 
-            _jpParam = new JumpPointParam(context.Grid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
+            _jpParam = new JumpPointParam(context.CollisionGrid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
             MouseStateExtended state = MouseExtended.GetState();
 
             _tree = new BehaviourTreeBuilder()
@@ -58,8 +58,10 @@ namespace temp1.AI
                                     return BehaviourTreeStatus.Failure;
                                 var sprite = aSpriteMap.Get(targetId);
                                 sprite.Play("open");
+                                
+                                Context.Inventory2.Build(_storageMap.Get(targetId));
+                                Context.GameState = GameState.Inventry2Opened;
                                 targetId = -1;
-                                Context.IsInventoryOpen = true;
                                 return BehaviourTreeStatus.Success;
                             })
                         .End()
@@ -88,8 +90,8 @@ namespace temp1.AI
                         {
                             targetId = Context.PointedId;
                             var pos = (_dotMapper.Get(Context.PointedId).Position / 32).ToPoint();
-                            var node = Context.Grid.GetNodeAt(pos.X, pos.Y);
-                            var near = Context.Grid.GetNeighbors(node, DiagonalMovement.Never);
+                            var node = Context.CollisionGrid.GetNodeAt(pos.X, pos.Y);
+                            var near = Context.CollisionGrid.GetNeighbors(node, DiagonalMovement.Never);
                             if (near.Count == 0)
                                 return BehaviourTreeStatus.Failure;
                             CommitMovement(GetBestPath(near));
@@ -102,10 +104,10 @@ namespace temp1.AI
         void CommitMovement(Point to)
         {
 
-            if (!Context.Grid.Contains(to) || !Context.Grid.IsWalkableAt(to.X, to.Y))
+            if (!Context.CollisionGrid.Contains(to) || !Context.CollisionGrid.IsWalkableAt(to.X, to.Y))
                 return;
             var from = _dotMapper.Get(EntityId).MapPosition;
-            _jpParam.Reset(new GridPos(from.X, from.Y), new GridPos(to.X, to.Y), Context.Grid);
+            _jpParam.Reset(new GridPos(from.X, from.Y), new GridPos(to.X, to.Y), Context.CollisionGrid);
             var result = JumpPointFinder.FindPath(_jpParam);
             if (result.Count < 2)
                 return;
@@ -137,7 +139,7 @@ namespace temp1.AI
             int minDist = int.MaxValue;
             for (var i = 0; i < to.Count; i++)
             {
-                _jpParam.Reset(from, new GridPos(to[i].x, to[i].y), Context.Grid);
+                _jpParam.Reset(from, new GridPos(to[i].x, to[i].y), Context.CollisionGrid);
                 var path = JumpPointFinder.FindPath(_jpParam);
                 if (path.Count < minDist)
                 {

@@ -1,8 +1,6 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Screens;
 using Myra;
-using Myra.Graphics2D;
-using Myra.Graphics2D.Brushes;
 using Myra.Graphics2D.UI;
 using temp1.UI;
 

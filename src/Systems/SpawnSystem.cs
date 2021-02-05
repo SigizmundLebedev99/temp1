@@ -25,7 +25,7 @@ namespace temp1.Systems
                 return;
             var portal = CreateEntity();
             var random = new Random();
-            var grid = _context.Grid;
+            var grid = _context.CollisionGrid;
             Point point = new Point(random.Next(0, grid.width), random.Next(0, grid.height));
             if (!grid.IsWalkableAt(point.X, point.Y))
                 return;

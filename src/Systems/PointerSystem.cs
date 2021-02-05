@@ -47,7 +47,7 @@ namespace temp1.Systems
             var state = MouseExtended.GetState();
             var worldPos = _camera.ScreenToWorld(state.Position.X, state.Position.Y);
             var point = (worldPos / 32).ToPoint();
-            if (!_context.Grid.Contains(point))
+            if (!_context.CollisionGrid.Contains(point))
             {
                 inMap = false;
                 return;
@@ -57,7 +57,7 @@ namespace temp1.Systems
             
             _context.PointedId = -1;
 
-            if (!_context.Grid.IsWalkableAt(point.X, point.Y))
+            if (!_context.CollisionGrid.IsWalkableAt(point.X, point.Y))
                 mark.Play("no");
             else if (!HandlePoint(worldPos))
                 mark.Play("idle");

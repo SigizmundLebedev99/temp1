@@ -2,8 +2,11 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Myra.Graphics2D;
+using Myra.Graphics2D.Brushes;
 using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
+using temp1.Components;
 
 namespace temp1.UI
 {
@@ -11,31 +14,58 @@ namespace temp1.UI
     {
         public int firstSize;
         public int secondSize;
-        Texture2D _image;
-        public Inventory2(ContentManager content, GameContext context)
+        GameContext _context;
+        public Inventory2(GameContext context)
         {
             BuildUI();
-            _image = content.Load<Texture2D>("animations/chest1");
-            closeButton.Click += (s,e) => {
-                context.IsInventoryOpen = false;
+            closeButton.Click += (s, e) =>
+            {
+                context.GameState = GameState.Default;
             };
-            BuildInventory(firstPanel, ref firstSize);
+            _context = context;
         }
 
-        void BuildInventory(VerticalStackPanel inventory, ref int size)
+        public void Build(Storage chest)
         {
-            var scroll = (ScrollViewer) inventory.Parent;
+            firstPanel.Widgets.Clear();
+            firstSize = 0;
+            BuildInventory(firstPanel, chest, ref firstSize);
+        }
+
+        void BuildInventory(VerticalStackPanel inventory, Storage from, ref int size)
+        {
+            var scroll = (ScrollViewer)inventory.Parent;
             var raw = (HorizontalStackPanel)inventory.Widgets.LastOrDefault();
-            for (var i = 0; i < 45; i++)
+            for (var i = 0; i < from.Content.Count; i++)
             {
-                if(size % 4 == 0){
+                if (size % 4 == 0)
+                {
                     raw = inventory.AddChild(new HorizontalStackPanel());
                 }
+                var slot = from.Content[i];
+                var sprite = _context.GetSprite(from.Content[i].ItemType.image);
+                var slotBox = new Grid();
                 var item = new Image();
-                item.Renderable = new TextureRegion(_image, new Rectangle(0,0, 50, 50));
+                var label = new TextBox();
+                label.Background = null;
+                label.TextColor = Color.Black;
+                label.Text = slot.Count.ToString();
+                item.Renderable = new TextureRegion(sprite.TextureRegion.Texture);
                 item.BorderThickness = new Myra.Graphics2D.Thickness(1);
-                raw.AddChild(item);
-                size ++;
+                slotBox.AddChild(item);
+                slotBox.AddChild(label);
+                slotBox.Background = new SolidBrush(Color.Gray);
+                slotBox.MouseEntered += (s, e) =>
+                {
+                    slotBox.Border = new SolidBrush(Color.Black);
+                };
+                slotBox.MouseLeft += (s, e) =>
+                {
+                    slotBox.Border = null;
+                };
+                slotBox.BorderThickness = new Thickness(2);
+                raw.AddChild(slotBox);
+                size++;
             }
         }
     }

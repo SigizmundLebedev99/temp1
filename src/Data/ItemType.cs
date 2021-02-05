@@ -14,14 +14,15 @@ namespace temp1.Data
     class ItemType
     {
         public string type;
-        public int Flags;
-        public int StackSize;
+        public int flags;
+        public int stackSize;
+        public string image;
     }
 
     class FilledSlot
     {
         public ItemType ItemType;
-        public int count;
+        public int Count;
     }
 }
 

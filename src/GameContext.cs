@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using EpPathFinding.cs;
@@ -12,30 +11,40 @@ using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
-using temp1.AI;
 using temp1.Components;
 using temp1.Data;
+using temp1.UI;
 
 namespace temp1
 {
+    enum GameState{
+        Default,
+        Inventry1Opened,
+        Inventry2Opened
+    }
+
     class GameContext
     {
         public World World;
         public TiledMap Map;
-        public BaseGrid Grid;
+        public BaseGrid CollisionGrid;
         public OrthographicCamera Camera;
         public Dictionary<string, MapObjectType> MapObjectTypes;
         public Dictionary<string, ItemType> ItemTypes;
+        
+        public Inventory2 Inventory2;
+        public Inventory1 Inventory1;
 
         public int PlayerId;
         public int PointedId;
 
-        public bool IsInventoryOpen = false;
+        public GameState GameState = GameState.Default;
 
         ContentManager _content;
         Dictionary<string, SpriteSheet> SpriteSheets;
         Dictionary<string, Sprite> Sprites;
         JsonContentLoader loader = new JsonContentLoader();
+        
 
         public GameContext(ContentManager content, OrthographicCamera camera)
         {
@@ -99,7 +108,7 @@ namespace temp1
             if (position.HasValue)
                 entity.Attach(new Dot(position.Value));
 
-            ComponentsMap.BuildComponents(entity, obj, mapObj, this);
+            ComponentsBuilder.BuildComponents(entity, obj, mapObj, this);
 
             return entity.Id;
         }
@@ -127,7 +136,7 @@ namespace temp1
                 }
             }
 
-            Grid = searchGrid;
+            CollisionGrid = searchGrid;
         }
 
         void ConfigureMapObjects()
