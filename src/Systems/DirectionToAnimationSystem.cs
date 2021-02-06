@@ -11,6 +11,7 @@ namespace temp1.Systems
     {
         Mapper<AnimatedSprite> _spriteMapper;
         Mapper<Direction> _directionMapper;
+        Mapper<IMovement> _moveMapper;
 
         public DirectionToAnimationSystem() : base(Aspect.All(typeof(AnimatedSprite), typeof(Direction)))
         {
@@ -20,25 +21,33 @@ namespace temp1.Systems
         {
             _directionMapper = mapperService.Get<Direction>();
             _spriteMapper = mapperService.Get<AnimatedSprite>();
+            _moveMapper = mapperService.Get<IMovement>();
         }
 
         public override void Process(GameTime gameTime, int entityId)
         {
-            var dir = _directionMapper.Get(entityId);
+            var move = _moveMapper.Get(entityId);
             var animation = _spriteMapper.Get(entityId);
+            var dir = _directionMapper.Get(entityId);
             var angle = dir.Angle;
-            if(dir.Changed){
-                if(angle >= Math.PI * 0.25 && angle < 0.75 * Math.PI)
-                    animation.Play("walkEast");
-                else if(Math.Abs(angle) >= Math.PI * 0.75 && Math.Abs(angle) < 1.25 * Math.PI)
-                    animation.Play("walkNorth");
-                else if(angle <= Math.PI * -0.25 && angle > -0.75 * Math.PI)
-                    animation.Play("walkWest");
-                else
-                    animation.Play("walkSouth");
-            }
+            string direction;
+
+            if(angle >= Math.PI * 0.25 && angle < 0.75 * Math.PI)
+                direction = "East";
+            else if(Math.Abs(angle) >= Math.PI * 0.75 && Math.Abs(angle) < 1.25 * Math.PI)
+                direction = "North";
+            else if(angle <= Math.PI * -0.25 && angle > -0.75 * Math.PI)
+                direction = "West";
             else
-                animation.Play("idle");
+                direction = "South";
+
+            if(move == null || move.IsCompleted){
+                _directionMapper.Delete(entityId);
+                animation.Play("idle" + direction);
+                return;
+            }
+
+            animation.Play("walk" + direction);
         }
     }
 }

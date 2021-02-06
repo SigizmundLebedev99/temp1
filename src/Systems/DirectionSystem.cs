@@ -10,9 +10,8 @@ namespace temp1.Systems
         Mapper<MapObject> _boxMapper;
         Mapper<Direction> _directionMapper;
 
-        public DirectionSystem() : base(Aspect.All(typeof(AllowedToAct), typeof(MapObject), typeof(Direction)))
-        {
-        }
+        public DirectionSystem() : base(Aspect.All(typeof(Direction)))
+        {}
 
         public override void Initialize(IComponentMapperService mapperService)
         {
@@ -24,14 +23,8 @@ namespace temp1.Systems
         {
             var dir = _directionMapper.Get(entityId);
             var box = _boxMapper.Get(entityId);
-
-            if(box.Position == dir.CurrentPosition){
-                dir.Changed = false;
-                return;
-            }
             dir.PreviousPosition = dir.CurrentPosition;
             dir.CurrentPosition = box.Position;
-            dir.Changed = true;
         }
     }
 }

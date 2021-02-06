@@ -7,7 +7,6 @@ namespace temp1.Components
     {
         public Vector2 PreviousPosition = Vector2.Zero;
         public Vector2 CurrentPosition = Vector2.Zero;
-        public bool Changed = false;
 
         public float Angle
         {

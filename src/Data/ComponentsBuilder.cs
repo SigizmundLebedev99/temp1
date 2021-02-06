@@ -43,7 +43,6 @@ static class ComponentsBuilder
             mapObj.Flag = MapObjectFlag.Enemy;
         }
         e.Attach(new AllowedToAct());
-        e.Attach(new Direction());
     }
 
     static void ChestHandler(Entity e, MapObjectType obj, TiledMapObject mapObject, GameContext context)

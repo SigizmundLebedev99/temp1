@@ -14,6 +14,7 @@ namespace temp1.AI
     class PlayerControll : BaseAI
     {
         Mapper<IMovement> _moveMapper;
+        Mapper<Direction> _directionMap;
         Mapper<Storage> _storageMap;
         Mapper<MapObject> _dotMapper;
 
@@ -26,6 +27,7 @@ namespace temp1.AI
             _dotMapper = cm.Get<MapObject>();
             _moveMapper = cm.Get<IMovement>();
             _storageMap = cm.Get<Storage>();
+            _directionMap = cm.Get<Direction>();
             var aSpriteMap = cm.Get<AnimatedSprite>();
 
             int targetId = -1;
@@ -106,7 +108,6 @@ namespace temp1.AI
 
         void CommitMovement(Point to)
         {
-
             if (!Context.CollisionGrid.Contains(to) || !Context.CollisionGrid.IsWalkableAt(to.X, to.Y))
                 return;
             var from = _dotMapper.Get(EntityId).MapPosition;
@@ -118,6 +119,7 @@ namespace temp1.AI
                     result.Select(e => new Vector2(e.x * 32 + 16, e.y * 32 + 16)).ToArray(),
                 3f);
             _moveMapper.Put(EntityId, movement);
+            _directionMap.Put(EntityId, new Direction());
         }
 
         void CommitMovement(List<GridPos> path)
@@ -128,6 +130,7 @@ namespace temp1.AI
                     path.Select(e => new Vector2(e.x * 32 + 16, e.y * 32 + 16)).ToArray(),
                 3f);
             _moveMapper.Put(EntityId, movement);
+            _directionMap.Put(EntityId, new Direction());
         }
 
         List<GridPos> GetBestPath(List<Node> to)
