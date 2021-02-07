@@ -11,17 +11,9 @@ namespace temp1.Data
         Weapon = 8
     }
 
-    class ItemType
+    class ItemStack
     {
-        public string type;
-        public int flags;
-        public int stackSize;
-        public string image;
-    }
-
-    class FilledSlot
-    {
-        public ItemType ItemType;
+        public GameObjectTypeInfo ItemType;
         public int Count;
     }
 }

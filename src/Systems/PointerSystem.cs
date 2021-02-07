@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -6,12 +7,14 @@ using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Sprites;
 using temp1.Components;
+using temp1.Data;
 
 namespace temp1.Systems
 {
     class PointerSystem : EntitySystem, IDrawSystem, IUpdateSystem
     {
         private Vector2 position;
+        private float scale;
         private bool inMap = false;
         AnimatedSprite mark;
 
@@ -28,7 +31,7 @@ namespace temp1.Systems
             _context = context;
             _spriteBatch = sb;
             _camera = context.Camera;
-            mark = _context.GetAnimatedSprite("animations/mark.sf");
+            mark = _context.GetAnimatedSprite("images/mark.sf");
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -60,7 +63,8 @@ namespace temp1.Systems
             else if (!HandlePoint(worldPos))
                 mark.Play("idle");
             inMap = true;
-            mark.Update(gameTime);
+            mark.Update(gameTime.ElapsedGameTime.Milliseconds);
+            scale = (float)(Math.Sin(gameTime.TotalGameTime.Milliseconds / 50) * 0.1 + 0.9);
         }
 
         private bool HandlePoint(Vector2 pos)
@@ -74,9 +78,9 @@ namespace temp1.Systems
 
                 if (bounds.Contains(pos - dot.Position + sprite.Origin))
                 {
-                    if (dot.Flag == MapObjectFlag.Storage)
+                    if (dot.Flag == GameObjectType.Storage || dot.Flag == GameObjectType.Item)
                         mark.Play("hand");
-                    else if (dot.Flag == MapObjectFlag.Enemy)
+                    else if (dot.Flag == GameObjectType.Enemy)
                         mark.Play("sword");
                     else
                         continue;
@@ -92,7 +96,14 @@ namespace temp1.Systems
         {
             if (!inMap || _context.GameState != GameState.Default)
                 return;
-            _spriteBatch.Draw(mark, position);
+            _spriteBatch.Draw(
+                mark.TextureRegion.Texture, 
+                position, 
+                mark.TextureRegion.Bounds,
+                Color.White,
+                0,
+                new Vector2(16),
+                scale,SpriteEffects.None, 0f);
         }
     }
 }

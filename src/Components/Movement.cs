@@ -11,8 +11,8 @@ namespace temp1.Components
 
     class PolylineMovement : IMovement
     {
-        Vector2 From;
-        Vector2 Target;
+        Vector2 _from;
+        Vector2 _to;
         float _change;
         float _speed;
         float k;
@@ -34,8 +34,9 @@ namespace temp1.Components
         public Vector2 Move()
         {
             k += _change;
-            var result = this.Target * k + this.From * (1 - k);
-            if(k >= 1 && !IsCompleted){
+            var result = this._to * k + this._from * (1 - k);
+            if (k >= 1 && !IsCompleted)
+            {
                 MoveTo(_path[currentSegment], _path[currentSegment + 1], _speed);
             }
             return result;
@@ -44,11 +45,33 @@ namespace temp1.Components
         private void MoveTo(Vector2 from, Vector2 to, float speed)
         {
             k = 0;
-            From = from;
-            Target = to;
+            _from = from;
+            _to = to;
             var v = to - from;
             _change = Math.Clamp(speed / v.Length(), 0, 1);
-            currentSegment ++;
+            currentSegment++;
+        }
+    }
+
+    class FallMovement : IMovement
+    {
+        float k = 0;
+        Vector2 _from;
+        Vector2 _to;
+
+        public bool IsCompleted => k >= 1;
+
+        public FallMovement(Vector2 from, Vector2 to){
+            _from = from;
+            _to = to;
+        }
+
+        public Vector2 Move()
+        {
+            k += 0.005f;
+            var result = _to * k + _from * (1 - k);
+            result.Y = result.Y - (float)(Math.Abs(Math.Sin(k * 35) * 20) * (1 - k));
+            return result;
         }
     }
 }

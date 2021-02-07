@@ -1,14 +1,14 @@
 {
   "textureAtlas": {
-    "texture": "circles.png",
+    "texture": "../images/portal.png",
     "regionWidth": 32,
-    "regionHeight": 32
+    "regionHeight": 72
   },
   "cycles": {
     "idle": {
-      "frames": [0,1,2,3],
+      "frames": [0,1,2],
       "isLooping": true,
-      "frameDuration": 0.5
+      "frameDuration": 0.2
     }
   }
 }

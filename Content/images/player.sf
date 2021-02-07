@@ -1,6 +1,6 @@
 {
   "textureAtlas": {
-    "texture": "motw.png",
+    "texture": "../images/motw.png",
     "regionWidth": 52,
     "regionHeight": 73
   },

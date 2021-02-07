@@ -15,7 +15,7 @@ static class ComponentsBuilder
         {"player", typeof(PlayerControll)}
     };
 
-    public static void BuildComponents(Entity e, MapObjectType obj, TiledMapObject mapObj, GameContext context)
+    public static void BuildComponents(Entity e, GameObjectTypeInfo obj, TiledMapObject mapObj, GameContext context)
     {
         if (obj.ai != null)
         {
@@ -30,29 +30,29 @@ static class ComponentsBuilder
         method.Invoke(null, new object[] { e, obj, mapObj, context });
     }
 
-    static void ActorHandler(Entity e, MapObjectType type, TiledMapObject tiledMapObj, GameContext context)
+    static void ActorHandler(Entity e, GameObjectTypeInfo type, TiledMapObject tiledMapObj, GameContext context)
     {
         var mapObj = e.Get<MapObject>();
-        if (type.type == "player")
+        if (type.typeName == "player")
         {
             e.Attach(new Storage());
             context.PlayerId = e.Id;
         }
-        if (type.type == "enemy")
+        if (type.typeName == "enemy")
         {
-            mapObj.Flag = MapObjectFlag.Enemy;
+            mapObj.Flag = GameObjectType.Enemy;
         }
         e.Attach(new AllowedToAct());
     }
 
-    static void ChestHandler(Entity e, MapObjectType obj, TiledMapObject mapObject, GameContext context)
+    static void ChestHandler(Entity e, GameObjectTypeInfo obj, TiledMapObject mapObject, GameContext context)
     {
         var mapObj = e.Get<MapObject>();
-        mapObj.Flag = MapObjectFlag.Storage;
+        mapObj.Flag = GameObjectType.Storage;
         var storage = new Storage();
         foreach (var prop in mapObject.Properties)
         {
-            var type = context.ItemTypes[prop.Key];
+            var type = context.GameObjectTypes[prop.Key];
             var count = int.Parse(prop.Value);
             if (count == 0)
                 continue;
@@ -60,13 +60,13 @@ static class ComponentsBuilder
             while(_count > 0){
                 if(type.stackSize < _count){
                     _count -= type.stackSize;
-                    storage.Content.Add(new FilledSlot{
+                    storage.Content.Add(new ItemStack{
                         ItemType = type,
                         Count = type.stackSize
                     });
                 }
                 else{
-                    storage.Content.Add(new FilledSlot{
+                    storage.Content.Add(new ItemStack{
                         ItemType = type,
                         Count = _count
                     });
@@ -77,7 +77,7 @@ static class ComponentsBuilder
         e.Attach(storage);
     }
 
-    static void HullHandler(Entity e, MapObjectType type, TiledMapObject mapObject, GameContext context)
+    static void HullHandler(Entity e, GameObjectTypeInfo type, TiledMapObject mapObject, GameContext context)
     {
         e.Attach(new Hull());
     }

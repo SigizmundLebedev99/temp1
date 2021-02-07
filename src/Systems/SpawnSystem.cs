@@ -24,19 +24,19 @@ namespace temp1.Systems
         {
             if (spawned)
                 return;
-            spawned = true;
+            
             var portal = CreateEntity();
             var random = new Random();
             var grid = _context.CollisionGrid;
             Point point = new Point(random.Next(0, grid.width), random.Next(0, grid.height));
             if (!grid.IsWalkableAt(point.X, point.Y))
                 return;
-            
+            spawned = true;
             portal.Attach(new MapObject
             {
                 Position = point.ToVector2() * 32 + new Vector2(16)
             });
-            portal.Attach(_context.GetAnimatedSprite("animations/portal.sf"));
+            portal.Attach(_context.GetAnimatedSprite("images/portal.sf"));
             portal.Attach<IExpired>(new Timer(1.5f, () =>
             {
                 _context.CreateEntity("enemy", point.ToVector2() * 32 + new Vector2(16));

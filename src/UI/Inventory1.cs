@@ -37,15 +37,17 @@ namespace temp1.UI
                 if (i % 4 == 0)
                     raw = inventory.AddChild(new HorizontalStackPanel());
                 var slot = from.Content[i];
-                var sprite = _context.GetSprite(from.Content[i].ItemType.image);
+                var sprite = _context.GetSprite(from.Content[i].ItemType);
                 var slotBox = new Grid();
                 var item = new Image();
+                item.Width = 50;
+                item.Height = 50;
                 var label = new Label();
                 label.Background = null;
                 label.TextColor = Color.Black;
                 label.Text = slot.Count.ToString();
                 label.Margin = new Thickness(6,2);
-                item.Renderable = new TextureRegion(sprite.TextureRegion.Texture);
+                item.Renderable = sprite.TextureRegion.ToMyra();
                 item.BorderThickness = new Myra.Graphics2D.Thickness(1);
                 slotBox.AddChild(item);
                 slotBox.AddChild(label);
@@ -53,8 +55,14 @@ namespace temp1.UI
                 
                 slotBox.MouseEntered += (s, e) => slotBox.Border = new SolidBrush(Color.Black);
                 slotBox.MouseLeft += (s, e) =>  slotBox.Border = null;
+                slotBox.TouchDoubleClick += (s, e) => {
+                    from.Content.Remove(slot);
+                    BuildInventory(inventory, from);
+                    _context.DropItem(slot);
+                };
                 
                 slotBox.BorderThickness = new Thickness(2);
+                
                 raw.AddChild(slotBox);
             }
         }

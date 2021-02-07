@@ -10,7 +10,7 @@ namespace temp1.Systems
         Mapper<IMovement> _moveMapper;
         Mapper<MapObject> _boxMapper;
 
-        public MoveSystem() : base(Aspect.All(typeof(AllowedToAct), typeof(IMovement), typeof(MapObject)))
+        public MoveSystem() : base(Aspect.All(typeof(IMovement), typeof(MapObject)))
         {
         }
 

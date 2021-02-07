@@ -1,0 +1,90 @@
+[
+    {
+        "typeName": "player",
+        "animated": true,
+        "path": "images/player.sf",
+        "origin": {
+            "x": 26,
+            "y": 65
+        },
+        "handler":"ActorHandler",
+        "ai":{
+            "type":"player"
+        }
+    },
+    {
+        "typeName": "enemy",
+        "animated": true,
+        "path": "images/enemy.sf",
+        "origin": {
+            "x": 26,
+            "y": 65
+        },
+        "handler":"ActorHandler",
+        "ai":{
+            "type":"randomMovement"
+        }
+    },
+    {
+        "typeName": "tree",
+        "path": "images/tree",
+        "origin": {
+            "x": 65,
+            "y": 160
+        }
+    },
+    {
+        "typeName": "chest1",
+        "animated": true,
+        "path": "images/chest1.sf",
+        "origin": {
+            "x": 16,
+            "y": 20
+        },
+        "handler":"ChestHandler"
+    },
+    {
+        "typeName": "house",
+        "animated": false,
+        "path": "images/house",
+        "origin": {
+            "x": 0,
+            "y": 464
+        },
+        "handler":"HullHandler"
+    },
+    {
+        "typeName": "blue_potion1",
+        "stackSize":10,
+        "path":"images/dragons_blade",
+        "region":{
+            "x":224,
+            "y":0,
+            "width":32,
+            "height":32
+        }
+    },
+    {
+        "typeName": "red_potion1",
+        "stackSize":10,
+        "path":"images/dragons_blade",
+        "region":{
+            "x":192,
+            "y":0,
+            "width":32,
+            "height":32
+        }
+    },
+    {
+        "typeName": "gladius1",
+        "stackSize":1,
+        "path":"images/dragons_blade_2",
+        "handler":"ItemHandler",
+        "region":{
+            "x":96,
+            "y":0,
+            "width":32,
+            "height":32
+        }
+    }
+]
