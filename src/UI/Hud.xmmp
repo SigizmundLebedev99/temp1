@@ -1,0 +1,17 @@
+<Project>
+  <Project.ExportOptions Namespace="temp1.UI" Class="Hud"/>
+  <Grid ShowGridLines="True" >
+    <Grid.ColumnsProportions>
+      <Proportion Type="Part" />
+      <Proportion Type="Pixels" Value="32" />
+      <Proportion Type="Pixels" Value="16" />
+    </Grid.ColumnsProportions>
+    <Grid.RowsProportions>
+      <Proportion Type="Pixels" Value="16" />
+      <Proportion Type="Pixels" Value="32" />
+      <Proportion Type="Part" />
+    </Grid.RowsProportions>
+    <Label Text="Inventory" Margin="0, 0, 7, 0" HorizontalAlignment="Right" VerticalAlignment="Center" GridRow="1" />
+   <Image Width="32" Height="32" BorderThickness="3" GridColumn="1" GridRow="1" Border="#FE3930FF" Id="inventoryImage" />
+  </Grid>
+</Project>

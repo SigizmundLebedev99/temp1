@@ -79,7 +79,6 @@
         "typeName": "gladius1",
         "stackSize":1,
         "path":"images/dragons_blade_2",
-        "handler":"ItemHandler",
         "region":{
             "x":96,
             "y":0,

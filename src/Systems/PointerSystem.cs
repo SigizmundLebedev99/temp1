@@ -43,7 +43,7 @@ namespace temp1.Systems
 
         public void Update(GameTime gameTime)
         {
-            if( _context.GameState != GameState.Default)
+            if( _context.HudState != HudState.Default)
                 return;
             var state = MouseExtended.GetState();
             var worldPos = _camera.ScreenToWorld(state.Position.X, state.Position.Y);
@@ -94,7 +94,7 @@ namespace temp1.Systems
 
         public void Draw(GameTime gameTime)
         {
-            if (!inMap || _context.GameState != GameState.Default)
+            if (!inMap || _context.HudState != HudState.Default)
                 return;
             _spriteBatch.Draw(
                 mark.TextureRegion.Texture, 

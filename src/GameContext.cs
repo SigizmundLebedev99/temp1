@@ -19,18 +19,13 @@ using temp1.UI;
 
 namespace temp1
 {
-    enum GameState{
-        Default,
-        Inventry1Opened,
-        Inventry2Opened
-    }
-
     class GameContext
     {
         public World World;
         public TiledMap Map;
         public BaseGrid CollisionGrid;
         public OrthographicCamera Camera;
+        public HudService Hud;
         public Dictionary<string, GameObjectTypeInfo> GameObjectTypes;
         
         public Inventory2 Inventory2;
@@ -39,7 +34,7 @@ namespace temp1
         public int PlayerId;
         public int PointedId;
 
-        public GameState GameState = GameState.Default;
+        public HudState HudState => Hud.HudState;
 
         ContentManager _content;
         Dictionary<string, SpriteSheet> SpriteSheets;
@@ -54,6 +49,7 @@ namespace temp1
             GameObjectTypes = new Dictionary<string, GameObjectTypeInfo>();
             Sprites = new Dictionary<string, Sprite>();
             SpriteSheets = new Dictionary<string, SpriteSheet>();
+            Hud = new HudService(content, this);
         }
 
         public void LoadTypes()
@@ -75,8 +71,8 @@ namespace temp1
             var entity = World.CreateEntity();
             entity.Attach(item);
             var random = new Random();
-            var x = random.Next(-60, 60);
-            var y = random.Next(-40, 0);
+            var x = random.Next(-50, 50) * 2;
+            var y = random.Next(-25, 0);
             entity.Attach(new MapObject(_from, GameObjectType.Item));
             entity.Attach<IMovement>(new FallMovement(_from, _from + new Vector2(x,y)));
             var sprite = GetSprite(item.ItemType);

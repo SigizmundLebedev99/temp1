@@ -1,11 +1,8 @@
 using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 using Myra.Graphics2D;
 using Myra.Graphics2D.Brushes;
-using Myra.Graphics2D.TextureAtlases;
 using Myra.Graphics2D.UI;
 using temp1.Components;
 using temp1.Data;
@@ -15,23 +12,14 @@ namespace temp1.UI
     partial class Inventory2
     {
         GameContext _context;
-        public Inventory2(GameContext context)
+        public Inventory2(GameContext context, HudService hud)
         {
             BuildUI();
-            closeButton.Click += (s, e) =>
-            {
-                context.GameState = GameState.Default;
-            };
+            closeButton.Click += (s,e) => hud.Default();
             _context = context;
         }
 
-        public void Open(Storage left, Storage right)
-        {
-            Build(left, right);
-            _context.GameState = GameState.Inventry2Opened;
-        }
-
-        void Build(Storage left, Storage right)
+        public void Build(Storage left, Storage right)
         {
 
             BuildInventory(firstPanel, left, (slot) =>

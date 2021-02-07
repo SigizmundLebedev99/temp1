@@ -5,7 +5,6 @@ using MonoGame.Extended;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Tiled.Renderers;
-using Myra.Graphics2D.UI;
 using temp1.Systems;
 using temp1.UI;
 
@@ -18,9 +17,6 @@ namespace temp1.Screens
         World _world;
         GameContext _context;
         OrthographicCamera camera;
-
-        Desktop inventory2;
-        Desktop inventory1;
 
         public PlayScreen(Game game) : base(game)
         {
@@ -37,14 +33,7 @@ namespace temp1.Screens
 
         public override void LoadContent()
         {
-            inventory2 = new Desktop();
-            inventory2.Root = new Inventory2(_context);
-            _context.Inventory2 = (Inventory2)inventory2.Root;
-
-            inventory1 = new Desktop();
-            inventory1.Root = new Inventory1(_context);
-            _context.Inventory1 = (Inventory1)inventory1.Root;
-
+            
             _context.LoadTypes();
             _context.LoadMap("tiled/map", _world);
             _tiledMapRenderer.LoadMap(_context.Map);
@@ -71,7 +60,7 @@ namespace temp1.Screens
                 return;
             _world.Update(gameTime);
             _tiledMapRenderer.Update(gameTime);
-            if(_context.GameState != GameState.Default)
+            if(_context.HudState != HudState.Default)
                 return;
             var state = Mouse.GetState();
             if (!this.Game.IsActive)
@@ -84,8 +73,6 @@ namespace temp1.Screens
                 camera.Move(new Vector2(5, 0));
             if (state.Y > this.GraphicsDevice.Viewport.Height)
                 camera.Move(new Vector2(0, 5));
-            if(state.RightButton == ButtonState.Pressed)
-                _context.Inventory1.Open();
         }
 
         public override void Draw(GameTime gameTime)
@@ -96,10 +83,7 @@ namespace temp1.Screens
             _world.Draw(gameTime);
             _sb.End();
 
-            if(_context.GameState == GameState.Inventry2Opened)
-                inventory2.Render();
-            if(_context.GameState == GameState.Inventry1Opened)
-                inventory1.Render();
+            _context.Hud.Draw();
         }
     }
 }

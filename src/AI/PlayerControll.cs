@@ -8,6 +8,7 @@ using MonoGame.Extended.Entities;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Sprites;
 using temp1.Components;
+using temp1.Data;
 
 namespace temp1.AI
 {
@@ -17,6 +18,7 @@ namespace temp1.AI
         Mapper<Direction> _directionMap;
         Mapper<Storage> _storageMap;
         Mapper<MapObject> _dotMapper;
+        Mapper<AnimatedSprite> _aSpriteMap;
 
         JumpPointParam _jpParam;
         IBehaviourTreeNode _tree;
@@ -28,7 +30,7 @@ namespace temp1.AI
             _moveMapper = cm.Get<IMovement>();
             _storageMap = cm.Get<Storage>();
             _directionMap = cm.Get<Direction>();
-            var aSpriteMap = cm.Get<AnimatedSprite>();
+            _aSpriteMap = cm.Get<AnimatedSprite>();
 
             int targetId = -1;
 
@@ -52,17 +54,7 @@ namespace temp1.AI
                                     return BehaviourTreeStatus.Success;
                                 return BehaviourTreeStatus.Failure;
                             })
-                            .Do("performAction", t =>
-                            {
-                                var sprite = aSpriteMap.Get(targetId);
-                                var storage = _storageMap.Get(targetId);
-                                if (sprite == null || storage == null)
-                                    return BehaviourTreeStatus.Failure;
-                                sprite.Play("open");
-                                Context.Inventory2.Open(storage, _storageMap.Get(EntityId));
-                                targetId = -1;
-                                return BehaviourTreeStatus.Success;
-                            })
+                            .Do("commit action", t => CommitAction(ref targetId))
                         .End()
                     .End()
                     .Do("Await input", t =>
@@ -78,7 +70,7 @@ namespace temp1.AI
                     .Selector("Possible Actions")
                         .Do("inventory open", t =>
                         {
-                            if(Context.GameState == GameState.Default)
+                            if(Context.HudState == HudState.Default)
                                 return BehaviourTreeStatus.Failure;
                             return BehaviourTreeStatus.Success;
                         })
@@ -113,13 +105,7 @@ namespace temp1.AI
             var from = _dotMapper.Get(EntityId).MapPosition;
             _jpParam.Reset(new GridPos(from.X, from.Y), new GridPos(to.X, to.Y), Context.CollisionGrid);
             var result = JumpPointFinder.FindPath(_jpParam);
-            if (result.Count < 2)
-                return;
-            var movement = new PolylineMovement(
-                    result.Select(e => new Vector2(e.x * 32 + 16, e.y * 32 + 16)).ToArray(),
-                3f);
-            _moveMapper.Put(EntityId, movement);
-            _directionMap.Put(EntityId, new Direction());
+            CommitMovement(result);
         }
 
         void CommitMovement(List<GridPos> path)
@@ -132,6 +118,34 @@ namespace temp1.AI
             _moveMapper.Put(EntityId, movement);
             _directionMap.Put(EntityId, new Direction());
         }
+
+        BehaviourTreeStatus CommitAction(ref int targetId){
+            var entity = Context.World.GetEntity(targetId);
+            var sprite = entity.Get<AnimatedSprite>();
+            var storage = entity.Get<Storage>();
+            var mapObj = entity.Get<MapObject>();
+
+            if (mapObj == null)
+                return BehaviourTreeStatus.Failure;
+            
+            switch(mapObj.Flag){
+                case GameObjectType.Storage : {
+                    sprite.Play("open");
+                    Context.Hud.OpenInventory2(storage, _storageMap.Get(EntityId));
+                    break;
+                }
+                case GameObjectType.Item : {
+                    _storageMap.Get(EntityId).Add(entity.Get<ItemStack>());
+                    Context.World.DestroyEntity(targetId);
+                    break;
+                }
+            }
+            
+            targetId = -1;
+            return BehaviourTreeStatus.Success;
+        }
+
+        
 
         List<GridPos> GetBestPath(List<Node> to)
         {

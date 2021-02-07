@@ -12,19 +12,16 @@ namespace temp1.UI
 	partial class Inventory1
 	{
         GameContext _context;
-		public Inventory1(GameContext context)
+		public Inventory1(GameContext context, HudService hud)
 		{
 			BuildUI();
             _context = context;
-            closeButton.Click += (s,e) => {
-                context.GameState = GameState.Default;
-            };
+            closeButton.Click += (s,e) => hud.Default();
 		}
 
         public void Open(){
             var storage = _context.World.GetEntity(_context.PlayerId).Get<Storage>();
             BuildInventory(firstPanel, storage);
-            _context.GameState = GameState.Inventry1Opened;
         }
 
         void BuildInventory(VerticalStackPanel inventory, Storage from)
