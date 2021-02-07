@@ -15,6 +15,15 @@ namespace temp1.UI
             var inventoryRect = new Rectangle(96, 64, 32, 32);
             inventoryImage.Renderable = new TextureRegion(inventoryTexture, inventoryRect);
             inventoryImage.TouchUp += (s, e) => hud.OpenInventory1();
+            inventoryImage.MouseEntered += (s,e) => {
+                inventoryImage.Width += 4;
+                inventoryImage.Height += 4;
+            };
+            inventoryImage.MouseLeft += (s,e) => {
+                inventoryImage.Width -= 4;
+                inventoryImage.Height -= 4;
+            };
+            hud.SetCallbacks(inventoryImage);
         }
     }
 }

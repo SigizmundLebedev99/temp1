@@ -20,6 +20,9 @@ namespace temp1
         Desktop desktop;
         
         public HudState HudState = HudState.Default;
+        public bool IsMouseOnHud => isMouseOnHud;
+
+        private bool isMouseOnHud;
 
         public HudService(ContentManager contentManager, GameContext context)
         {
@@ -28,6 +31,11 @@ namespace temp1
             inventory2 = new Inventory2(context, this);
             hud = new Hud(contentManager, this);
             Default();
+        }
+
+        public void SetCallbacks(Widget widget){
+            widget.MouseEntered += (s,e) => isMouseOnHud = true;
+            widget.MouseLeft += (s,e) => isMouseOnHud = false;
         }
 
         public void OpenInventory2(Storage left, Storage right)
@@ -46,6 +54,7 @@ namespace temp1
         public void Default(){
             desktop.Root = hud;
             HudState = HudState.Default;
+            isMouseOnHud = false;
         }
 
         internal void Draw()

@@ -15,7 +15,7 @@ namespace temp1.Systems
     {
         private Vector2 position;
         private float scale;
-        private bool inMap = false;
+        private bool shouldShow = false;
         AnimatedSprite mark;
 
         private Mapper<MapObject> _dotMapper;
@@ -43,14 +43,16 @@ namespace temp1.Systems
 
         public void Update(GameTime gameTime)
         {
-            if( _context.HudState != HudState.Default)
+            if( _context.HudState != HudState.Default || _context.Hud.IsMouseOnHud){
+                shouldShow = false;
                 return;
+            }
             var state = MouseExtended.GetState();
             var worldPos = _camera.ScreenToWorld(state.Position.X, state.Position.Y);
             var point = (worldPos / 32).ToPoint();
             if (!_context.CollisionGrid.Contains(point))
             {
-                inMap = false;
+                shouldShow = false;
                 return;
             }
 
@@ -62,7 +64,7 @@ namespace temp1.Systems
                 mark.Play("no");
             else if (!HandlePoint(worldPos))
                 mark.Play("idle");
-            inMap = true;
+            shouldShow = true;
             mark.Update(gameTime.ElapsedGameTime.Milliseconds);
             scale = (float)(Math.Sin(gameTime.TotalGameTime.Milliseconds / 50) * 0.1 + 0.9);
         }
@@ -94,7 +96,7 @@ namespace temp1.Systems
 
         public void Draw(GameTime gameTime)
         {
-            if (!inMap || _context.HudState != HudState.Default)
+            if (!shouldShow)
                 return;
             _spriteBatch.Draw(
                 mark.TextureRegion.Texture, 

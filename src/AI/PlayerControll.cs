@@ -60,7 +60,9 @@ namespace temp1.AI
                     .Do("Await input", t =>
                     {
                         state = MouseExtended.GetState();
-                        if (state.LeftButton == ButtonState.Pressed)
+                        if (state.LeftButton == ButtonState.Pressed
+                        && Context.HudState == HudState.Default
+                        && !Context.Hud.IsMouseOnHud)
                         {
                             targetId = -1;
                             return BehaviourTreeStatus.Success;
@@ -68,12 +70,6 @@ namespace temp1.AI
                         return BehaviourTreeStatus.Failure;
                     })
                     .Selector("Possible Actions")
-                        .Do("inventory open", t =>
-                        {
-                            if(Context.HudState == HudState.Default)
-                                return BehaviourTreeStatus.Failure;
-                            return BehaviourTreeStatus.Success;
-                        })
                         .Do("just move", t =>
                         {
                             if (Context.PointedId != -1)
