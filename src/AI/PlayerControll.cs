@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using EpPathFinding.cs;
 using FluentBehaviourTree;
 using Microsoft.Xna.Framework;
@@ -59,14 +58,16 @@ namespace temp1.AI
                     .End()
                     .Do("Await input", t =>
                     {
-                        state = MouseExtended.GetState();
-                        if (state.LeftButton == ButtonState.Pressed
+                        var newState = MouseExtended.GetState();
+                        if (state.LeftButton == ButtonState.Pressed && newState.LeftButton == ButtonState.Released
                         && Context.HudState == HudState.Default
                         && !Context.Hud.IsMouseOnHud)
                         {
                             targetId = -1;
+                            state = newState;
                             return BehaviourTreeStatus.Success;
                         }
+                        state = newState;
                         return BehaviourTreeStatus.Failure;
                     })
                     .Selector("Possible Actions")
@@ -108,14 +109,14 @@ namespace temp1.AI
         {
             if (path.Count < 2)
                 return;
-            var movement = new PolylineMovement(
-                    path.Select(e => new Vector2(e.x * 32 + 16, e.y * 32 + 16)).ToArray(),
-                3f);
+            var movement = new PolylineMovement(path, 3f);
             _moveMapper.Put(EntityId, movement);
-            _directionMap.Put(EntityId, new Direction());
+            var position = _dotMapper.Get(EntityId).Position;
+            _directionMap.Put(EntityId, new Direction(position));
         }
 
-        BehaviourTreeStatus CommitAction(ref int targetId){
+        BehaviourTreeStatus CommitAction(ref int targetId)
+        {
             var entity = Context.World.GetEntity(targetId);
             var sprite = entity.Get<AnimatedSprite>();
             var storage = entity.Get<Storage>();
@@ -123,25 +124,28 @@ namespace temp1.AI
 
             if (mapObj == null)
                 return BehaviourTreeStatus.Failure;
-            
-            switch(mapObj.Flag){
-                case GameObjectType.Storage : {
-                    sprite.Play("open");
-                    Context.Hud.OpenInventory2(storage, _storageMap.Get(EntityId));
-                    break;
-                }
-                case GameObjectType.Item : {
-                    _storageMap.Get(EntityId).Add(entity.Get<ItemStack>());
-                    Context.World.DestroyEntity(targetId);
-                    break;
-                }
+
+            switch (mapObj.Flag)
+            {
+                case GameObjectType.Storage:
+                    {
+                        sprite.Play("open");
+                        Context.Hud.OpenInventory2(storage, _storageMap.Get(EntityId));
+                        break;
+                    }
+                case GameObjectType.Item:
+                    {
+                        _storageMap.Get(EntityId).Add(entity.Get<ItemStack>());
+                        Context.World.DestroyEntity(targetId);
+                        break;
+                    }
             }
-            
+
             targetId = -1;
             return BehaviourTreeStatus.Success;
         }
 
-        
+
 
         List<GridPos> GetBestPath(List<Node> to)
         {

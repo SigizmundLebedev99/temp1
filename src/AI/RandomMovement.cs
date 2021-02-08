@@ -67,13 +67,9 @@ namespace temp1.AI
                 return false;
             _jpParam.Reset(new GridPos(from.X, from.Y), new GridPos(point.X, point.Y));
             var result = JumpPointFinder.FindPath(_jpParam);
-            _movement = new PolylineMovement(
-                result.Select(e =>
-                    new Vector2(e.x * 32 + 16, e.y * 32 + 16))
-                    .ToArray(),
-                1f);
+            _movement = new PolylineMovement(result, 1f);
             _moveMapper.Put(EntityId, _movement);
-            _directionMap.Put(EntityId, new Direction());
+            _directionMap.Put(EntityId, new Direction(_dot.Position));
 
             return true;
         }

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using EpPathFinding.cs;
 using Microsoft.Xna.Framework;
 
 namespace temp1.Components
@@ -28,7 +30,20 @@ namespace temp1.Components
             _path = path;
             _speed = speed;
             currentSegment = 0;
-            MoveTo(path[0], path[1], speed);
+            MoveTo(_path[0], _path[1], speed);
+        }
+
+        public PolylineMovement(List<GridPos> path, float speed){
+            if (path.Count < 2)
+                throw new Exception("Path should contain at liast two points");
+            _path = new Vector2[path.Count];
+            for(var i = 0; i < path.Count; i ++){
+                var p = path[i];
+                _path[i] = new Vector2(p.x * 32 + 16, p.y * 32 + 16);
+            }
+            _speed = speed;
+            currentSegment = 0;
+            MoveTo(_path[0], _path[1], speed);
         }
 
         public Vector2 Move()
