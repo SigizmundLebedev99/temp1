@@ -27,14 +27,14 @@ namespace temp1.Systems
             
             var portal = CreateEntity();
             var random = new Random();
-            var grid = _context.CollisionGrid;
-            Point point = new Point(random.Next(0, grid.width), random.Next(0, grid.height));
-            if (!grid.IsWalkableAt(point.X, point.Y))
+            var grid = _context.MoveGrid;
+            Point point = new Point(random.Next(0, grid.Width), random.Next(0, grid.Height));
+            if (!grid.ValueAt(point.X, point.Y))
                 return;
             spawned = true;
             portal.Attach(new MapObject
             {
-                Position = point.ToVector2() * 32 + new Vector2(16)
+                position = point.ToVector2() * 32 + new Vector2(16)
             });
             portal.Attach(_context.GetAnimatedSprite("images/portal.sf"));
             portal.Attach<IExpired>(new Timer(1.5f, () =>

@@ -23,8 +23,8 @@ namespace temp1.Systems
         {
             var dir = _directionMapper.Get(entityId);
             var box = _boxMapper.Get(entityId);
-            dir.PreviousPosition = dir.CurrentPosition;
-            dir.CurrentPosition = box.Position;
+            dir.previousPosition = dir.currentPosition;
+            dir.currentPosition = box.position;
         }
     }
 }

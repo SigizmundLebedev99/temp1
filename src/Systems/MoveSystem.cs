@@ -5,12 +5,12 @@ using temp1.Components;
 
 namespace temp1.Systems
 {
-    class MoveSystem : EntityProcessingSystem
+    class MovementSystem : EntityProcessingSystem
     {
         Mapper<IMovement> _moveMapper;
         Mapper<MapObject> _boxMapper;
 
-        public MoveSystem() : base(Aspect.All(typeof(IMovement), typeof(MapObject)))
+        public MovementSystem() : base(Aspect.All(typeof(IMovement), typeof(MapObject)))
         {
         }
 
@@ -24,8 +24,9 @@ namespace temp1.Systems
         {
             var move = _moveMapper.Get(entityId);
             var box = _boxMapper.Get(entityId);
-            box.Position = move.Move();
+            box.position = move.Move();
             if(move.IsCompleted){
+                move.OnComplete?.Invoke();
                 _moveMapper.Delete(entityId);
             }
         }

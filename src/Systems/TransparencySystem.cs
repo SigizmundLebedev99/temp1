@@ -34,13 +34,13 @@ namespace temp1.Systems
 
         public override void Process(GameTime gameTime, int entityId)
         {
-            var playerPos = _dotMapper.Get(_context.PlayerId).Position;
-            var hullPos = _dotMapper.Get(entityId).Position;
+            var playerPos = _dotMapper.Get(_context.PlayerId).position;
+            var hullPos = _dotMapper.Get(entityId).position;
             if (playerPos.Y > hullPos.Y)
                 return;
             var playerRect = _aSpriteMapper.Get(_context.PlayerId).GetBoundingRectangle(playerPos, 0, Vector2.One);
             
-            _hullMapper.Get(entityId).IsPlayerIn = Overlaps(entityId, hullPos, playerRect);
+            _hullMapper.Get(entityId).isPlayerIn = Overlaps(entityId, hullPos, playerRect);
         }
 
         bool Overlaps(int id, Vector2 hullPos, RectangleF player)

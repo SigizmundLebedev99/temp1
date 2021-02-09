@@ -29,7 +29,7 @@ namespace temp1.Systems
             var move = _moveMapper.Get(entityId);
             var animation = _spriteMapper.Get(entityId);
             var dir = _directionMapper.Get(entityId);
-            if(dir.PreviousPosition == dir.CurrentPosition)
+            if(dir.previousPosition == dir.currentPosition)
                 return;
             var angle = dir.Angle;
             string direction;

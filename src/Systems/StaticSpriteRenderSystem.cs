@@ -32,18 +32,18 @@ namespace temp1.Systems
                 var sprite = _spriteMapper.Get(entities[i]);
                 var box = _boxMapper.Get(entities[i]);
                 var hull = _hullMapper.Get(entities[i]);
-                if(hull != null && hull.IsPlayerIn)
+                if(hull != null && hull.isPlayerIn)
                     continue;
                 _spriteBatch.Draw(
                     sprite.TextureRegion.Texture,
-                    box.Position,
+                    box.position,
                     new Rectangle(sprite.TextureRegion.X, sprite.TextureRegion.Y, sprite.TextureRegion.Width, sprite.TextureRegion.Height),
                     Color.White,
                     0, 
                     sprite.Origin,
                     1,
                     SpriteEffects.None,
-                    sprite.Depth + 0.1f / box.Position.Y
+                    sprite.Depth + 0.1f / box.position.Y
                 );
             }
         }

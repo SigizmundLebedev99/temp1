@@ -40,14 +40,14 @@ namespace temp1.Systems
                 var box = _boxMapper.Get(entities[i]);
                 _spriteBatch.Draw(
                     sprite.TextureRegion.Texture,
-                    box.Position,
+                    box.position,
                     new Rectangle(sprite.TextureRegion.X, sprite.TextureRegion.Y, sprite.TextureRegion.Width, sprite.TextureRegion.Height),
                     Color.White,
                     0, 
                     sprite.Origin,
                     1,
                     SpriteEffects.None,
-                    sprite.Depth + 0.1f / box.Position.Y
+                    sprite.Depth + 0.1f / box.position.Y
                 );
             }
         }

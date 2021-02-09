@@ -40,7 +40,7 @@ static class ComponentsBuilder
         }
         if (type.typeName == "enemy")
         {
-            mapObj.Flag = GameObjectType.Enemy;
+            mapObj.type = GameObjectType.Enemy;
         }
         e.Attach(new AllowedToAct());
     }
@@ -48,7 +48,7 @@ static class ComponentsBuilder
     static void ChestHandler(Entity e, GameObjectTypeInfo obj, TiledMapObject mapObject, GameContext context)
     {
         var mapObj = e.Get<MapObject>();
-        mapObj.Flag = GameObjectType.Storage;
+        mapObj.type = GameObjectType.Storage;
         var storage = new Storage();
         foreach (var prop in mapObject.Properties)
         {

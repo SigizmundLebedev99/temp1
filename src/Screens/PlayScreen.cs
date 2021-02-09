@@ -42,9 +42,9 @@ namespace temp1.Screens
 
         private void ConfigureWorld()
         {
-            _world.RegisterSystem(new PointerSystem(_sb, _context));
-            _world.RegisterSystem(new AISystem(_context.CollisionGrid));
-            _world.RegisterSystem(new MoveSystem());
+            _world.RegisterSystem(new CursorSystem(_sb, _context));
+            _world.RegisterSystem(new AISystem(_context.MoveGrid));
+            _world.RegisterSystem(new MovementSystem());
             _world.RegisterSystem(new TransparensySystem(_context));
             _world.RegisterSystem(new ExpirationSystem());
             _world.RegisterSystem(new DirectionSystem());
@@ -63,15 +63,17 @@ namespace temp1.Screens
             if(_context.HudState != HudState.Default)
                 return;
             var state = Mouse.GetState();
+            var v = GraphicsDevice.Viewport;
+            var map = _context.Map;
             if (!this.Game.IsActive)
                 return;
-            if (state.X <= 0)
+            if (state.X <= 0 && camera.Position.X > 0)
                 camera.Move(new Vector2(-5, 0));
-            if (state.Y <= 0 && camera.Position.Y >= 0)
+            if (state.Y <= 0 && camera.Position.Y > 0)
                 camera.Move(new Vector2(0, -5));
-            if (state.X > this.GraphicsDevice.Viewport.Width)
+            if (state.X > v.Width && camera.Position.X < map.WidthInPixels - v.Width)
                 camera.Move(new Vector2(5, 0));
-            if (state.Y > this.GraphicsDevice.Viewport.Height)
+            if (state.Y > v.Height&& camera.Position.Y < map.HeightInPixels - v.Height)
                 camera.Move(new Vector2(0, 5));
         }
 

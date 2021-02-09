@@ -5,20 +5,20 @@ namespace temp1.Components
 {
     class Direction
     {
-        public Vector2 PreviousPosition;
-        public Vector2 CurrentPosition;
+        public Vector2 previousPosition;
+        public Vector2 currentPosition;
 
         public Direction(Vector2 from)
         {
-            PreviousPosition = from;
-            CurrentPosition = from;
+            previousPosition = from;
+            currentPosition = from;
         }
 
         public float Angle
         {
             get
             {
-                var v = CurrentPosition - PreviousPosition;
+                var v = currentPosition - previousPosition;
                 if (v.X == 0 && v.Y == 0)
                     return (float)(Math.PI * 0.5);
                 return (float)Math.Atan2(v.X, v.Y);

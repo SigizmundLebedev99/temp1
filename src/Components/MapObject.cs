@@ -5,15 +5,15 @@ namespace temp1.Components
 {
     class MapObject
     {
-        public GameObjectType Flag;
-        public Vector2 Position;
-        public Point MapPosition => (Position / 32).ToPoint();
+        public GameObjectType type;
+        public Vector2 position;
+        public Point MapPosition => (position / 32).ToPoint();
         
         public MapObject(){}
 
         public MapObject(Vector2 position, GameObjectType flag){
-            Position = position;
-            Flag = flag;
+            this.position = position;
+            type = flag;
         }
     }
 }

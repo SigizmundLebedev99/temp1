@@ -1,9 +1,9 @@
-using EpPathFinding.cs;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using temp1.AI;
 using temp1.Components;
+using temp1.GridSystem;
 
 namespace temp1.Systems
 {
@@ -11,7 +11,7 @@ namespace temp1.Systems
     {
         Mapper<BaseAI> _aiMapper;
         
-        public AISystem(BaseGrid grid) : base(Aspect.All(typeof(BaseAI), typeof(AllowedToAct)))
+        public AISystem(Grid grid) : base(Aspect.All(typeof(BaseAI), typeof(AllowedToAct)))
         {}
 
         public override void Initialize(IComponentMapperService mapperService)

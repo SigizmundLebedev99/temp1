@@ -1,10 +1,9 @@
 using System;
-using System.Linq;
-using EpPathFinding.cs;
 using FluentBehaviourTree;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 using temp1.Components;
+using temp1.GridSystem;
 
 namespace temp1.AI
 {
@@ -14,7 +13,7 @@ namespace temp1.AI
         Mapper<Direction> _directionMap;
         IMovement _movement = null;
         MapObject _dot;
-        JumpPointParam _jpParam;
+
         IBehaviourTreeNode _tree;
         float _time = 0;
         public RandomMovement(int entityId, GameContext context) : base(entityId, context)
@@ -23,7 +22,6 @@ namespace temp1.AI
             _dot = context.World.GetEntity(entityId).Get<MapObject>();
             _moveMapper = cm.Get<IMovement>();
             _directionMap = cm.Get<Direction>();
-            _jpParam = new JumpPointParam(context.CollisionGrid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
 
             _tree = new BehaviourTreeBuilder()
                 .Sequence("start")
@@ -58,18 +56,20 @@ namespace temp1.AI
 
         bool SetMovement(){
             var random = new Random();
-            var grid = Context.CollisionGrid;
-            Point point = new Point(random.Next(0, grid.width), random.Next(0, grid.height));
-            if (!grid.IsWalkableAt(point.X, point.Y))
+            var grid = Context.MoveGrid;
+            Point point = new Point(random.Next(0, grid.Width), random.Next(0, grid.Height));
+            if (!grid.ValueAt(point.X, point.Y))
                 return false;
             var from = _dot.MapPosition;
             if (from == point)
                 return false;
-            _jpParam.Reset(new GridPos(from.X, from.Y), new GridPos(point.X, point.Y));
-            var result = JumpPointFinder.FindPath(_jpParam);
+
+            var result = PathFinding.FindPath(from, point, grid);
+            if (result.Length < 2)
+                return false;
             _movement = new PolylineMovement(result, 1f);
             _moveMapper.Put(EntityId, _movement);
-            _directionMap.Put(EntityId, new Direction(_dot.Position));
+            _directionMap.Put(EntityId, new Direction(_dot.position));
 
             return true;
         }
