@@ -33,42 +33,38 @@ namespace temp1.AI
             _aSpriteMap = cm.Get<AnimatedSprite>();
 
             _jpParam = new JumpPointParam(context.MovementGrid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
-            MouseStateExtended state = MouseExtended.GetState();
+            MouseStateExtended mouseState = MouseExtended.GetState();
 
             _tree = new BehaviourTreeBuilder()
                 .Sequence("Start")
                     .Do("Await input", t =>
                     {
                         var newState = MouseExtended.GetState();
-                        if (state.LeftButton == ButtonState.Pressed && newState.LeftButton == ButtonState.Released
+                        if (mouseState.LeftButton == ButtonState.Pressed && newState.LeftButton == ButtonState.Released
                         && Context.HudState == HudState.Default
                         && !Context.Hud.IsMouseOnHud)
                         {
-                            state = newState;
+                            mouseState = newState;
                             return BehaviourTreeStatus.Success;
                         }
-                        state = newState;
+                        mouseState = newState;
                         return BehaviourTreeStatus.Failure;
                     })
                     .Selector("Possible Actions")
-                        .Do("just move", t =>
+                        // .Sequence("Combat")
+                        //     .Do("Is in battle", t => Context.GameState == GameState.Combat ? BehaviourTreeStatus.Success : BehaviourTreeStatus.Failure)
+                        //     .Do("Estimate", t =>
+                        //     {
+
+                        //     })
+                        // .End()
+                        .Do("move", t =>
                         {
-                            if (Context.PointedId != -1)
-                                return BehaviourTreeStatus.Failure;
-                            var pointOnMap = Context.Camera.ScreenToWorld(state.X, state.Y);
-                            var to = (pointOnMap / 32).ToPoint();
-                            CommitMovement(to);
-                            return BehaviourTreeStatus.Success;
-                        })
-                        .Do("move to target", t =>
-                        {
-                            var targetId = Context.PointedId;
-                            var pos = (_dotMapper.Get(Context.PointedId).Position / 32).ToPoint();
-                            var node = Context.MovementGrid.GetNodeAt(pos.X, pos.Y);
-                            var near = Context.MovementGrid.GetNeighbors(node, DiagonalMovement.Never);
-                            if (near.Count == 0)
-                                return BehaviourTreeStatus.Failure;
-                            CommitMovement(GetBestPath(near), () => CommitAction(targetId));
+                            var path = FindPath(Context.PointedId, mouseState);
+                            if(Context.PointedId != -1)
+                                CommitMovement(path, () => CommitAction(Context.PointedId));
+                            else
+                                CommitMovement(path, null);
                             return BehaviourTreeStatus.Success;
                         })
                     .End()
@@ -103,14 +99,45 @@ namespace temp1.AI
             return;
         }
 
-        void CommitMovement(Point to)
+        List<GridPos> FindPath(Point to)
         {
-            if (!Context.MovementGrid.Contains(to) || !Context.MovementGrid.IsWalkableAt(to.X, to.Y))
-                return;
             var from = _dotMapper.Get(EntityId).MapPosition;
             _jpParam.Reset(new GridPos(from.X, from.Y), new GridPos(to.X, to.Y), Context.MovementGrid);
-            var result = JumpPointFinder.FindPath(_jpParam);
-            CommitMovement(result, null);
+            return JumpPointFinder.FindPath(_jpParam);
+        }
+
+        List<GridPos> FindPath(int targetId, MouseStateExtended state)
+        {
+            var from = _dotMapper.Get(EntityId).MapPosition;
+            if(targetId == -1){
+                var pointOnMap = Context.Camera.ScreenToWorld(state.X, state.Y);
+                var to = (pointOnMap / 32).ToPoint();
+                return FindPath(to);
+            }
+            var pos = _dotMapper.Get(targetId).MapPosition;
+            return GetBestPath(pos);
+        }
+
+        List<GridPos> GetBestPath(Point pos)
+        {
+            var node = Context.MovementGrid.GetNodeAt(pos.X, pos.Y);
+            var to = Context.MovementGrid.GetNeighbors(node, DiagonalMovement.Never);
+            if (to.Count == 1)
+                return new List<GridPos>{
+                    new GridPos(to[0].x, to[0].y)
+                };
+            List<GridPos> min = null;
+            int minDist = int.MaxValue;
+            for (var i = 0; i < to.Count; i++)
+            {
+                var path = FindPath(new Point(to[i].x, to[i].y));
+                if (path.Count < minDist)
+                {
+                    minDist = path.Count;
+                    min = path;
+                }
+            }
+            return min;
         }
 
         void CommitMovement(List<GridPos> path, Action onComplete)
@@ -122,29 +149,6 @@ namespace temp1.AI
             _moveMapper.Put(EntityId, movement);
             var position = _dotMapper.Get(EntityId).Position;
             _directionMap.Put(EntityId, new Direction(position));
-        }
-
-        List<GridPos> GetBestPath(List<Node> to)
-        {
-            if (to.Count == 1)
-                return new List<GridPos>{
-                    new GridPos(to[0].x, to[0].y)
-                };
-            var dot = _dotMapper.Get(EntityId).MapPosition;
-            var from = new GridPos(dot.X, dot.Y);
-            List<GridPos> min = null;
-            int minDist = int.MaxValue;
-            for (var i = 0; i < to.Count; i++)
-            {
-                _jpParam.Reset(from, new GridPos(to[i].x, to[i].y), Context.MovementGrid);
-                var path = JumpPointFinder.FindPath(_jpParam);
-                if (path.Count < minDist)
-                {
-                    minDist = path.Count;
-                    min = path;
-                }
-            }
-            return min;
         }
 
         public override void Update(GameTime time)

@@ -42,15 +42,17 @@ namespace temp1.Screens
 
         private void ConfigureWorld()
         {
+            _world.RegisterSystem(new PossibleMovementBuildSystem(_context));
             _world.RegisterSystem(new CursorSystem(_sb, _context));
             _world.RegisterSystem(new AISystem(_context.MovementGrid));
-            _world.RegisterSystem(new MoveSystem());
+            _world.RegisterSystem(new MovementSystem());
             _world.RegisterSystem(new TransparensySystem(_context));
             _world.RegisterSystem(new ExpirationSystem());
             _world.RegisterSystem(new DirectionSystem());
             _world.RegisterSystem(new DirectionToAnimationSystem());
             _world.RegisterSystem(new AnimationRenderSystem(_sb));
             _world.RegisterSystem(new StaticSpriteRenderSystem(_sb));
+            _world.RegisterSystem(new PossibleMovementDrawSystem(_sb, Content));
             _world.RegisterSystem(new SpawnSystem(_context));
         }
         

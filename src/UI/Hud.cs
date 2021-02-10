@@ -8,7 +8,7 @@ namespace temp1.UI
 {
     partial class Hud
     {
-        public Hud(ContentManager content, HudService hud)
+        public Hud(ContentManager content, HudService hud, GameContext context)
         {
             BuildUI();
             var texture = content.Load<Texture2D>("images/dragons_blade");
@@ -17,6 +17,7 @@ namespace temp1.UI
             inventoryImage.TouchUp += (s, e) => hud.OpenInventory1();
             var battleRect = new Rectangle(192,96,32,32);
             battleImage.Renderable = new TextureRegion(texture, battleRect);
+            battleImage.TouchUp += (s,e) => context.StartBattle();
             hud.SetCallbacks(inventoryImage);
             SetCallbacks(inventoryImage);
             hud.SetCallbacks(battleImage);

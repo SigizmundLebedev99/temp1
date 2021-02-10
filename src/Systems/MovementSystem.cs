@@ -5,12 +5,13 @@ using temp1.Components;
 
 namespace temp1.Systems
 {
-    class MoveSystem : EntityProcessingSystem
+    class MovementSystem : EntityProcessingSystem
     {
         Mapper<IMovement> _moveMapper;
+        Mapper<PossibleMoves> _possibleMoveMap;
         Mapper<MapObject> _boxMapper;
 
-        public MoveSystem() : base(Aspect.All(typeof(IMovement), typeof(MapObject)))
+        public MovementSystem() : base(Aspect.All(typeof(IMovement), typeof(MapObject)))
         {
         }
 
@@ -18,6 +19,7 @@ namespace temp1.Systems
         {
             _moveMapper = mapperService.Get<IMovement>();
             _boxMapper = mapperService.Get<MapObject>();
+            _possibleMoveMap= mapperService.Get<PossibleMoves>();
         }
 
         public override void Process(GameTime gameTime, int entityId)
@@ -28,6 +30,7 @@ namespace temp1.Systems
             if(move.IsCompleted){
                 move.OnComplete?.Invoke();
                 _moveMapper.Delete(entityId);
+                _possibleMoveMap.Delete(entityId);
             }
         }
     }

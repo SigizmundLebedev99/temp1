@@ -19,17 +19,23 @@ using temp1.UI;
 
 namespace temp1
 {
+    enum GameState
+    {
+        Peace,
+        Combat,
+    }
+
     class GameContext
     {
         public World World;
-        public TiledMap Map;
         public BaseGrid MovementGrid;
         public OrthographicCamera Camera;
         public HudService Hud;
+
+        public GameState GameState = GameState.Peace;
+
         public Dictionary<string, GameObjectTypeInfo> GameObjectTypes;
-        
-        public Inventory2 Inventory2;
-        public Inventory1 Inventory1;
+        public TiledMap Map;
 
         public int PlayerId;
         public int PointedId;
@@ -40,7 +46,7 @@ namespace temp1
         Dictionary<string, SpriteSheet> SpriteSheets;
         Dictionary<string, Sprite> Sprites;
         JsonContentLoader loader = new JsonContentLoader();
-        
+
 
         public GameContext(ContentManager content, OrthographicCamera camera)
         {
@@ -66,26 +72,34 @@ namespace temp1
             Hud = new HudService(_content, this);
         }
 
-        public void DropItem(ItemStack item, Vector2? from = null){
-            var _from = from.HasValue?from.Value:World.GetEntity(PlayerId).Get<MapObject>().Position;
+        public void StartBattle()
+        {
+            World.GetEntity(PlayerId).Attach(new TurnPartitioner(1));
+        }
+
+        public void DropItem(ItemStack item, Vector2? from = null)
+        {
+            var _from = from.HasValue ? from.Value : World.GetEntity(PlayerId).Get<MapObject>().Position;
             var entity = World.CreateEntity();
             entity.Attach(item);
             var random = new Random();
             var x = random.Next(-50, 50) * 2;
             var y = random.Next(-25, 0);
             entity.Attach(new MapObject(_from, GameObjectType.Item));
-            entity.Attach<IMovement>(new FallMovement(_from, _from + new Vector2(x,y)));
+            entity.Attach<IMovement>(new FallMovement(_from, _from + new Vector2(x, y)));
             var sprite = GetSprite(item.ItemType);
             sprite.Depth = 0;
             entity.Attach(sprite);
         }
 
-        public Sprite GetSprite(GameObjectTypeInfo type){
-            if(!Sprites.ContainsKey(type.typeName)){
+        public Sprite GetSprite(GameObjectTypeInfo type)
+        {
+            if (!Sprites.ContainsKey(type.typeName))
+            {
                 var texture = _content.Load<Texture2D>(type.path);
-                var sprite = 
-                    type.region == null ? 
-                        new Sprite(texture) 
+                var sprite =
+                    type.region == null ?
+                        new Sprite(texture)
                         : new Sprite(new TextureRegion2D(texture, type.region.Rectangle));
                 if (type.origin != null)
                     sprite.Origin = new Vector2(type.origin.x, type.origin.y);
@@ -120,7 +134,7 @@ namespace temp1
                 var sprite = GetSprite(objType);
                 entity.Attach(sprite);
             }
-            if (position!= null)
+            if (position != null)
                 entity.Attach(new MapObject(position.Value, GameObjectType.None));
 
             ComponentsBuilder.BuildComponents(entity, objType, tiledMapObj, this);
@@ -131,12 +145,12 @@ namespace temp1
         void ConfigureObstacles()
         {
             var searchGrid = new StaticGrid(Map.Width, Map.Height);
-           var obstacles = Map.GetLayer<TiledMapTileLayer>("obstacles");
+            var obstacles = Map.GetLayer<TiledMapTileLayer>("obstacles");
             for (ushort x = 0; x < Map.Width; x++)
             {
                 for (ushort y = 0; y < Map.Height; y++)
                 {
-                    var tile = obstacles.GetTile(x,y);
+                    var tile = obstacles.GetTile(x, y);
                     searchGrid.SetWalkableAt(x, y, tile.IsBlank);
                 }
             }

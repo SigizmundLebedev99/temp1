@@ -29,7 +29,7 @@ namespace temp1
             desktop = new Desktop();
             inventory1 = new Inventory1(context, this);
             inventory2 = new Inventory2(context, this);
-            hud = new Hud(contentManager, this);
+            hud = new Hud(contentManager, this, context);
             Default();
         }
 
