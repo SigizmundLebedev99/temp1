@@ -26,6 +26,7 @@ namespace temp1.Systems
             var box = _boxMapper.Get(entityId);
             box.Position = move.Move();
             if(move.IsCompleted){
+                move.OnComplete?.Invoke();
                 _moveMapper.Delete(entityId);
             }
         }

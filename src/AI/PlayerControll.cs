@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using EpPathFinding.cs;
 using FluentBehaviourTree;
@@ -31,31 +32,11 @@ namespace temp1.AI
             _directionMap = cm.Get<Direction>();
             _aSpriteMap = cm.Get<AnimatedSprite>();
 
-            int targetId = -1;
-
-            _jpParam = new JumpPointParam(context.CollisionGrid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
+            _jpParam = new JumpPointParam(context.MovementGrid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
             MouseStateExtended state = MouseExtended.GetState();
 
             _tree = new BehaviourTreeBuilder()
                 .Sequence("Start")
-                    .Inverter("i1")
-                        .Sequence("AwaitMove")
-                            .Do("has no target", t =>
-                            {
-                                if (targetId == -1)
-                                    return BehaviourTreeStatus.Failure;
-                                return BehaviourTreeStatus.Success;
-                            })
-                            .Do("await move", t =>
-                            {
-                                var move = _moveMapper.Get(EntityId);
-                                if (move == null || move.IsCompleted)
-                                    return BehaviourTreeStatus.Success;
-                                return BehaviourTreeStatus.Failure;
-                            })
-                            .Do("commit action", t => CommitAction(ref targetId))
-                        .End()
-                    .End()
                     .Do("Await input", t =>
                     {
                         var newState = MouseExtended.GetState();
@@ -63,7 +44,6 @@ namespace temp1.AI
                         && Context.HudState == HudState.Default
                         && !Context.Hud.IsMouseOnHud)
                         {
-                            targetId = -1;
                             state = newState;
                             return BehaviourTreeStatus.Success;
                         }
@@ -82,40 +62,20 @@ namespace temp1.AI
                         })
                         .Do("move to target", t =>
                         {
-                            targetId = Context.PointedId;
+                            var targetId = Context.PointedId;
                             var pos = (_dotMapper.Get(Context.PointedId).Position / 32).ToPoint();
-                            var node = Context.CollisionGrid.GetNodeAt(pos.X, pos.Y);
-                            var near = Context.CollisionGrid.GetNeighbors(node, DiagonalMovement.Never);
+                            var node = Context.MovementGrid.GetNodeAt(pos.X, pos.Y);
+                            var near = Context.MovementGrid.GetNeighbors(node, DiagonalMovement.Never);
                             if (near.Count == 0)
                                 return BehaviourTreeStatus.Failure;
-                            CommitMovement(GetBestPath(near));
+                            CommitMovement(GetBestPath(near), () => CommitAction(targetId));
                             return BehaviourTreeStatus.Success;
                         })
                     .End()
                 .End().Build();
         }
 
-        void CommitMovement(Point to)
-        {
-            if (!Context.CollisionGrid.Contains(to) || !Context.CollisionGrid.IsWalkableAt(to.X, to.Y))
-                return;
-            var from = _dotMapper.Get(EntityId).MapPosition;
-            _jpParam.Reset(new GridPos(from.X, from.Y), new GridPos(to.X, to.Y), Context.CollisionGrid);
-            var result = JumpPointFinder.FindPath(_jpParam);
-            CommitMovement(result);
-        }
-
-        void CommitMovement(List<GridPos> path)
-        {
-            if (path.Count < 2)
-                return;
-            var movement = new PolylineMovement(path, 3f);
-            _moveMapper.Put(EntityId, movement);
-            var position = _dotMapper.Get(EntityId).Position;
-            _directionMap.Put(EntityId, new Direction(position));
-        }
-
-        BehaviourTreeStatus CommitAction(ref int targetId)
+        void CommitAction(int targetId)
         {
             var entity = Context.World.GetEntity(targetId);
             var sprite = entity.Get<AnimatedSprite>();
@@ -123,9 +83,9 @@ namespace temp1.AI
             var mapObj = entity.Get<MapObject>();
 
             if (mapObj == null)
-                return BehaviourTreeStatus.Failure;
+                return;
 
-            switch (mapObj.Flag)
+            switch (mapObj.Type)
             {
                 case GameObjectType.Storage:
                     {
@@ -140,12 +100,29 @@ namespace temp1.AI
                         break;
                     }
             }
-
-            targetId = -1;
-            return BehaviourTreeStatus.Success;
+            return;
         }
 
+        void CommitMovement(Point to)
+        {
+            if (!Context.MovementGrid.Contains(to) || !Context.MovementGrid.IsWalkableAt(to.X, to.Y))
+                return;
+            var from = _dotMapper.Get(EntityId).MapPosition;
+            _jpParam.Reset(new GridPos(from.X, from.Y), new GridPos(to.X, to.Y), Context.MovementGrid);
+            var result = JumpPointFinder.FindPath(_jpParam);
+            CommitMovement(result, null);
+        }
 
+        void CommitMovement(List<GridPos> path, Action onComplete)
+        {
+            if (path.Count < 2)
+                return;
+            var movement = new PolylineMovement(path, 3f);
+            movement.OnComplete = onComplete;
+            _moveMapper.Put(EntityId, movement);
+            var position = _dotMapper.Get(EntityId).Position;
+            _directionMap.Put(EntityId, new Direction(position));
+        }
 
         List<GridPos> GetBestPath(List<Node> to)
         {
@@ -159,7 +136,7 @@ namespace temp1.AI
             int minDist = int.MaxValue;
             for (var i = 0; i < to.Count; i++)
             {
-                _jpParam.Reset(from, new GridPos(to[i].x, to[i].y), Context.CollisionGrid);
+                _jpParam.Reset(from, new GridPos(to[i].x, to[i].y), Context.MovementGrid);
                 var path = JumpPointFinder.FindPath(_jpParam);
                 if (path.Count < minDist)
                 {

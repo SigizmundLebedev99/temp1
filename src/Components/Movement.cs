@@ -9,6 +9,7 @@ namespace temp1.Components
     {
         bool IsCompleted { get; }
         Vector2 Move();
+        Action OnComplete { get; }
     }
 
     class PolylineMovement : IMovement
@@ -23,6 +24,8 @@ namespace temp1.Components
 
         public bool IsCompleted => currentSegment == _path.Length - 1 && k >= 1f;
 
+        public Action OnComplete { get; set; }
+
         public PolylineMovement(Vector2[] path, float speed)
         {
             if (path.Length < 2)
@@ -33,11 +36,13 @@ namespace temp1.Components
             MoveTo(_path[0], _path[1], speed);
         }
 
-        public PolylineMovement(List<GridPos> path, float speed){
+        public PolylineMovement(List<GridPos> path, float speed)
+        {
             if (path.Count < 2)
                 throw new Exception("Path should contain at liast two points");
             _path = new Vector2[path.Count];
-            for(var i = 0; i < path.Count; i ++){
+            for (var i = 0; i < path.Count; i++)
+            {
                 var p = path[i];
                 _path[i] = new Vector2(p.x * 32 + 16, p.y * 32 + 16);
             }
@@ -76,7 +81,10 @@ namespace temp1.Components
 
         public bool IsCompleted => k >= 1;
 
-        public FallMovement(Vector2 from, Vector2 to){
+        public Action OnComplete { get; set; }
+
+        public FallMovement(Vector2 from, Vector2 to)
+        {
             _from = from;
             _to = to;
         }

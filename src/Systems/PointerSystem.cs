@@ -11,7 +11,7 @@ using temp1.Data;
 
 namespace temp1.Systems
 {
-    class PointerSystem : EntitySystem, IDrawSystem, IUpdateSystem
+    class CursorSystem : EntitySystem, IDrawSystem, IUpdateSystem
     {
         private Vector2 position;
         private float scale;
@@ -26,7 +26,7 @@ namespace temp1.Systems
         private GameContext _context;
         OrthographicCamera _camera;
 
-        public PointerSystem(SpriteBatch sb, GameContext context) : base(Aspect.All(typeof(MapObject)).One(typeof(Sprite), typeof(AnimatedSprite)))
+        public CursorSystem(SpriteBatch sb, GameContext context) : base(Aspect.All(typeof(MapObject)).One(typeof(Sprite), typeof(AnimatedSprite)))
         {
             _context = context;
             _spriteBatch = sb;
@@ -43,30 +43,34 @@ namespace temp1.Systems
 
         public void Update(GameTime gameTime)
         {
-            if( _context.HudState != HudState.Default || _context.Hud.IsMouseOnHud){
+            if (_context.HudState != HudState.Default || _context.Hud.IsMouseOnHud)
+            {
                 shouldShow = false;
                 return;
             }
             var state = MouseExtended.GetState();
             var worldPos = _camera.ScreenToWorld(state.Position.X, state.Position.Y);
             var point = (worldPos / 32).ToPoint();
-            if (!_context.CollisionGrid.Contains(point))
+
+            if (!_context.MovementGrid.Contains(point))
             {
                 shouldShow = false;
                 return;
             }
 
             position = point.ToVector2() * 32 + new Vector2(16);
-            
-            _context.PointedId = -1;
 
-            if (!_context.CollisionGrid.IsWalkableAt(point.X, point.Y))
-                mark.Play("no");
-            else if (!HandlePoint(worldPos))
-                mark.Play("idle");
+            _context.PointedId = -1;
+            if (!HandlePoint(worldPos))
+            {
+                if (_context.MovementGrid.IsWalkableAt(point.X, point.Y))
+                    mark.Play("idle");
+                else
+                    mark.Play("no");
+            }
             shouldShow = true;
             mark.Update(gameTime.ElapsedGameTime.Milliseconds);
-            scale = (float)(Math.Sin(gameTime.TotalGameTime.Milliseconds / 50) * 0.1 + 0.9);
+            scale = (float)(Math.Sin(gameTime.TotalGameTime.Milliseconds / 64) * 0.1 + 0.9);
         }
 
         private bool HandlePoint(Vector2 pos)
@@ -75,15 +79,13 @@ namespace temp1.Systems
             {
                 var sprite = _spriteMapper.Get(ActiveEntities[i]) ?? _aSpriteMapper.Get(ActiveEntities[i]);
                 var dot = _dotMapper.Get(ActiveEntities[i]);
-                var id =  ActiveEntities[i];
+                var id = ActiveEntities[i];
                 var bounds = new Rectangle(0, 0, sprite.TextureRegion.Width, sprite.TextureRegion.Height);
 
                 if (bounds.Contains(pos - dot.Position + sprite.Origin))
                 {
-                    if (dot.Flag == GameObjectType.Storage || dot.Flag == GameObjectType.Item)
-                        mark.Play("hand");
-                    else if (dot.Flag == GameObjectType.Enemy)
-                        mark.Play("sword");
+                    if (GetCursor(dot, out var animation))
+                        mark.Play(animation);
                     else
                         continue;
                     position = pos;
@@ -94,18 +96,27 @@ namespace temp1.Systems
             return false;
         }
 
+        private bool GetCursor(MapObject obj, out string animation){
+            animation = obj.Type switch{
+                GameObjectType.Storage => "hand",
+                GameObjectType.Enemy => "sword",
+                _ => null
+            };
+            return animation != null;
+        }
+
         public void Draw(GameTime gameTime)
         {
             if (!shouldShow)
                 return;
             _spriteBatch.Draw(
-                mark.TextureRegion.Texture, 
-                position, 
+                mark.TextureRegion.Texture,
+                position,
                 mark.TextureRegion.Bounds,
                 Color.White,
                 0,
                 new Vector2(16),
-                scale,SpriteEffects.None, 0f);
+                scale, SpriteEffects.None, 0f);
         }
     }
 }

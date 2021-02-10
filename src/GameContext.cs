@@ -23,7 +23,7 @@ namespace temp1
     {
         public World World;
         public TiledMap Map;
-        public BaseGrid CollisionGrid;
+        public BaseGrid MovementGrid;
         public OrthographicCamera Camera;
         public HudService Hud;
         public Dictionary<string, GameObjectTypeInfo> GameObjectTypes;
@@ -49,7 +49,6 @@ namespace temp1
             GameObjectTypes = new Dictionary<string, GameObjectTypeInfo>();
             Sprites = new Dictionary<string, Sprite>();
             SpriteSheets = new Dictionary<string, SpriteSheet>();
-            Hud = new HudService(content, this);
         }
 
         public void LoadTypes()
@@ -64,6 +63,7 @@ namespace temp1
             Map = _content.Load<TiledMap>(map);
             ConfigureObstacles();
             ConfigureMapObjects();
+            Hud = new HudService(_content, this);
         }
 
         public void DropItem(ItemStack item, Vector2? from = null){
@@ -131,27 +131,17 @@ namespace temp1
         void ConfigureObstacles()
         {
             var searchGrid = new StaticGrid(Map.Width, Map.Height);
-            var obstacles = Map.GetLayer<TiledMapObjectLayer>("obstacles").Objects.Select(e =>
-                new Polygon((e as TiledMapPolygonObject).Points.Select(p => new Vector2(p.X, p.Y) + e.Position)))
-                .ToArray();
-            for (var x = 0; x < Map.Width; x++)
+           var obstacles = Map.GetLayer<TiledMapTileLayer>("obstacles");
+            for (ushort x = 0; x < Map.Width; x++)
             {
-                for (var y = 0; y < Map.Height; y++)
+                for (ushort y = 0; y < Map.Height; y++)
                 {
-                    var isIn = false;
-                    for (var i = 0; i < obstacles.Length; i++)
-                    {
-                        if (obstacles[i].Contains(x * Map.TileWidth + Map.TileWidth / 2, y * Map.TileHeight + Map.TileHeight / 2))
-                        {
-                            isIn = true;
-                            break;
-                        }
-                    }
-                    searchGrid.SetWalkableAt(x, y, !isIn);
+                    var tile = obstacles.GetTile(x,y);
+                    searchGrid.SetWalkableAt(x, y, tile.IsBlank);
                 }
             }
 
-            CollisionGrid = searchGrid;
+            MovementGrid = searchGrid;
         }
 
         void ConfigureMapObjects()
