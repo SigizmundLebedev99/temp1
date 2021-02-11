@@ -22,6 +22,7 @@ namespace temp1.Systems
         Mapper<Sprite> _spriteMapper;
         Mapper<AnimatedSprite> _aSpriteMapper;
         Mapper<PossibleMoves> _possibleMovesMap;
+        Mapper<AllowedToAct> _allowedMap;
 
         SpriteBatch _spriteBatch;
         GameContext _context;
@@ -41,6 +42,7 @@ namespace temp1.Systems
             _spriteMapper = mapperService.Get<Sprite>();
             _aSpriteMapper = mapperService.Get<AnimatedSprite>();
             _possibleMovesMap = mapperService.Get<PossibleMoves>();
+            _allowedMap= mapperService.Get<AllowedToAct>();
         }
 
         public void Update(GameTime gameTime)
@@ -73,6 +75,8 @@ namespace temp1.Systems
             }
             else
             {
+                if(!_allowedMap.Has(_context.PlayerId))
+                    return;
                 var possibleMoves = _possibleMovesMap.Get(_context.PlayerId);
                 if (possibleMoves.Contains(point))
                 {

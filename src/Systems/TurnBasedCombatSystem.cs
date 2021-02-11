@@ -35,8 +35,8 @@ namespace temp1.Systems
                     _allowanceMapper.Delete(entityId);
                     _turnMapper.Delete(entityId);
                     // ход переходит к следующему актору
-                    _allowanceMapper.Put(entityId, new AllowedToAct());
-                    _turnMapper.Put(entityId, new CurrentTurn());
+                    _allowanceMapper.Put(id, new AllowedToAct());
+                    _turnMapper.Put(id, new CurrentTurn());
                     return;
                 }
             }

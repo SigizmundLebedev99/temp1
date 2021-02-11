@@ -30,7 +30,8 @@ namespace temp1.Systems
         {
             var position = _dotMap.Get(entityId).MapPosition;
             var possibleMoves = BuildMoves(position, entityId);
-            if(possibleMoves.Moves.Count > 0){
+            if (possibleMoves.Moves.Count > 0)
+            {
                 _moveMap.Put(entityId, possibleMoves);
             }
         }
@@ -65,9 +66,10 @@ namespace temp1.Systems
                 for (var i = 0; i < directions.Length; i++)
                 {
                     var point = current.point + directions[i];
-                    if(searched.Contains(point))
+                    if (searched.Contains(point))
                         continue;
-                    frontier.Enqueue(new Cell{
+                    frontier.Enqueue(new Cell
+                    {
                         distance = current.distance + 1,
                         point = point,
                         from = current
@@ -76,7 +78,8 @@ namespace temp1.Systems
                 }
             }
 
-            return new PossibleMoves{
+            return new PossibleMoves
+            {
                 Moves = result
             };
         }

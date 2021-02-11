@@ -81,6 +81,8 @@ namespace temp1.AI
 
         void CommitAction(int targetId)
         {
+            if(targetId == -1)
+                return;
             var entity = Context.World.GetEntity(targetId);
             var sprite = entity.Get<AnimatedSprite>();
             var storage = entity.Get<Storage>();
