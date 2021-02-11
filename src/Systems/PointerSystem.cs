@@ -47,7 +47,7 @@ namespace temp1.Systems
 
         public void Update(GameTime gameTime)
         {
-            if (_context.HudState != HudState.Default || _context.Hud.IsMouseOnHud)
+            if (_context.HudState != HudState.Default || _context.Hud.IsMouseOnHud ||  !_allowedMap.Has(_context.PlayerId))
             {
                 shouldShow = false;
                 return;
@@ -75,8 +75,6 @@ namespace temp1.Systems
             }
             else
             {
-                if(!_allowedMap.Has(_context.PlayerId))
-                    return;
                 var possibleMoves = _possibleMovesMap.Get(_context.PlayerId);
                 if (possibleMoves.Contains(point))
                 {

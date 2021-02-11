@@ -68,9 +68,13 @@ namespace temp1.AI
                         .End()
                         .Do("move", t =>
                         {
-                            var path = FindPath(Context.PointedId, mouseState);
-                            if (Context.PointedId != -1)
-                                CommitMovement(path, () => CommitAction(Context.PointedId));
+                            var point = mouseState.MapPosition(Context.Camera);
+                            if (Context.PointedId == -1 && !Context.MovementGrid.IsWalkableAt(point.X, point.Y))
+                                return BehaviourTreeStatus.Success;
+                            var path = FindPath(Context.PointedId, point);
+                            var targetId = Context.PointedId;
+                            if (targetId != -1)
+                                CommitMovement(path, () => CommitAction(targetId));
                             else
                                 CommitMovement(path, null);
                             return BehaviourTreeStatus.Success;
@@ -81,8 +85,6 @@ namespace temp1.AI
 
         void CommitAction(int targetId)
         {
-            if(targetId == -1)
-                return;
             var entity = Context.World.GetEntity(targetId);
             var sprite = entity.Get<AnimatedSprite>();
             var storage = entity.Get<Storage>();
@@ -109,13 +111,12 @@ namespace temp1.AI
             return;
         }
 
-        List<GridPos> FindPath(int targetId, MouseStateExtended state)
+        List<GridPos> FindPath(int targetId, Point to)
         {
             var from = _dotMapper.Get(EntityId).MapPosition;
-            var to = state.MapPosition(Context.Camera);
             _jpParam.Reset(new GridPos(from.X, from.Y), new GridPos(to.X, to.Y), Context.MovementGrid);
             var path = JumpPointFinder.FindPath(_jpParam);
-            if (targetId != -1)
+            if (targetId != -1 && path.Count > 2)
                 path.RemoveAt(path.Count - 1);
             return path;
         }
