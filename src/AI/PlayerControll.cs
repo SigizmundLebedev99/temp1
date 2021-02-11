@@ -31,6 +31,7 @@ namespace temp1.AI
             _storageMap = cm.Get<Storage>();
             _directionMap = cm.Get<Direction>();
             _aSpriteMap = cm.Get<AnimatedSprite>();
+            var possibleMoveMap = cm.Get<PossibleMoves>();
 
             _jpParam = new JumpPointParam(context.MovementGrid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
             MouseStateExtended mouseState = MouseExtended.GetState();
@@ -51,17 +52,22 @@ namespace temp1.AI
                         return BehaviourTreeStatus.Failure;
                     })
                     .Selector("Possible Actions")
-                        // .Sequence("Combat")
-                        //     .Do("Is in battle", t => Context.GameState == GameState.Combat ? BehaviourTreeStatus.Success : BehaviourTreeStatus.Failure)
-                        //     .Do("Estimate", t =>
-                        //     {
-
-                        //     })
-                        // .End()
+                        .Sequence("Combat")
+                            .Do("is in battle", t => Context.GameState == GameState.Combat ? BehaviourTreeStatus.Success : BehaviourTreeStatus.Failure)
+                            .Do("try move", t =>
+                            {
+                                var possibleMoves = possibleMoveMap.Get(EntityId);
+                                if (possibleMoves.TryGetPath(mouseState.MapPosition(Context.Camera), out var path))
+                                {
+                                    CommitMovement(path, null);
+                                }
+                                return BehaviourTreeStatus.Success;
+                            })
+                        .End()
                         .Do("move", t =>
                         {
                             var path = FindPath(Context.PointedId, mouseState);
-                            if(Context.PointedId != -1)
+                            if (Context.PointedId != -1)
                                 CommitMovement(path, () => CommitAction(Context.PointedId));
                             else
                                 CommitMovement(path, null);
@@ -99,45 +105,15 @@ namespace temp1.AI
             return;
         }
 
-        List<GridPos> FindPath(Point to)
-        {
-            var from = _dotMapper.Get(EntityId).MapPosition;
-            _jpParam.Reset(new GridPos(from.X, from.Y), new GridPos(to.X, to.Y), Context.MovementGrid);
-            return JumpPointFinder.FindPath(_jpParam);
-        }
-
         List<GridPos> FindPath(int targetId, MouseStateExtended state)
         {
             var from = _dotMapper.Get(EntityId).MapPosition;
-            if(targetId == -1){
-                var pointOnMap = Context.Camera.ScreenToWorld(state.X, state.Y);
-                var to = (pointOnMap / 32).ToPoint();
-                return FindPath(to);
-            }
-            var pos = _dotMapper.Get(targetId).MapPosition;
-            return GetBestPath(pos);
-        }
-
-        List<GridPos> GetBestPath(Point pos)
-        {
-            var node = Context.MovementGrid.GetNodeAt(pos.X, pos.Y);
-            var to = Context.MovementGrid.GetNeighbors(node, DiagonalMovement.Never);
-            if (to.Count == 1)
-                return new List<GridPos>{
-                    new GridPos(to[0].x, to[0].y)
-                };
-            List<GridPos> min = null;
-            int minDist = int.MaxValue;
-            for (var i = 0; i < to.Count; i++)
-            {
-                var path = FindPath(new Point(to[i].x, to[i].y));
-                if (path.Count < minDist)
-                {
-                    minDist = path.Count;
-                    min = path;
-                }
-            }
-            return min;
+            var to = state.MapPosition(Context.Camera);
+            _jpParam.Reset(new GridPos(from.X, from.Y), new GridPos(to.X, to.Y), Context.MovementGrid);
+            var path =  JumpPointFinder.FindPath(_jpParam);
+            if(targetId != -1)
+                path.RemoveAt(path.Count - 1);
+            return path;
         }
 
         void CommitMovement(List<GridPos> path, Action onComplete)

@@ -42,6 +42,7 @@ namespace temp1.Screens
 
         private void ConfigureWorld()
         {
+            _world.RegisterSystem(new TurnBasedCombatSystem(_context));
             _world.RegisterSystem(new PossibleMovementBuildSystem(_context));
             _world.RegisterSystem(new CursorSystem(_sb, _context));
             _world.RegisterSystem(new AISystem(_context.MovementGrid));

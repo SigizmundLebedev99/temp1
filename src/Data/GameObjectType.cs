@@ -3,7 +3,6 @@ using temp1.Components;
 
 namespace temp1.Data
 {
-
     public enum GameObjectType{
         None,
         Storage,

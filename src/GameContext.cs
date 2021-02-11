@@ -6,16 +6,16 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
+using MonoGame.Extended.Collections;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Serialization;
-using MonoGame.Extended.Shapes;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using MonoGame.Extended.Tiled;
+using temp1.AI;
 using temp1.Components;
 using temp1.Data;
-using temp1.UI;
 
 namespace temp1
 {
@@ -31,7 +31,7 @@ namespace temp1
         public BaseGrid MovementGrid;
         public OrthographicCamera Camera;
         public HudService Hud;
-
+        public Bag<int> Actors => subscription.ActiveEntities;
         public GameState GameState = GameState.Peace;
 
         public Dictionary<string, GameObjectTypeInfo> GameObjectTypes;
@@ -46,7 +46,11 @@ namespace temp1
         Dictionary<string, SpriteSheet> SpriteSheets;
         Dictionary<string, Sprite> Sprites;
         JsonContentLoader loader = new JsonContentLoader();
-
+        EntitySubscription subscription;
+        Mapper<AllowedToAct> _allowedMapper;
+        Mapper<TurnOccured> _combatantMapper;
+        Mapper<IMovement> _moveMapper;
+        Mapper<CurrentTurn> _turnMapper;
 
         public GameContext(ContentManager content, OrthographicCamera camera)
         {
@@ -67,14 +71,26 @@ namespace temp1
         {
             World = world;
             Map = _content.Load<TiledMap>(map);
+            subscription = new EntitySubscription(world.EntityManager, Aspect.All(typeof(BaseAI)).Build(world.ComponentManager));
             ConfigureObstacles();
             ConfigureMapObjects();
             Hud = new HudService(_content, this);
+            _allowedMapper = world.ComponentManager.Get<AllowedToAct>();
+            _combatantMapper = world.ComponentManager.Get<TurnOccured>();
+            _moveMapper = world.ComponentManager.Get<IMovement>();
+            _turnMapper = world.ComponentManager.Get<CurrentTurn>();
         }
 
         public void StartBattle()
         {
-            World.GetEntity(PlayerId).Attach(new TurnPartitioner(1));
+            GameState = GameState.Combat;
+            for (var i = 0; i < Actors.Count; i++)
+            {
+                _allowedMapper.Delete(Actors[i]);
+                _combatantMapper.Delete(Actors[i]);
+                _moveMapper.Delete(Actors[i]);
+            }
+            _turnMapper.Put(PlayerId, new CurrentTurn());
         }
 
         public void DropItem(ItemStack item, Vector2? from = null)

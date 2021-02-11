@@ -12,7 +12,7 @@ namespace temp1.Systems
         Mapper<PossibleMoves> _moveMap;
         Mapper<MapObject> _dotMap;
         GameContext _context;
-        public PossibleMovementBuildSystem(GameContext context) : base(Aspect.All(typeof(TurnPartitioner)).Exclude(typeof(PossibleMoves)))
+        public PossibleMovementBuildSystem(GameContext context) : base(Aspect.All(typeof(CurrentTurn)).Exclude(typeof(PossibleMoves)))
         {
             _context = context;
         }

@@ -13,17 +13,18 @@ namespace temp1.Systems
 {
     class CursorSystem : EntitySystem, IDrawSystem, IUpdateSystem
     {
-        private Vector2 position;
-        private float scale;
-        private bool shouldShow = false;
+        Vector2 position;
+        float scale;
+        bool shouldShow = false;
         AnimatedSprite mark;
 
-        private Mapper<MapObject> _dotMapper;
-        private Mapper<Sprite> _spriteMapper;
-        private Mapper<AnimatedSprite> _aSpriteMapper;
+        Mapper<MapObject> _dotMapper;
+        Mapper<Sprite> _spriteMapper;
+        Mapper<AnimatedSprite> _aSpriteMapper;
+        Mapper<PossibleMoves> _possibleMovesMap;
 
-        private SpriteBatch _spriteBatch;
-        private GameContext _context;
+        SpriteBatch _spriteBatch;
+        GameContext _context;
         OrthographicCamera _camera;
 
         public CursorSystem(SpriteBatch sb, GameContext context) : base(Aspect.All(typeof(MapObject)).One(typeof(Sprite), typeof(AnimatedSprite)))
@@ -39,6 +40,7 @@ namespace temp1.Systems
             _dotMapper = mapperService.Get<MapObject>();
             _spriteMapper = mapperService.Get<Sprite>();
             _aSpriteMapper = mapperService.Get<AnimatedSprite>();
+            _possibleMovesMap = mapperService.Get<PossibleMoves>();
         }
 
         public void Update(GameTime gameTime)
@@ -51,22 +53,36 @@ namespace temp1.Systems
             var state = MouseExtended.GetState();
             var worldPos = _camera.ScreenToWorld(state.Position.X, state.Position.Y);
             var point = (worldPos / 32).ToPoint();
-
-            if (!_context.MovementGrid.Contains(point))
-            {
-                shouldShow = false;
-                return;
-            }
-
             position = point.ToVector2() * 32 + new Vector2(16);
-
             _context.PointedId = -1;
-            if (!HandlePoint(worldPos))
+            if (_context.GameState == GameState.Peace)
             {
-                if (_context.MovementGrid.IsWalkableAt(point.X, point.Y))
-                    mark.Play("idle");
+                if (!_context.MovementGrid.Contains(point))
+                {
+                    shouldShow = false;
+                    return;
+                }
+
+                if (!HandlePoint(worldPos))
+                {
+                    if (_context.MovementGrid.IsWalkableAt(point.X, point.Y))
+                        mark.Play("idle");
+                    else
+                        mark.Play("no");
+                }
+            }
+            else
+            {
+                var possibleMoves = _possibleMovesMap.Get(_context.PlayerId);
+                if (possibleMoves.Contains(point))
+                {
+                    if (!HandlePoint(worldPos))
+                        mark.Play("idle");
+                }
                 else
+                {
                     mark.Play("no");
+                }
             }
             shouldShow = true;
             mark.Update(gameTime.ElapsedGameTime.Milliseconds);
@@ -96,10 +112,13 @@ namespace temp1.Systems
             return false;
         }
 
-        private bool GetCursor(MapObject obj, out string animation){
-            animation = obj.Type switch{
+        private bool GetCursor(MapObject obj, out string animation)
+        {
+            animation = obj.Type switch
+            {
                 GameObjectType.Storage => "hand",
                 GameObjectType.Enemy => "sword",
+                GameObjectType.Item => "hand",
                 _ => null
             };
             return animation != null;

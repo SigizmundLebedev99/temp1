@@ -18,7 +18,7 @@ namespace temp1.UI
 			BuildUI();
             _context = context;
             var sprite = context.World.ComponentManager.Get<AnimatedSprite>().Get(context.PlayerId);
-            playerImage.Renderable = new TextureRegion(sprite.TextureRegion.Texture, sprite.TextureRegion.Bounds);
+            playerImage.Renderable = sprite.TextureRegion.ToMyra();
             closeButton.Click += (s,e) => hud.Default();
 		}
 

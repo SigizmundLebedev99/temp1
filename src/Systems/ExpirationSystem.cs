@@ -22,7 +22,7 @@ namespace temp1.Systems
         {
             var expire = _expireMapper.Get(entityId);
             if(expire.Update(gameTime)){
-                if(expire.ShouldDestroy)
+                if(expire.ShouldDestroyEntity)
                     DestroyEntity(entityId);
                 else
                     _expireMapper.Delete(entityId);
