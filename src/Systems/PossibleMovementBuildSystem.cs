@@ -11,7 +11,9 @@ namespace temp1.Systems
     {
         Mapper<PossibleMoves> _moveMap;
         Mapper<MapObject> _dotMap;
+        Mapper<ActionPoints> _pointsMap;
         GameContext _context;
+        HashSet<Point> searched = new HashSet<Point>();
         public PossibleMovementBuildSystem(GameContext context) : base(Aspect.All(typeof(CurrentTurn)).Exclude(typeof(PossibleMoves)))
         {
             _context = context;
@@ -21,20 +23,22 @@ namespace temp1.Systems
         {
             _moveMap = mapperService.Get<PossibleMoves>();
             _dotMap = mapperService.Get<MapObject>();
+            _pointsMap = mapperService.Get<ActionPoints>();
         }
 
         public override void Process(GameTime gameTime, int entityId)
         {
             var position = _dotMap.Get(entityId).MapPosition;
-            var possibleMoves = BuildMoves(position);
+            var possibleMoves = BuildMoves(position, entityId);
             if(possibleMoves.Moves.Count > 0){
                 _moveMap.Put(entityId, possibleMoves);
             }
         }
 
-        private PossibleMoves BuildMoves(Point mapPosition)
+        private PossibleMoves BuildMoves(Point mapPosition, int entityId)
         {
-            var limit = 5;
+            searched.Clear();
+            var limit = _pointsMap.Get(entityId).Remain + 1;
             var grid = _context.MovementGrid;
             var frontier = new Queue<Cell>(limit * limit);
             var result = new List<Cell>(limit * limit);
@@ -60,11 +64,15 @@ namespace temp1.Systems
                 result.Add(current);
                 for (var i = 0; i < directions.Length; i++)
                 {
+                    var point = current.point + directions[i];
+                    if(searched.Contains(point))
+                        continue;
                     frontier.Enqueue(new Cell{
                         distance = current.distance + 1,
-                        point = current.point + directions[i],
+                        point = point,
                         from = current
                     });
+                    searched.Add(point);
                 }
             }
 

@@ -5,6 +5,7 @@ using temp1.Components;
 
 namespace temp1.Systems
 {
+    // система переключения права хода между акторами
     class TurnBasedCombatSystem : EntityProcessingSystem
     {
         Mapper<AllowedToAct> _allowanceMapper;
@@ -12,7 +13,7 @@ namespace temp1.Systems
         Mapper<TurnOccured> _endOfTurnMapper;
         GameContext _context;
 
-        public TurnBasedCombatSystem(GameContext context) : base(Aspect.All(typeof(CurrentTurn)))
+        public TurnBasedCombatSystem(GameContext context) : base(Aspect.All(typeof(CurrentTurn), typeof(TurnOccured)))
         {
             _context = context;
         }
@@ -26,12 +27,6 @@ namespace temp1.Systems
 
         public override void Process(GameTime gameTime, int entityId)
         {
-            if (_context.GameState != GameState.Combat)
-                return;
-            if (!_allowanceMapper.Has(entityId))
-                _allowanceMapper.Put(entityId, new AllowedToAct());
-            if (!_endOfTurnMapper.Has(entityId)) // Ход не закончился
-                return;
             for (var i = 0; i < _context.Actors.Count; i++)
             {
                 var id = _context.Actors[i];
@@ -39,6 +34,7 @@ namespace temp1.Systems
                 {
                     _allowanceMapper.Delete(entityId);
                     _turnMapper.Delete(entityId);
+                    // ход переходит к следующему актору
                     _allowanceMapper.Put(entityId, new AllowedToAct());
                     _turnMapper.Put(entityId, new CurrentTurn());
                     return;

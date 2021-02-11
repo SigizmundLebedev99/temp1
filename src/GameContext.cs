@@ -91,6 +91,7 @@ namespace temp1
                 _moveMapper.Delete(Actors[i]);
             }
             _turnMapper.Put(PlayerId, new CurrentTurn());
+            _allowedMapper.Put(PlayerId, new AllowedToAct());
         }
 
         public void DropItem(ItemStack item, Vector2? from = null)

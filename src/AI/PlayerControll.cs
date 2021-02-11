@@ -19,7 +19,7 @@ namespace temp1.AI
         Mapper<Storage> _storageMap;
         Mapper<MapObject> _dotMapper;
         Mapper<AnimatedSprite> _aSpriteMap;
-
+        Mapper<ActionOccured> _actionMapper;
         JumpPointParam _jpParam;
         IBehaviourTreeNode _tree;
 
@@ -31,6 +31,7 @@ namespace temp1.AI
             _storageMap = cm.Get<Storage>();
             _directionMap = cm.Get<Direction>();
             _aSpriteMap = cm.Get<AnimatedSprite>();
+            _actionMapper = cm.Get<ActionOccured>();
             var possibleMoveMap = cm.Get<PossibleMoves>();
 
             _jpParam = new JumpPointParam(context.MovementGrid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
@@ -60,6 +61,7 @@ namespace temp1.AI
                                 if (possibleMoves.TryGetPath(mouseState.MapPosition(Context.Camera), out var path))
                                 {
                                     CommitMovement(path, null);
+                                    _actionMapper.Put(EntityId, new ActionOccured { PointsTaken = path.Count });
                                 }
                                 return BehaviourTreeStatus.Success;
                             })
@@ -110,8 +112,8 @@ namespace temp1.AI
             var from = _dotMapper.Get(EntityId).MapPosition;
             var to = state.MapPosition(Context.Camera);
             _jpParam.Reset(new GridPos(from.X, from.Y), new GridPos(to.X, to.Y), Context.MovementGrid);
-            var path =  JumpPointFinder.FindPath(_jpParam);
-            if(targetId != -1)
+            var path = JumpPointFinder.FindPath(_jpParam);
+            if (targetId != -1)
                 path.RemoveAt(path.Count - 1);
             return path;
         }

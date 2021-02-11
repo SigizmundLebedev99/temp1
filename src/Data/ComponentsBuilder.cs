@@ -43,6 +43,10 @@ static class ComponentsBuilder
         {
             mapObj.Type = GameObjectType.Enemy;
         }
+        e.Attach(new ActionPoints{
+            Max = 10,
+            Remain = 10
+        });
         e.Attach(new AllowedToAct());
     }
 
