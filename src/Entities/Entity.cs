@@ -27,11 +27,22 @@ namespace MonoGame.Extended.Entities
             mapper.Put(Id, component);
         }
 
+        public void Attach(object component)
+        {
+            _componentManager.Put(Id, component);
+        }
+
         public void Detach<T>()
             where T : class
         {
             var mapper = _componentManager.Get<T>();
             mapper.Delete(Id);
+        }
+
+        public void Detach(object obj)
+        {
+            var id = _componentManager.GetComponentTypeId(obj.GetType());
+            _componentManager.GetMapper(id).Delete(Id);
         }
 
         public T Get<T>()

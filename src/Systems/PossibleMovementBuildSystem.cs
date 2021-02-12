@@ -10,11 +10,11 @@ namespace temp1.Systems
     class PossibleMovementBuildSystem : EntityProcessingSystem
     {
         Mapper<PossibleMoves> _moveMap;
-        Mapper<MapObject> _dotMap;
+        Mapper<MapObject> _moMap;
         Mapper<ActionPoints> _pointsMap;
         GameContext _context;
         HashSet<Point> searched = new HashSet<Point>();
-        public PossibleMovementBuildSystem(GameContext context) : base(Aspect.All(typeof(CurrentTurn)).Exclude(typeof(PossibleMoves)))
+        public PossibleMovementBuildSystem(GameContext context) : base(Aspect.All(typeof(AllowedToAct)).Exclude(typeof(PossibleMoves)))
         {
             _context = context;
         }
@@ -22,13 +22,15 @@ namespace temp1.Systems
         public override void Initialize(IComponentMapperService mapperService)
         {
             _moveMap = mapperService.Get<PossibleMoves>();
-            _dotMap = mapperService.Get<MapObject>();
+            _moMap = mapperService.Get<MapObject>();
             _pointsMap = mapperService.Get<ActionPoints>();
         }
 
         public override void Process(GameTime gameTime, int entityId)
         {
-            var position = _dotMap.Get(entityId).MapPosition;
+            if(_context.GameState == GameState.Peace)
+                return;
+            var position = _moMap.Get(entityId).MapPosition;
             var possibleMoves = BuildMoves(position, entityId);
             if (possibleMoves.Moves.Count > 0)
             {
@@ -53,7 +55,6 @@ namespace temp1.Systems
             frontier.Enqueue(new Cell
             {
                 point = mapPosition,
-                from = null,
                 distance = 0
             });
 
@@ -71,8 +72,7 @@ namespace temp1.Systems
                     frontier.Enqueue(new Cell
                     {
                         distance = current.distance + 1,
-                        point = point,
-                        from = current
+                        point = point
                     });
                     searched.Add(point);
                 }

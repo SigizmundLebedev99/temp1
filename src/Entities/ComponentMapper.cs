@@ -15,6 +15,7 @@ namespace MonoGame.Extended.Entities
         public Type ComponentType { get; }
         public abstract bool Has(int entityId);
         public abstract void Delete(int entityId);
+        public abstract void Put(int entityId, object component);
     }
 
     public class Mapper<T> : ComponentMapper
@@ -34,6 +35,12 @@ namespace MonoGame.Extended.Entities
         public void Put(int entityId, T component)
         {
             Components[entityId] = component;
+            _onCompositionChanged(entityId);
+        }
+
+        public override void Put(int entityId, object component)
+        {
+            Components[entityId] = (T)component;
             _onCompositionChanged(entityId);
         }
 

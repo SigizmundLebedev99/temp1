@@ -36,6 +36,12 @@ namespace MonoGame.Extended.Entities
             return mapper;
         }
 
+        internal void Put(int id, object component)
+        {
+            var _id = GetComponentTypeId(component.GetType());
+            _componentMappers[_id].Put(id, component);
+        }
+
         public ComponentMapper GetMapper(int componentTypeId)
         {
             return _componentMappers[componentTypeId];

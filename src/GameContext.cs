@@ -50,7 +50,6 @@ namespace temp1
         Mapper<AllowedToAct> _allowedMapper;
         Mapper<TurnOccured> _combatantMapper;
         Mapper<IMovement> _moveMapper;
-        Mapper<CurrentTurn> _turnMapper;
 
         public GameContext(ContentManager content, OrthographicCamera camera)
         {
@@ -78,7 +77,6 @@ namespace temp1
             _allowedMapper = world.ComponentManager.Get<AllowedToAct>();
             _combatantMapper = world.ComponentManager.Get<TurnOccured>();
             _moveMapper = world.ComponentManager.Get<IMovement>();
-            _turnMapper = world.ComponentManager.Get<CurrentTurn>();
         }
 
         public void StartBattle()
@@ -90,7 +88,6 @@ namespace temp1
                 _combatantMapper.Delete(Actors[i]);
                 _moveMapper.Delete(Actors[i]);
             }
-            _turnMapper.Put(PlayerId, new CurrentTurn());
             _allowedMapper.Put(PlayerId, new AllowedToAct());
         }
 

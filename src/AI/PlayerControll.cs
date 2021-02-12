@@ -17,24 +17,20 @@ namespace temp1.AI
         Mapper<IMovement> _moveMapper;
         Mapper<Direction> _directionMap;
         Mapper<Storage> _storageMap;
-        Mapper<MapObject> _dotMapper;
+        Mapper<MapObject> _moMapper;
         Mapper<AnimatedSprite> _aSpriteMap;
-        Mapper<ActionOccured> _actionMapper;
-        JumpPointParam _jpParam;
         IBehaviourTreeNode _tree;
 
         public PlayerControll(int entityId, GameContext context) : base(entityId, context)
         {
             var cm = context.World.ComponentManager;
-            _dotMapper = cm.Get<MapObject>();
+            _moMapper = cm.Get<MapObject>();
             _moveMapper = cm.Get<IMovement>();
             _storageMap = cm.Get<Storage>();
             _directionMap = cm.Get<Direction>();
             _aSpriteMap = cm.Get<AnimatedSprite>();
-            _actionMapper = cm.Get<ActionOccured>();
             var possibleMoveMap = cm.Get<PossibleMoves>();
 
-            _jpParam = new JumpPointParam(context.MovementGrid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
             MouseStateExtended mouseState = MouseExtended.GetState();
 
             _tree = new BehaviourTreeBuilder()
@@ -53,30 +49,17 @@ namespace temp1.AI
                         return BehaviourTreeStatus.Failure;
                     })
                     .Selector("Possible Actions")
-                        .Sequence("Combat")
-                            .Do("is in battle", t => Context.GameState == GameState.Combat ? BehaviourTreeStatus.Success : BehaviourTreeStatus.Failure)
-                            .Do("try move", t =>
-                            {
-                                var possibleMoves = possibleMoveMap.Get(EntityId);
-                                if (possibleMoves.TryGetPath(mouseState.MapPosition(Context.Camera), out var path))
-                                {
-                                    CommitMovement(path, null);
-                                    _actionMapper.Put(EntityId, new ActionOccured { PointsTaken = path.Count });
-                                }
-                                return BehaviourTreeStatus.Success;
-                            })
-                        .End()
                         .Do("move", t =>
                         {
                             var point = mouseState.MapPosition(Context.Camera);
-                            if (Context.PointedId == -1 && !Context.MovementGrid.IsWalkableAt(point.X, point.Y))
-                                return BehaviourTreeStatus.Success;
-                            var path = FindPath(Context.PointedId, point);
-                            var targetId = Context.PointedId;
-                            if (targetId != -1)
-                                CommitMovement(path, () => CommitAction(targetId));
+                            WalkAction action;
+                            if (Context.PointedId == -1)
+                                action = new WalkAction(point);
                             else
-                                CommitMovement(path, null);
+                                action = new WalkAction(Context.PointedId);
+                            var target = _moMapper.Get(Context.PointedId);
+                            if(target.Type == GameObjectType.Storage)
+                            
                             return BehaviourTreeStatus.Success;
                         })
                     .End()
@@ -109,27 +92,6 @@ namespace temp1.AI
                     }
             }
             return;
-        }
-
-        List<GridPos> FindPath(int targetId, Point to)
-        {
-            var from = _dotMapper.Get(EntityId).MapPosition;
-            _jpParam.Reset(new GridPos(from.X, from.Y), new GridPos(to.X, to.Y), Context.MovementGrid);
-            var path = JumpPointFinder.FindPath(_jpParam);
-            if (targetId != -1 && path.Count > 2)
-                path.RemoveAt(path.Count - 1);
-            return path;
-        }
-
-        void CommitMovement(List<GridPos> path, Action onComplete)
-        {
-            if (path.Count < 2)
-                return;
-            var movement = new PolylineMovement(path, 3f);
-            movement.OnComplete = onComplete;
-            _moveMapper.Put(EntityId, movement);
-            var position = _dotMapper.Get(EntityId).Position;
-            _directionMap.Put(EntityId, new Direction(position));
         }
 
         public override void Update(GameTime time)

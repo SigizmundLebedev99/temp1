@@ -9,11 +9,10 @@ namespace temp1.Systems
     class TurnBasedCombatSystem : EntityProcessingSystem
     {
         Mapper<AllowedToAct> _allowanceMapper;
-        Mapper<CurrentTurn> _turnMapper;
         Mapper<TurnOccured> _endOfTurnMapper;
         GameContext _context;
 
-        public TurnBasedCombatSystem(GameContext context) : base(Aspect.All(typeof(CurrentTurn), typeof(TurnOccured)))
+        public TurnBasedCombatSystem(GameContext context) : base(Aspect.All(typeof(AllowedToAct), typeof(TurnOccured)))
         {
             _context = context;
         }
@@ -21,7 +20,6 @@ namespace temp1.Systems
         public override void Initialize(IComponentMapperService mapperService)
         {
             _allowanceMapper = mapperService.Get<AllowedToAct>();
-            _turnMapper = mapperService.Get<CurrentTurn>();
             _endOfTurnMapper = mapperService.Get<TurnOccured>();
         }
 
@@ -33,10 +31,8 @@ namespace temp1.Systems
                 if (!_endOfTurnMapper.Has(id))
                 {
                     _allowanceMapper.Delete(entityId);
-                    _turnMapper.Delete(entityId);
                     // ход переходит к следующему актору
                     _allowanceMapper.Put(id, new AllowedToAct());
-                    _turnMapper.Put(id, new CurrentTurn());
                     return;
                 }
             }

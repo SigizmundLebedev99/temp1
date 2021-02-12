@@ -13,14 +13,14 @@ namespace temp1.AI
         Mapper<IMovement> _moveMapper;
         Mapper<Direction> _directionMap;
         IMovement _movement = null;
-        MapObject _dot;
+        MapObject _mo;
         JumpPointParam _jpParam;
         IBehaviourTreeNode _tree;
         float _time = 0;
         public RandomMovement(int entityId, GameContext context) : base(entityId, context)
         {
             var cm = context.World.ComponentManager;
-            _dot = context.World.GetEntity(entityId).Get<MapObject>();
+            _mo = context.World.GetEntity(entityId).Get<MapObject>();
             _moveMapper = cm.Get<IMovement>();
             _directionMap = cm.Get<Direction>();
             _jpParam = new JumpPointParam(context.MovementGrid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
@@ -62,14 +62,14 @@ namespace temp1.AI
             Point point = new Point(random.Next(0, grid.width), random.Next(0, grid.height));
             if (!grid.IsWalkableAt(point.X, point.Y))
                 return false;
-            var from = _dot.MapPosition;
+            var from = _mo.MapPosition;
             if (from == point)
                 return false;
             _jpParam.Reset(new GridPos(from.X, from.Y), new GridPos(point.X, point.Y));
             var result = JumpPointFinder.FindPath(_jpParam);
             _movement = new PolylineMovement(result, 1f);
             _moveMapper.Put(EntityId, _movement);
-            _directionMap.Put(EntityId, new Direction(_dot.Position));
+            _directionMap.Put(EntityId, new Direction(_mo.Position));
 
             return true;
         }

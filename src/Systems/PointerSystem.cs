@@ -18,7 +18,7 @@ namespace temp1.Systems
         bool shouldShow = false;
         AnimatedSprite mark;
 
-        Mapper<MapObject> _dotMapper;
+        Mapper<MapObject> _moMapper;
         Mapper<Sprite> _spriteMapper;
         Mapper<AnimatedSprite> _aSpriteMapper;
         Mapper<PossibleMoves> _possibleMovesMap;
@@ -38,7 +38,7 @@ namespace temp1.Systems
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _dotMapper = mapperService.Get<MapObject>();
+            _moMapper = mapperService.Get<MapObject>();
             _spriteMapper = mapperService.Get<Sprite>();
             _aSpriteMapper = mapperService.Get<AnimatedSprite>();
             _possibleMovesMap = mapperService.Get<PossibleMoves>();
@@ -96,13 +96,13 @@ namespace temp1.Systems
             for (var i = 0; i < ActiveEntities.Count; i++)
             {
                 var sprite = _spriteMapper.Get(ActiveEntities[i]) ?? _aSpriteMapper.Get(ActiveEntities[i]);
-                var dot = _dotMapper.Get(ActiveEntities[i]);
+                var mo = _moMapper.Get(ActiveEntities[i]);
                 var id = ActiveEntities[i];
                 var bounds = new Rectangle(0, 0, sprite.TextureRegion.Width, sprite.TextureRegion.Height);
 
-                if (bounds.Contains(pos - dot.Position + sprite.Origin))
+                if (bounds.Contains(pos - mo.Position + sprite.Origin))
                 {
-                    if (GetCursor(dot, out var animation))
+                    if (GetCursor(mo, out var animation))
                         mark.Play(animation);
                     else
                         continue;

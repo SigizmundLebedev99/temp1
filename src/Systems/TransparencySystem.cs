@@ -13,7 +13,7 @@ namespace temp1.Systems
     {
         Mapper<AnimatedSprite> _aSpriteMapper;
         Mapper<Sprite> _spriteMapper;
-        Mapper<MapObject> _dotMapper;
+        Mapper<MapObject> _moMapper;
         Mapper<Hull> _hullMapper;
         GameContext _context;
 
@@ -26,7 +26,7 @@ namespace temp1.Systems
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _dotMapper = mapperService.Get<MapObject>();
+            _moMapper = mapperService.Get<MapObject>();
             _spriteMapper = mapperService.Get<Sprite>();
             _aSpriteMapper = mapperService.Get<AnimatedSprite>();
             _hullMapper = mapperService.Get<Hull>();
@@ -34,8 +34,8 @@ namespace temp1.Systems
 
         public override void Process(GameTime gameTime, int entityId)
         {
-            var playerPos = _dotMapper.Get(_context.PlayerId).Position;
-            var hullPos = _dotMapper.Get(entityId).Position;
+            var playerPos = _moMapper.Get(_context.PlayerId).Position;
+            var hullPos = _moMapper.Get(entityId).Position;
             if (playerPos.Y > hullPos.Y)
                 return;
             var playerRect = _aSpriteMapper.Get(_context.PlayerId).GetBoundingRectangle(playerPos, 0, Vector2.One);
