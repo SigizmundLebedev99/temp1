@@ -29,21 +29,15 @@ namespace temp1.Systems
             var action = _actionMapper.Get(entityId);
             if (context.GameState == GameState.Combat)
             {
-                if(!action.IsChecked){
+                if (!action.IsChecked)
+                {
                     var actionPoints = _pointsMapper.Get(entityId);
                     action.IsChecked = true;
-                    if (actionPoints.Remain <= 0)
+                    if (actionPoints.Remain < action.PointsTaken)
                     {
-                        actionPoints.Remain = actionPoints.Max;
-                        _actionMapper.Delete(entityId);
-                        _endOfTurnMapper.Put(entityId, new TurnOccured());
-                        return;
-                    }
-                    if(actionPoints.Remain < action.PointsTaken){
                         _actionMapper.Delete(entityId);
                         return;
                     }
-                    actionPoints.Remain -= action.PointsTaken;
                 }
             }
             if (action.Status != ActionStatus.Running)
@@ -68,6 +62,18 @@ namespace temp1.Systems
                     entity.Attach((object)action.After);
                 else
                     entity.Detach<BaseAction>();
+            }
+            if (context.GameState == GameState.Combat)
+            {
+                var actionPoints = _pointsMapper.Get(entityId);
+                actionPoints.Remain -= action.PointsTaken;
+                if (actionPoints.Remain <= 0)
+                {
+                    actionPoints.Remain = actionPoints.Max;
+                    _actionMapper.Delete(entityId);
+                    _endOfTurnMapper.Put(entityId, new TurnOccured());
+                    return;
+                }
             }
         }
     }

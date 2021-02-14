@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using EpPathFinding.cs;
 using Microsoft.Xna.Framework;
 
 namespace temp1.Components

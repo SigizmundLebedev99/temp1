@@ -7,7 +7,7 @@ namespace temp1.Components
         GameContext _context;
         public override int PointsTaken => 1;
 
-        private ActionStatus status = ActionStatus.Success;
+        private ActionStatus status = ActionStatus.Running;
         public override ActionStatus Status => status;
 
         public int StorageId;

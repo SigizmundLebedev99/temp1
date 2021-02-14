@@ -6,22 +6,22 @@ using temp1.Components;
 
 namespace temp1.Systems
 {
-    class OpenStorageActionSystem : EntityProcessingSystem
+    class PeakItemActionSystem : EntityProcessingSystem
     {
-        Mapper<OpenStorageAction> _actionMap;
+        Mapper<PeakItemAction> _actionMap;
         Mapper<AnimatedSprite> _aSpriteMap;
         Mapper<Storage> _storageMap;
 
         GameContext _context;
 
-        public OpenStorageActionSystem(GameContext context) : base(Aspect.All(typeof(OpenStorageAction)))
+        public PeakItemActionSystem(GameContext context) : base(Aspect.All(typeof(PeakItemAction)))
         {
             _context = context;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _actionMap = mapperService.Get<OpenStorageAction>();
+            _actionMap = mapperService.Get<PeakItemAction>();
             _aSpriteMap = mapperService.Get<AnimatedSprite>();
             _storageMap = mapperService.Get<Storage>();
         }
@@ -29,7 +29,7 @@ namespace temp1.Systems
         public override void Process(GameTime gameTime, int entityId)
         {
             var entity = GetEntity(entityId);
-            var action = entity.Get<OpenStorageAction>();
+            var action = entity.Get<PeakItemAction>();
             entity.Detach<OpenStorageAction>();
             if(Open(action.StorageId, entityId))
                 entity.Attach<BaseAction>(action);

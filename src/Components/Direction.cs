@@ -19,7 +19,5 @@ namespace temp1.Components
             else
                 angle = (float)Math.Atan2(v.X, v.Y);
         }
-
-        
     }
 }

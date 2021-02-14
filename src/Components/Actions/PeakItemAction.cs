@@ -6,13 +6,15 @@ namespace temp1.Components
     {
         public override int PointsTaken => 1;
 
-        private ActionStatus status = ActionStatus.Success;
+        private ActionStatus status = ActionStatus.Running;
         public override ActionStatus Status => status;
 
         public int StorageId;
-        public PeakItemAction(int storageId, int target)
+        GameContext _context;
+        public PeakItemAction(int storageId, int target, GameContext context)
         {
             StorageId = storageId;
+            _context = context;
         }
 
         public override void Abort()
@@ -21,6 +23,8 @@ namespace temp1.Components
         }
 
         public override void Update(GameTime time)
-        { }
+        { 
+            
+        }
     }
 }

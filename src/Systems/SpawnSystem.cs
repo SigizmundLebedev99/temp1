@@ -1,5 +1,4 @@
 using System;
-using EpPathFinding.cs;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;

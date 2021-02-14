@@ -1,5 +1,4 @@
 using System;
-using EpPathFinding.cs;
 using FluentBehaviourTree;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
@@ -12,7 +11,6 @@ namespace temp1.AI
         Mapper<BaseAction> _actionMap;
         Mapper<WalkAction> _walkMap;
         MapObject _mo;
-        JumpPointParam _jpParam;
         IBehaviourTreeNode _tree;
         float _time = 0;
         public RandomMovement(int entityId, GameContext context) : base(entityId, context)
@@ -21,7 +19,6 @@ namespace temp1.AI
             _mo = context.World.GetEntity(entityId).Get<MapObject>();
             _actionMap = cm.Get<BaseAction>();
             _walkMap = cm.Get<WalkAction>();
-            _jpParam = new JumpPointParam(context.MovementGrid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
 
             _tree = new BehaviourTreeBuilder()
                 .Sequence("start")

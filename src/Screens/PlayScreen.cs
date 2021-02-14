@@ -54,7 +54,7 @@ namespace temp1.Screens
             _world.RegisterSystem(new AnimationRenderSystem(_sb));
             _world.RegisterSystem(new StaticSpriteRenderSystem(_sb));
             _world.RegisterSystem(new PossibleMovementDrawSystem(_sb, Content));
-            _world.RegisterSystem(new SpawnSystem(_context));
+            //_world.RegisterSystem(new SpawnSystem(_context));
         }
         
         public override void Update(GameTime gameTime)

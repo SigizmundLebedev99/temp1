@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using EpPathFinding.cs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,6 +15,7 @@ using MonoGame.Extended.Tiled;
 using temp1.AI;
 using temp1.Components;
 using temp1.Data;
+using temp1.PathFinding;
 using temp1.Util;
 
 namespace temp1
@@ -29,10 +29,11 @@ namespace temp1
     class GameContext
     {
         public World World;
-        public BaseGrid MovementGrid;
+        public StaticGrid MovementGrid;
         public OrthographicCamera Camera;
         public HudService Hud;
-        public Bag<int> Actors => subscription.ActiveEntities;
+        public Bag<int> Actors => actorsSubscription.ActiveEntities;
+        public Bag<int> MapObjects => mapObjectsSubscription.ActiveEntities;
         public GameState GameState = GameState.Peace;
         public PathFinder PathFinder;
 
@@ -48,7 +49,8 @@ namespace temp1
         Dictionary<string, SpriteSheet> SpriteSheets;
         Dictionary<string, Sprite> Sprites;
         JsonContentLoader loader = new JsonContentLoader();
-        EntitySubscription subscription;
+        EntitySubscription actorsSubscription;
+        EntitySubscription mapObjectsSubscription;
         Mapper<AllowedToAct> _allowedMapper;
         Mapper<TurnOccured> _combatantMapper;
         Mapper<BaseAction> _actionMapper;
@@ -72,7 +74,8 @@ namespace temp1
         {
             World = world;
             Map = _content.Load<TiledMap>(map);
-            subscription = new EntitySubscription(world.EntityManager, Aspect.All(typeof(BaseAI)).Build(world.ComponentManager));
+            actorsSubscription = new EntitySubscription(world.EntityManager, Aspect.All(typeof(BaseAI)).Build(world.ComponentManager));
+            mapObjectsSubscription = new EntitySubscription(world.EntityManager, Aspect.All(typeof(MapObject)).Build(world.ComponentManager));
             ConfigureObstacles();
             ConfigureMapObjects();
             PathFinder = new PathFinder(this);
