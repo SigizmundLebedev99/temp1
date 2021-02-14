@@ -10,14 +10,14 @@ namespace temp1.Components
         public override ActionStatus Status => status;
 
         public int StorageId;
-        public PeakItemAction(int storageId)
+        public PeakItemAction(int storageId, int target)
         {
             StorageId = storageId;
         }
 
         public override void Abort()
         {
-            status = ActionStatus.Failure;
+            status = ActionStatus.Canceled;
         }
 
         public override void Update(GameTime time)

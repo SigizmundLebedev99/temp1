@@ -4,43 +4,46 @@ namespace temp1.Components
 {
     class WalkAction : BaseAction
     {
-        public Point To;
-        public int TargetId;
-
-        public override int PointsTaken => _points;
-
+        public Point from;
+        public Point to;
+        public override int PointsTaken => 1;
         public override ActionStatus Status => status;
+        private ActionStatus status = ActionStatus.Running;
 
-        private ActionStatus status = ActionStatus.Started;
-        private int _points;
-        private IMovement _movement;
+        private MapObject _objToMove;
 
-        public WalkAction(Point to)
+        public WalkAction(Point from, Point to, MapObject objToMove, float speed)
         {
-            To = to;
-            TargetId = -1;
-        }
-
-        public WalkAction(int targetId)
-        {
-            TargetId = targetId;
-        }
-
-        public void SetInfo(int points, IMovement movement)
-        {
-            _points = points;
-            _movement = movement;
-        }
-
-        public override void Abort()
-        {
-            status = ActionStatus.Failure;
+            this._speed = speed;
+            this.from = from;
+            this.to = to;
+            this._from = from.ToVector2() * 32 + new Vector2(16);
+            this._to = to.ToVector2() * 32 + new Vector2(16);
+            _objToMove = objToMove;
         }
 
         public override void Update(GameTime time)
         {
-            if(_movement.IsCompleted)
+            _objToMove.Position = Move();
+            if(k >= 1f)
                 status = ActionStatus.Success;
+        }
+
+        public override void Abort()
+        {
+            status = ActionStatus.Canceled;
+        }
+
+        Vector2 _from;
+        Vector2 _to;
+        float _speed;
+        float k = 0;
+
+        public Vector2 Move()
+        {
+            k += _speed;
+            var result = this._to * k + this._from * (1 - k);
+            return result;
         }
     }
 }

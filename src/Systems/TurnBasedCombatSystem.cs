@@ -12,7 +12,7 @@ namespace temp1.Systems
         Mapper<TurnOccured> _endOfTurnMapper;
         GameContext _context;
 
-        public TurnBasedCombatSystem(GameContext context) : base(Aspect.All(typeof(AllowedToAct), typeof(TurnOccured)))
+        public TurnBasedCombatSystem(GameContext context) : base(Aspect.All(typeof(AllowedToAct), typeof(TurnOccured)).Exclude(typeof(BaseAction)))
         {
             _context = context;
         }
@@ -41,7 +41,7 @@ namespace temp1.Systems
             for (var i = 0; i < _context.Actors.Count; i++)
             {
                 var id = _context.Actors[i];
-                if(id != entityId)
+                if (id != entityId)
                     _endOfTurnMapper.Delete(id);
             }
         }

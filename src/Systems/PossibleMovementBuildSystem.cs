@@ -14,7 +14,7 @@ namespace temp1.Systems
         Mapper<ActionPoints> _pointsMap;
         GameContext _context;
         HashSet<Point> searched = new HashSet<Point>();
-        public PossibleMovementBuildSystem(GameContext context) : base(Aspect.All(typeof(AllowedToAct)).Exclude(typeof(PossibleMoves)))
+        public PossibleMovementBuildSystem(GameContext context) : base(Aspect.All(typeof(AllowedToAct)).Exclude(typeof(BaseAction)))
         {
             _context = context;
         }

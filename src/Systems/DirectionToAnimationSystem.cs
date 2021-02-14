@@ -11,7 +11,7 @@ namespace temp1.Systems
     {
         Mapper<AnimatedSprite> _spriteMapper;
         Mapper<Direction> _directionMapper;
-        Mapper<IMovement> _moveMapper;
+        Mapper<BaseAction> _actionMapper;
 
         public DirectionToAnimationSystem() : base(Aspect.All(typeof(AnimatedSprite), typeof(Direction)))
         {
@@ -21,17 +21,15 @@ namespace temp1.Systems
         {
             _directionMapper = mapperService.Get<Direction>();
             _spriteMapper = mapperService.Get<AnimatedSprite>();
-            _moveMapper = mapperService.Get<IMovement>();
+            _actionMapper = mapperService.Get<BaseAction>();
         }
 
         public override void Process(GameTime gameTime, int entityId)
         {
-            var move = _moveMapper.Get(entityId);
             var animation = _spriteMapper.Get(entityId);
             var dir = _directionMapper.Get(entityId);
-            if(dir.PreviousPosition == dir.CurrentPosition)
-                return;
-            var angle = dir.Angle;
+            var action = _actionMapper.Get(entityId);
+            var angle = dir.angle;
             string direction;
 
             if(angle >= Math.PI * 0.25 && angle < 0.75 * Math.PI)
@@ -43,7 +41,7 @@ namespace temp1.Systems
             else
                 direction = "South";
 
-            if(move == null || move.IsCompleted){
+            if(action == null || !(action is WalkAction)){
                 _directionMapper.Delete(entityId);
                 animation.Play("idle" + direction);
                 return;

@@ -5,24 +5,21 @@ namespace temp1.Components
 {
     class Direction
     {
-        public Vector2 PreviousPosition;
-        public Vector2 CurrentPosition;
-
-        public Direction(Vector2 from)
+        private Point from;
+        private Point to;
+        public float angle;
+        
+        public Direction(Point from, Point to)
         {
-            PreviousPosition = from;
-            CurrentPosition = from;
+            this.from = from;
+            this.to = to;
+            var v = from - to;
+            if (v.X == 0 && v.Y == 0)
+                angle = (float)(Math.PI * 0.5);
+            else
+                angle = (float)Math.Atan2(v.X, v.Y);
         }
 
-        public float Angle
-        {
-            get
-            {
-                var v = CurrentPosition - PreviousPosition;
-                if (v.X == 0 && v.Y == 0)
-                    return (float)(Math.PI * 0.5);
-                return (float)Math.Atan2(v.X, v.Y);
-            }
-        }
+        
     }
 }

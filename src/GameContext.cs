@@ -16,6 +16,7 @@ using MonoGame.Extended.Tiled;
 using temp1.AI;
 using temp1.Components;
 using temp1.Data;
+using temp1.Util;
 
 namespace temp1
 {
@@ -33,6 +34,7 @@ namespace temp1
         public HudService Hud;
         public Bag<int> Actors => subscription.ActiveEntities;
         public GameState GameState = GameState.Peace;
+        public PathFinder PathFinder;
 
         public Dictionary<string, GameObjectTypeInfo> GameObjectTypes;
         public TiledMap Map;
@@ -49,7 +51,7 @@ namespace temp1
         EntitySubscription subscription;
         Mapper<AllowedToAct> _allowedMapper;
         Mapper<TurnOccured> _combatantMapper;
-        Mapper<IMovement> _moveMapper;
+        Mapper<BaseAction> _actionMapper;
 
         public GameContext(ContentManager content, OrthographicCamera camera)
         {
@@ -73,10 +75,11 @@ namespace temp1
             subscription = new EntitySubscription(world.EntityManager, Aspect.All(typeof(BaseAI)).Build(world.ComponentManager));
             ConfigureObstacles();
             ConfigureMapObjects();
+            PathFinder = new PathFinder(this);
             Hud = new HudService(_content, this);
             _allowedMapper = world.ComponentManager.Get<AllowedToAct>();
+            _actionMapper = world.ComponentManager.Get<BaseAction>();
             _combatantMapper = world.ComponentManager.Get<TurnOccured>();
-            _moveMapper = world.ComponentManager.Get<IMovement>();
         }
 
         public void StartBattle()
@@ -86,7 +89,7 @@ namespace temp1
             {
                 _allowedMapper.Delete(Actors[i]);
                 _combatantMapper.Delete(Actors[i]);
-                _moveMapper.Delete(Actors[i]);
+                _actionMapper.Delete(Actors[i]);
             }
             _allowedMapper.Put(PlayerId, new AllowedToAct());
         }
@@ -99,8 +102,7 @@ namespace temp1
             var random = new Random();
             var x = random.Next(-50, 50) * 2;
             var y = random.Next(-25, 0);
-            entity.Attach(new MapObject(_from, GameObjectType.Item));
-            entity.Attach<IMovement>(new FallMovement(_from, _from + new Vector2(x, y)));
+            entity.Attach(new MapObject(_from + new Vector2(x,y), GameObjectType.Item));
             var sprite = GetSprite(item.ItemType);
             sprite.Depth = 0;
             entity.Attach(sprite);

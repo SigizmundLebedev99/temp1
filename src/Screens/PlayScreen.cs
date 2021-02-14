@@ -33,7 +33,6 @@ namespace temp1.Screens
 
         public override void LoadContent()
         {
-            
             _context.LoadTypes();
             _context.LoadMap("tiled/map", _world);
             _tiledMapRenderer.LoadMap(_context.Map);
@@ -43,15 +42,14 @@ namespace temp1.Screens
         private void ConfigureWorld()
         {
             _world.RegisterSystem(new TurnBasedCombatSystem(_context));
+            _world.RegisterSystem(new WalkActionSystem(_context));
+            _world.RegisterSystem(new OpenStorageActionSystem(_context));
+            _world.RegisterSystem(new BaseActionSystem(_context));
             _world.RegisterSystem(new PossibleMovementBuildSystem(_context));
             _world.RegisterSystem(new CursorSystem(_sb, _context));
             _world.RegisterSystem(new AISystem(_context.MovementGrid));
-            _world.RegisterSystem(new WalkActionSystem(_context));
-            _world.RegisterSystem(new OpenStorageActionSystem(_context));
-            _world.RegisterSystem(new MovementSystem());
             _world.RegisterSystem(new TransparensySystem(_context));
             _world.RegisterSystem(new ExpirationSystem());
-            _world.RegisterSystem(new DirectionSystem());
             _world.RegisterSystem(new DirectionToAnimationSystem());
             _world.RegisterSystem(new AnimationRenderSystem(_sb));
             _world.RegisterSystem(new StaticSpriteRenderSystem(_sb));

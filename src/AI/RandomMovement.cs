@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using EpPathFinding.cs;
 using FluentBehaviourTree;
 using Microsoft.Xna.Framework;
@@ -10,9 +9,8 @@ namespace temp1.AI
 {
     class RandomMovement : BaseAI
     {
-        Mapper<IMovement> _moveMapper;
-        Mapper<Direction> _directionMap;
-        IMovement _movement = null;
+        Mapper<BaseAction> _actionMap;
+        Mapper<WalkAction> _walkMap;
         MapObject _mo;
         JumpPointParam _jpParam;
         IBehaviourTreeNode _tree;
@@ -21,21 +19,23 @@ namespace temp1.AI
         {
             var cm = context.World.ComponentManager;
             _mo = context.World.GetEntity(entityId).Get<MapObject>();
-            _moveMapper = cm.Get<IMovement>();
-            _directionMap = cm.Get<Direction>();
+            _actionMap = cm.Get<BaseAction>();
+            _walkMap = cm.Get<WalkAction>();
             _jpParam = new JumpPointParam(context.MovementGrid, EndNodeUnWalkableTreatment.ALLOW, DiagonalMovement.Never);
 
             _tree = new BehaviourTreeBuilder()
                 .Sequence("start")
-                    .Do("checkMovement", t =>
+                    .Do("check activity", t =>
                     {
-                        if(_movement == null || _movement.IsCompleted)
-                            return BehaviourTreeStatus.Success;
-                        return BehaviourTreeStatus.Running;
+                        if (_actionMap.Has(entityId))
+                            return BehaviourTreeStatus.Running;
+                        return BehaviourTreeStatus.Success;
                     })
                     .Sequence("createPath")
-                        .Do("await", t =>{
-                            if(_time <= 1){
+                        .Do("await", t =>
+                        {
+                            if (_time <= 1)
+                            {
                                 _time += 0.007f;
                                 return BehaviourTreeStatus.Running;
                             }
@@ -44,34 +44,31 @@ namespace temp1.AI
                         })
                         .Do("create", t =>
                         {
-                            SetMovement();
+                            if (!TryGetPoint(out var point))
+                                return BehaviourTreeStatus.Success;
+                            if (Context.PathFinder.FindPath(_mo, point, out var first, out var last))
+                            {
+                                _walkMap.Put(EntityId, first);
+                            }
                             return BehaviourTreeStatus.Success;
                         })
                     .End()
                 .End().Build();
         }
 
+        bool TryGetPoint(out Point point)
+        {
+            var random = new Random();
+            var grid = Context.MovementGrid;
+            point = new Point(random.Next(0, grid.width), random.Next(0, grid.height));
+            if (!grid.IsWalkableAt(point.X, point.Y))
+                return false;
+            return true;
+        }
+
         public override void Update(GameTime time)
         {
             _tree.Tick(new TimeData());
-        }
-
-        bool SetMovement(){
-            var random = new Random();
-            var grid = Context.MovementGrid;
-            Point point = new Point(random.Next(0, grid.width), random.Next(0, grid.height));
-            if (!grid.IsWalkableAt(point.X, point.Y))
-                return false;
-            var from = _mo.MapPosition;
-            if (from == point)
-                return false;
-            _jpParam.Reset(new GridPos(from.X, from.Y), new GridPos(point.X, point.Y));
-            var result = JumpPointFinder.FindPath(_jpParam);
-            _movement = new PolylineMovement(result, 1f);
-            _moveMapper.Put(EntityId, _movement);
-            _directionMap.Put(EntityId, new Direction(_mo.Position));
-
-            return true;
         }
     }
 }

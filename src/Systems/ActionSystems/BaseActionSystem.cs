@@ -5,13 +5,14 @@ using temp1.Components;
 
 namespace temp1.Systems
 {
-    abstract class BaseActionSystem : EntityUpdateSystem
+    class BaseActionSystem : EntityProcessingSystem
     {
-        protected GameContext context;
-        protected Mapper<ActionPoints> _pointsMapper;
-        protected Mapper<TurnOccured> _endOfTurnMapper;
+        GameContext context;
+        Mapper<ActionPoints> _pointsMapper;
+        Mapper<TurnOccured> _endOfTurnMapper;
+        Mapper<BaseAction> _actionMapper;
 
-        public BaseActionSystem(AspectBuilder builder, GameContext context) : base(builder)
+        public BaseActionSystem(GameContext context) : base(Aspect.All(typeof(BaseAction)))
         {
             this.context = context;
         }
@@ -20,35 +21,54 @@ namespace temp1.Systems
         {
             _pointsMapper = mapperService.Get<ActionPoints>();
             _endOfTurnMapper = mapperService.Get<TurnOccured>();
+            _actionMapper = mapperService.Get<BaseAction>();
+        }
+
+        public override void Process(GameTime gameTime, int entityId)
+        {
+            var action = _actionMapper.Get(entityId);
+            if (context.GameState == GameState.Combat)
+            {
+                if(!action.IsChecked){
+                    var actionPoints = _pointsMapper.Get(entityId);
+                    action.IsChecked = true;
+                    if (actionPoints.Remain <= 0)
+                    {
+                        actionPoints.Remain = actionPoints.Max;
+                        _actionMapper.Delete(entityId);
+                        _endOfTurnMapper.Put(entityId, new TurnOccured());
+                        return;
+                    }
+                    if(actionPoints.Remain < action.PointsTaken){
+                        _actionMapper.Delete(entityId);
+                        return;
+                    }
+                    actionPoints.Remain -= action.PointsTaken;
+                }
+            }
+            if (action.Status != ActionStatus.Running)
+                Complete(action, entityId);
+            else
+                action.Update(gameTime);
         }
 
         protected void Complete(BaseAction action, int entityId)
         {
-            
             var entity = GetEntity(entityId);
-            entity.Detach(action);
-            if (action.Status == ActionStatus.Failure)
+            if (action.Status == ActionStatus.Canceled)
             {
                 if (action.Alternative != null)
-                    entity.Attach(action.Alternative);
-                return;
+                    entity.Attach((object)action.Alternative);
+                else
+                    entity.Detach<BaseAction>();
             }
-            if (action.Status == ActionStatus.Success)
+            else if (action.Status == ActionStatus.Success)
             {
                 if (action.After != null)
-                    entity.Attach(action.After);
+                    entity.Attach((object)action.After);
+                else
+                    entity.Detach<BaseAction>();
             }
-
-            if(context.GameState == GameState.Peace)
-                return;
-            var points = entity.Get<ActionPoints>();
-            points.Remain -= action.PointsTaken;
-            if (points.Remain <= 0)
-            {
-                points.Remain = points.Max;
-                entity.Attach(new TurnOccured());
-            }
-            
         }
     }
 }

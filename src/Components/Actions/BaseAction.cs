@@ -4,14 +4,15 @@ namespace temp1.Components
 {
     enum ActionStatus
     {
-        Started,
         Running,
         Success,
-        Failure
+        Canceled
     }
 
     abstract class BaseAction
     {
+        public bool IsChecked { get; set; }
+
         public abstract int PointsTaken { get; }
 
         public abstract ActionStatus Status { get; }

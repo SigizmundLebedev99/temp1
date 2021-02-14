@@ -13,7 +13,7 @@ namespace temp1.Systems
         SpriteBatch _spriteBatch;
         Texture2D _texture;
 
-        public PossibleMovementDrawSystem(SpriteBatch sb, ContentManager content) : base(Aspect.All(typeof(PossibleMoves)).Exclude(typeof(IMovement)))
+        public PossibleMovementDrawSystem(SpriteBatch sb, ContentManager content) : base(Aspect.All(typeof(AllowedToAct), typeof(PossibleMoves)).Exclude(typeof(BaseAction)))
         {
             _spriteBatch = sb;
             _texture = content.Load<Texture2D>("images/possible_move");
