@@ -49,6 +49,18 @@ namespace temp1.Systems
         protected void Complete(BaseAction action, int entityId)
         {
             var entity = GetEntity(entityId);
+            if (context.GameState == GameState.Combat)
+            {
+                var actionPoints = _pointsMapper.Get(entityId);
+                actionPoints.Remain -= action.PointsTaken;
+                if (actionPoints.Remain <= 0)
+                {
+                    actionPoints.Remain = actionPoints.Max;
+                    _actionMapper.Delete(entityId);
+                    _endOfTurnMapper.Put(entityId, new TurnOccured());
+                    return;
+                }
+            }
             if (action.Status == ActionStatus.Canceled)
             {
                 if (action.Alternative != null)
@@ -62,18 +74,6 @@ namespace temp1.Systems
                     entity.Attach((object)action.After);
                 else
                     entity.Detach<BaseAction>();
-            }
-            if (context.GameState == GameState.Combat)
-            {
-                var actionPoints = _pointsMapper.Get(entityId);
-                actionPoints.Remain -= action.PointsTaken;
-                if (actionPoints.Remain <= 0)
-                {
-                    actionPoints.Remain = actionPoints.Max;
-                    _actionMapper.Delete(entityId);
-                    _endOfTurnMapper.Put(entityId, new TurnOccured());
-                    return;
-                }
             }
         }
     }

@@ -44,6 +44,7 @@ namespace temp1.Screens
             _world.RegisterSystem(new TurnBasedCombatSystem(_context));
             _world.RegisterSystem(new WalkActionSystem(_context));
             _world.RegisterSystem(new OpenStorageActionSystem(_context));
+            _world.RegisterSystem(new PeakItemActionSystem());
             _world.RegisterSystem(new BaseActionSystem(_context));
             _world.RegisterSystem(new PossibleMovementBuildSystem(_context));
             _world.RegisterSystem(new CursorSystem(_sb, _context));
@@ -54,7 +55,7 @@ namespace temp1.Screens
             _world.RegisterSystem(new AnimationRenderSystem(_sb));
             _world.RegisterSystem(new StaticSpriteRenderSystem(_sb));
             _world.RegisterSystem(new PossibleMovementDrawSystem(_sb, Content));
-            //_world.RegisterSystem(new SpawnSystem(_context));
+            _world.RegisterSystem(new SpawnSystem(_context));
         }
         
         public override void Update(GameTime gameTime)

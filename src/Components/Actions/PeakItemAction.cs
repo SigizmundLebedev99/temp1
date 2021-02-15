@@ -1,4 +1,6 @@
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Entities;
+using temp1.Data;
 
 namespace temp1.Components
 {
@@ -9,12 +11,19 @@ namespace temp1.Components
         private ActionStatus status = ActionStatus.Running;
         public override ActionStatus Status => status;
 
-        public int StorageId;
+        int _storageId;
+        int _targetId;
         GameContext _context;
-        public PeakItemAction(int storageId, int target, GameContext context)
+        Mapper<Storage> _storageMap;
+        Mapper<ItemStack> _stackMap;
+        public PeakItemAction(int storageId, int itemId, GameContext context)
         {
-            StorageId = storageId;
+            _storageId = storageId;
+            _targetId = itemId;
             _context = context;
+            var cm = context.World.ComponentManager;
+            _storageMap = cm.Get<Storage>();
+            _stackMap = cm.Get<ItemStack>();
         }
 
         public override void Abort()
@@ -24,7 +33,9 @@ namespace temp1.Components
 
         public override void Update(GameTime time)
         { 
-            
+            _storageMap.Get(_storageId).Add(_stackMap.Get(_targetId));
+            _context.World.DestroyEntity(_targetId);
+            status = ActionStatus.Success;
         }
     }
 }
