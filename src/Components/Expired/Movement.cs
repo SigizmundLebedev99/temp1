@@ -4,18 +4,12 @@ namespace temp1.Components
 {
     class Movement : Expired
     {
-        public Point from;
-        public Point to;
-
         private MapObject _objToMove;
 
-        public Movement(Point from, Point to, MapObject objToMove, float speed)
+        public Movement(Vector2 from, Vector2 to, MapObject objToMove, float speed)
         {
-            this._speed = speed;
-            this.from = from;
-            this.to = to;
-            this._from = from.ToVector2() * 32 + new Vector2(16);
-            this._to = to.ToVector2() * 32 + new Vector2(16);
+            this._from = from;
+            this._to = to;
             _objToMove = objToMove;
         }
 
