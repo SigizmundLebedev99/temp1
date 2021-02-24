@@ -1,6 +1,5 @@
 ﻿using C5;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
@@ -15,9 +14,9 @@ namespace temp1.PathFinding
             m_startNode = m_searchGrid.GetNodeAt(iStartPos.X, iStartPos.Y);
             m_endNode = m_searchGrid.GetNodeAt(iEndPos.X, iEndPos.Y);
             if (m_startNode == null)
-                m_startNode = new Node(iStartPos.X, iStartPos.Y, true);
+                m_startNode = new Node(iStartPos.X, iStartPos.Y, 0);
             if (m_endNode == null)
-                m_endNode = new Node(iEndPos.X, iEndPos.Y, true);
+                m_endNode = new Node(iEndPos.X, iEndPos.Y, 0);
         }
 
         public AStarParam(StaticGrid iGrid, DiagonalMovement iDiagonalMovement)
@@ -39,9 +38,9 @@ namespace temp1.PathFinding
             m_startNode = m_searchGrid.GetNodeAt(iStartPos.X, iStartPos.Y);
             m_endNode = m_searchGrid.GetNodeAt(iEndPos.X, iEndPos.Y);
             if (m_startNode == null)
-                m_startNode = new Node(iStartPos.X, iStartPos.Y, true);
+                m_startNode = new Node(iStartPos.X, iStartPos.Y, 0);
             if (m_endNode == null)
-                m_endNode = new Node(iEndPos.X, iEndPos.Y, true);
+                m_endNode = new Node(iEndPos.X, iEndPos.Y, 0);
         }
 
         public DiagonalMovement DiagonalMovement;
@@ -99,7 +98,7 @@ namespace temp1.PathFinding
                     if (!neighbor.isOpened || ng < neighbor.startToCurNodeLen)
                     {
                         neighbor.startToCurNodeLen = ng;
-                        if (neighbor.heuristicCurNodeToEndLen == null) neighbor.heuristicCurNodeToEndLen = weight * Heuristic.Manhattan(Math.Abs(X - endNode.x), Math.Abs(Y - endNode.y));
+                        if (neighbor.heuristicCurNodeToEndLen == null) neighbor.heuristicCurNodeToEndLen = neighbor.value + Heuristic.Manhattan(Math.Abs(X - endNode.x), Math.Abs(Y - endNode.y));
                         neighbor.heuristicStartToEndLen = neighbor.startToCurNodeLen + neighbor.heuristicCurNodeToEndLen.Value;
                         neighbor.parent = node;
                         if (!neighbor.isOpened)

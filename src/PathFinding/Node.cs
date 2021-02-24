@@ -8,7 +8,7 @@ namespace temp1.PathFinding
     {
         public int x;
         public int y;
-        public bool walkable;
+        public sbyte value;
         public float heuristicStartToEndLen; // which passes current node
         public float startToCurNodeLen;
         public float? heuristicCurNodeToEndLen;
@@ -16,11 +16,11 @@ namespace temp1.PathFinding
         public bool isClosed;
         public Object parent;
 
-        public Node(int iX, int iY, bool? iWalkable = null)
+        public Node(int iX, int iY, sbyte? iWalkable = null)
         {
             this.x = iX;
             this.y = iY;
-            this.walkable = (iWalkable.HasValue ? iWalkable.Value : false);
+            this.value = (iWalkable.HasValue ? iWalkable.Value : (sbyte)0);
             this.heuristicStartToEndLen = 0;
             this.startToCurNodeLen = 0;
             // this must be initialized as null to verify that its value never initialized
@@ -29,14 +29,13 @@ namespace temp1.PathFinding
             this.isOpened = false;
             this.isClosed = false;
             this.parent = null;
-
         }
 
         public Node(Node b)
         {
             this.x = b.x;
             this.y = b.y;
-            this.walkable = b.walkable;
+            this.value = b.value;
             this.heuristicStartToEndLen = b.heuristicStartToEndLen;
             this.startToCurNodeLen = b.startToCurNodeLen;
             this.heuristicCurNodeToEndLen = b.heuristicCurNodeToEndLen;
@@ -45,10 +44,10 @@ namespace temp1.PathFinding
             this.parent = b.parent;
         }
 
-        public void Reset(bool? iWalkable = null)
+        public void Reset(sbyte? iWalkable = null)
         {
             if (iWalkable.HasValue)
-                walkable = iWalkable.Value;
+                value = iWalkable.Value;
             this.heuristicStartToEndLen = 0;
             this.startToCurNodeLen = 0;
             // this must be initialized as null to verify that its value never initialized

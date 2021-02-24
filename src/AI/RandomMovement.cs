@@ -58,7 +58,7 @@ namespace temp1.AI
             var random = new Random();
             var grid = Context.MovementGrid;
             point = new Point(random.Next(0, grid.width), random.Next(0, grid.height));
-            if (!grid.IsWalkableAt(point.X, point.Y))
+            if (!grid.IsZeroAt(point.X, point.Y))
                 return false;
             return true;
         }

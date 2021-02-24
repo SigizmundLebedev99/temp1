@@ -7,21 +7,22 @@ namespace temp1.Systems
 {
     class ExpirationSystem : EntityProcessingSystem
     {
-        Mapper<IExpired> _expireMapper;
+        Mapper<Expired> _expireMapper;
 
-        public ExpirationSystem() : base(Aspect.One(typeof(IExpired)))
+        public ExpirationSystem() : base(Aspect.One(typeof(Expired)))
         {
         }
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _expireMapper = mapperService.Get<IExpired>();
+            _expireMapper = mapperService.Get<Expired>();
         }
 
         public override void Process(GameTime gameTime, int entityId)
         {
             var expire = _expireMapper.Get(entityId);
             if(expire.Update(gameTime)){
+                expire.OnCompleted?.Invoke();
                 if(expire.ShouldDestroyEntity)
                     DestroyEntity(entityId);
                 else

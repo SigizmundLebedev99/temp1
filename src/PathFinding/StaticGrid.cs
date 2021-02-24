@@ -1,7 +1,5 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections;
 using Microsoft.Xna.Framework;
 
 namespace temp1.PathFinding
@@ -20,11 +18,11 @@ namespace temp1.PathFinding
 
         public int height { get; private set; }
 
-        private Node[][] m_nodes;
+        private Node[,] m_nodes;
 
         public Rectangle GridRect { get; private set; }
 
-        public StaticGrid(int iWidth, int iHeight, bool[][] iMatrix = null)
+        public StaticGrid(int iWidth, int iHeight, sbyte[,] iMatrix = null)
         {
             width = iWidth;
             height = iHeight;
@@ -33,19 +31,20 @@ namespace temp1.PathFinding
 
         public StaticGrid(StaticGrid b)
         {
-            bool[][] tMatrix = new bool[b.width][];
+            sbyte[,] tMatrix = new sbyte[b.width, b.height];
             for (int widthTrav = 0; widthTrav < b.width; widthTrav++)
             {
-                tMatrix[widthTrav] = new bool[b.height];
                 for (int heightTrav = 0; heightTrav < b.height; heightTrav++)
                 {
-                    if (b.IsWalkableAt(widthTrav, heightTrav))
-                        tMatrix[widthTrav][heightTrav] = true;
-                    else
-                        tMatrix[widthTrav][heightTrav] = false;
+                    tMatrix[widthTrav, heightTrav] = b.GetValueAt(widthTrav, heightTrav);
                 }
             }
             this.m_nodes = buildNodes(b.width, b.height, tMatrix);
+        }
+
+        private sbyte GetValueAt(int widthTrav, int heightTrav)
+        {
+            return m_nodes[widthTrav, heightTrav].value;
         }
 
         public List<Node> GetNeighbors(Node iNode, DiagonalMovement diagonalMovement)
@@ -124,16 +123,14 @@ namespace temp1.PathFinding
             return neighbors;
         }
 
-        private Node[][] buildNodes(int iWidth, int iHeight, bool[][] iMatrix)
+        private Node[,] buildNodes(int iWidth, int iHeight, sbyte[,] iMatrix)
         {
-
-            Node[][] tNodes = new Node[iWidth][];
+            Node[,] tNodes = new Node[iWidth, iHeight];
             for (int widthTrav = 0; widthTrav < iWidth; widthTrav++)
             {
-                tNodes[widthTrav] = new Node[iHeight];
                 for (int heightTrav = 0; heightTrav < iHeight; heightTrav++)
                 {
-                    tNodes[widthTrav][heightTrav] = new Node(widthTrav, heightTrav, null);
+                    tNodes[widthTrav,heightTrav] = new Node(widthTrav, heightTrav, null);
                 }
             }
 
@@ -142,24 +139,14 @@ namespace temp1.PathFinding
                 return tNodes;
             }
 
-            if (iMatrix.Length != iWidth || iMatrix[0].Length != iHeight)
-            {
-                throw new System.Exception("Matrix size does not fit");
-            }
-
+            if(iWidth != iMatrix.GetLength(0) || iHeight != iMatrix.GetLength(1))
+                throw new ArgumentException("width or height is to match matrix width or height");
 
             for (int widthTrav = 0; widthTrav < iWidth; widthTrav++)
             {
                 for (int heightTrav = 0; heightTrav < iHeight; heightTrav++)
                 {
-                    if (iMatrix[widthTrav][heightTrav])
-                    {
-                        tNodes[widthTrav][heightTrav].walkable = true;
-                    }
-                    else
-                    {
-                        tNodes[widthTrav][heightTrav].walkable = false;
-                    }
+                    tNodes[widthTrav,heightTrav].value = iMatrix[widthTrav,heightTrav];
                 }
             }
             return tNodes;
@@ -167,12 +154,17 @@ namespace temp1.PathFinding
 
         public Node GetNodeAt(int iX, int iY)
         {
-            return this.m_nodes[iX][iY];
+            return this.m_nodes[iX,iY];
+        }
+
+        public bool IsZeroAt(int iX, int iY)
+        {
+            return isInside(iX, iY) && this.m_nodes[iX,iY].value == 0;
         }
 
         public bool IsWalkableAt(int iX, int iY)
         {
-            return isInside(iX, iY) && this.m_nodes[iX][iY].walkable;
+            return isInside(iX, iY) && this.m_nodes[iX,iY].value >= 0;
         }
 
         protected bool isInside(int iX, int iY)
@@ -180,9 +172,9 @@ namespace temp1.PathFinding
             return (iX >= 0 && iX < width) && (iY >= 0 && iY < height);
         }
 
-        public bool SetWalkableAt(int iX, int iY, bool iWalkable)
+        public bool SetValueAt(int iX, int iY, sbyte value)
         {
-            this.m_nodes[iX][iY].walkable = iWalkable;
+            this.m_nodes[iX,iY].value = value;
             return true;
         }
 
@@ -201,9 +193,9 @@ namespace temp1.PathFinding
             return IsWalkableAt(iPos.X, iPos.Y);
         }
 
-        public bool SetWalkableAt(Point iPos, bool iWalkable)
+        public bool SetWalkableAt(Point iPos, sbyte value)
         {
-            return SetWalkableAt(iPos.X, iPos.Y, iWalkable);
+            return SetValueAt(iPos.X, iPos.Y, value);
         }
 
         public void Reset()
@@ -211,13 +203,13 @@ namespace temp1.PathFinding
             Reset(null);
         }
 
-        public void Reset(bool[][] iMatrix)
+        public void Reset(sbyte[][] iMatrix)
         {
             for (int widthTrav = 0; widthTrav < width; widthTrav++)
             {
                 for (int heightTrav = 0; heightTrav < height; heightTrav++)
                 {
-                    m_nodes[widthTrav][heightTrav].Reset();
+                    m_nodes[widthTrav,heightTrav].Reset();
                 }
             }
 
@@ -233,15 +225,8 @@ namespace temp1.PathFinding
             for (int widthTrav = 0; widthTrav < width; widthTrav++)
             {
                 for (int heightTrav = 0; heightTrav < height; heightTrav++)
-                {
-                    if (iMatrix[widthTrav][heightTrav])
-                    {
-                        m_nodes[widthTrav][heightTrav].walkable = true;
-                    }
-                    else
-                    {
-                        m_nodes[widthTrav][heightTrav].walkable = false;
-                    }
+                {      
+                    m_nodes[widthTrav,heightTrav].value = iMatrix[widthTrav][heightTrav];
                 }
             }
         }

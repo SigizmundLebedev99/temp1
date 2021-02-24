@@ -170,7 +170,7 @@ namespace temp1
                 for (ushort y = 0; y < Map.Height; y++)
                 {
                     var tile = obstacles.GetTile(x, y);
-                    searchGrid.SetWalkableAt(x, y, tile.IsBlank);
+                    searchGrid.SetValueAt(x, y, tile.IsBlank ? (sbyte)0 : (sbyte)-1);
                 }
             }
 

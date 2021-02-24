@@ -36,7 +36,7 @@ namespace temp1.Systems
                 Position = point.ToVector2() * 32 + new Vector2(16)
             });
             portal.Attach(_context.GetAnimatedSprite("images/portal.sf"));
-            portal.Attach<IExpired>(new Timer(1.5f, () =>
+            portal.Attach<Expired>(new Timer(1.5f, () =>
             {
                 _context.CreateEntity("enemy", point.ToVector2() * 32 + new Vector2(16));
             }, true));

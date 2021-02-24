@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Microsoft.Xna.Framework;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Tiled;
 using temp1;
@@ -79,6 +78,7 @@ static class ComponentsBuilder
                 }
             }
         }
+        context.MovementGrid.SetValueAt(mapObj.MapPosition.X, mapObj.MapPosition.Y, 3);
         e.Attach(storage);
     }
 
