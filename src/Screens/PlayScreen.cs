@@ -50,6 +50,7 @@ namespace temp1.Screens
             _world.RegisterSystem(new CursorSystem(_sb, _context));
             _world.RegisterSystem(new AISystem(_context.MovementGrid));
             _world.RegisterSystem(new TransparensySystem(_context));
+            _world.RegisterSystem(new MoveOriginSystem());
             _world.RegisterSystem(new ExpirationSystem());
             _world.RegisterSystem(new DirectionToAnimationSystem());
             _world.RegisterSystem(new AnimationRenderSystem(_sb));

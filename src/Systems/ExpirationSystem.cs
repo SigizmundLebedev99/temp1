@@ -9,7 +9,7 @@ namespace temp1.Systems
     {
         Mapper<Expired> _expireMapper;
 
-        public ExpirationSystem() : base(Aspect.One(typeof(Expired)))
+        public ExpirationSystem() : base(Aspect.All(typeof(Expired)))
         {
         }
 

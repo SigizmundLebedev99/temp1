@@ -21,7 +21,7 @@ namespace temp1.Components
 
         public void Update(GameTime gameTime)
         {
-            _sprite.Origin = _origin + new Vector2(0, (float)Math.Abs(Math.Sin(gameTime.TotalGameTime.Seconds) * 3));
+            _sprite.Origin = _origin + new Vector2(0, (float)Math.Abs(Math.Sin(gameTime.TotalGameTime.Milliseconds / 64) * 10));
         }
     }
 
@@ -35,7 +35,7 @@ namespace temp1.Components
 
         public void Update(GameTime gameTime)
         {
-            _sprite.Origin += new Vector2(0, (float)Math.Sin(gameTime.TotalGameTime.Seconds) * 3);
+            _sprite.Origin += new Vector2(0, (float)Math.Sin(gameTime.TotalGameTime.Milliseconds / 64) * 3);
         }
     }
 }

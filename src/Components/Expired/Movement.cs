@@ -10,6 +10,7 @@ namespace temp1.Components
         {
             this._from = from;
             this._to = to;
+            _speed = speed;
             _objToMove = objToMove;
         }
 

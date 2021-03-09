@@ -46,8 +46,6 @@ namespace temp1
         public HudState HudState => Hud.HudState;
 
         ContentManager _content;
-        Dictionary<string, SpriteSheet> SpriteSheets;
-        Dictionary<string, Sprite> Sprites;
         JsonContentLoader loader = new JsonContentLoader();
         EntitySubscription actorsSubscription;
         EntitySubscription mapObjectsSubscription;
@@ -60,8 +58,6 @@ namespace temp1
             _content = content;
             Camera = camera;
             GameObjectTypes = new Dictionary<string, GameObjectTypeInfo>();
-            Sprites = new Dictionary<string, Sprite>();
-            SpriteSheets = new Dictionary<string, SpriteSheet>();
         }
 
         public void LoadTypes()
@@ -103,36 +99,36 @@ namespace temp1
             var entity = World.CreateEntity();
             entity.Attach(item);
             var random = new Random();
-            var x = random.Next(-50, 50) * 2;
-            var y = random.Next(-25, 0);
-            entity.Attach(new MapObject(_from + new Vector2(x,y), GameObjectType.Item));
+            var x = random.Next(-15, 15) * 4;
+            var y = random.Next(-25, 25);
+            var mo = new MapObject(_from, GameObjectType.Item);
+            entity.Attach(mo);
+            entity.Attach<Expired>(new Movement(_from, _from + new Vector2(x, y), mo, 1f / 16f)
+            {
+                OnCompleted = () => entity.Detach<IOriginMove>()
+            });
             var sprite = GetSprite(item.ItemType);
+            entity.Attach<IOriginMove>(new JumpOriginMove(sprite));
             sprite.Depth = 0;
             entity.Attach(sprite);
         }
 
         public Sprite GetSprite(GameObjectTypeInfo type)
         {
-            if (!Sprites.ContainsKey(type.typeName))
-            {
-                var texture = _content.Load<Texture2D>(type.path);
-                var sprite =
-                    type.region == null ?
-                        new Sprite(texture)
-                        : new Sprite(new TextureRegion2D(texture, type.region.Rectangle));
-                if (type.origin != null)
-                    sprite.Origin = new Vector2(type.origin.x, type.origin.y);
-                Sprites[type.typeName] = sprite;
-            }
-
-            return Sprites[type.typeName];
+            var texture = _content.Load<Texture2D>(type.path);
+            var sprite =
+                type.region == null ?
+                    new Sprite(texture)
+                    : new Sprite(new TextureRegion2D(texture, type.region.Rectangle));
+            if (type.origin != null)
+                sprite.Origin = new Vector2(type.origin.x, type.origin.y);
+            return sprite;
         }
 
         public AnimatedSprite GetAnimatedSprite(string name)
         {
-            if (!SpriteSheets.ContainsKey(name))
-                SpriteSheets[name] = _content.Load<SpriteSheet>(name, loader);
-            var sprite = new AnimatedSprite(SpriteSheets[name]);
+            var ss = _content.Load<SpriteSheet>(name, loader);
+            var sprite = new AnimatedSprite(ss);
             sprite.Play("idle");
             return sprite;
         }
