@@ -57,6 +57,7 @@ namespace temp1.Systems
             var state = MouseExtended.GetState();
             var worldPos = _camera.ScreenToWorld(state.Position.X, state.Position.Y);
             var point = (worldPos / 32).ToPoint();
+            position = point.ToVector2() * 32 + new Vector2(16);
             _context.PointedId = -1;
             if (_context.GameState == GameState.Peace)
             {
