@@ -23,12 +23,13 @@ namespace temp1.Systems
         Mapper<AnimatedSprite> _aSpriteMapper;
         Mapper<PossibleMoves> _possibleMovesMap;
         Mapper<AllowedToAct> _allowedMap;
+        Mapper<Cursor> _pointableMapper;
 
         SpriteBatch _spriteBatch;
         GameContext _context;
         OrthographicCamera _camera;
 
-        public CursorSystem(SpriteBatch sb, GameContext context) : base(Aspect.All(typeof(MapObject)).One(typeof(Sprite), typeof(AnimatedSprite)))
+        public CursorSystem(SpriteBatch sb, GameContext context) : base(Aspect.All(typeof(Cursor)).One(typeof(Sprite), typeof(AnimatedSprite)))
         {
             _context = context;
             _spriteBatch = sb;
@@ -43,6 +44,7 @@ namespace temp1.Systems
             _aSpriteMapper = mapperService.Get<AnimatedSprite>();
             _possibleMovesMap = mapperService.Get<PossibleMoves>();
             _allowedMap= mapperService.Get<AllowedToAct>();
+            _pointableMapper = mapperService.Get<Cursor>();
         }
 
         public void Update(GameTime gameTime)
@@ -55,7 +57,6 @@ namespace temp1.Systems
             var state = MouseExtended.GetState();
             var worldPos = _camera.ScreenToWorld(state.Position.X, state.Position.Y);
             var point = (worldPos / 32).ToPoint();
-            position = point.ToVector2() * 32 + new Vector2(16);
             _context.PointedId = -1;
             if (_context.GameState == GameState.Peace)
             {
@@ -95,35 +96,20 @@ namespace temp1.Systems
         {
             for (var i = 0; i < ActiveEntities.Count; i++)
             {
-                var sprite = _spriteMapper.Get(ActiveEntities[i]) ?? _aSpriteMapper.Get(ActiveEntities[i]);
-                var mo = _moMapper.Get(ActiveEntities[i]);
                 var id = ActiveEntities[i];
+                var sprite = _spriteMapper.Get(id) ?? _aSpriteMapper.Get(id);
+                var mo = _moMapper.Get(id);
                 var bounds = new Rectangle(0, 0, sprite.TextureRegion.Width, sprite.TextureRegion.Height);
-
+                var pointable = _pointableMapper.Get(id);
                 if (bounds.Contains(pos - mo.Position + sprite.Origin))
                 {
-                    if (GetCursor(mo, out var animation))
-                        mark.Play(animation);
-                    else
-                        continue;
+                    mark.Play(pointable.SpriteName);
                     position = pos;
                     _context.PointedId = id;
                     return true;
                 }
             }
             return false;
-        }
-
-        private bool GetCursor(MapObject obj, out string animation)
-        {
-            animation = obj.Type switch
-            {
-                GameObjectType.Storage => "hand",
-                GameObjectType.Enemy => "sword",
-                GameObjectType.Item => "hand",
-                _ => null
-            };
-            return animation != null;
         }
 
         public void Draw(GameTime gameTime)

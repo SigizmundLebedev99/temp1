@@ -103,6 +103,7 @@ namespace temp1
             var y = random.Next(-25, 25);
             var mo = new MapObject(_from, GameObjectType.Item);
             entity.Attach(mo);
+            entity.Attach(new Cursor("hand"));
             entity.Attach<Expired>(new Movement(_from, _from + new Vector2(x, y), mo, 1f / 16f)
             {
                 OnCompleted = () => entity.Detach<IOriginMove>()

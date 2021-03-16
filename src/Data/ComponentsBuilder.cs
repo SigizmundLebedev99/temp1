@@ -41,6 +41,7 @@ static class ComponentsBuilder
         if (type.typeName == "enemy")
         {
             mapObj.Type = GameObjectType.Enemy;
+            e.Attach(new Cursor("sword"));
         }
         e.Attach(new ActionPoints{
             Max = 10,
@@ -80,6 +81,7 @@ static class ComponentsBuilder
         }
         context.MovementGrid.SetValueAt(mapObj.MapPosition.X, mapObj.MapPosition.Y, 3);
         e.Attach(storage);
+        e.Attach(new Cursor("hand"));
     }
 
     static void HullHandler(Entity e, GameObjectTypeInfo type, TiledMapObject mapObject, GameContext context)
