@@ -27,7 +27,7 @@ namespace temp1.Screens
         {
             camera = new OrthographicCamera(GraphicsDevice);
             _world = new World();
-            _context = new GameContext(Content, camera);
+            _context = new GameContext(Game, camera);
             _tiledMapRenderer = new TiledMapRenderer(GraphicsDevice);
         }
 
@@ -65,7 +65,7 @@ namespace temp1.Screens
                 return;
             _world.Update(gameTime);
             _tiledMapRenderer.Update(gameTime);
-            if(_context.HudState != HudState.Default)
+            if(_context.UIState != UIState.Default)
                 return;
             var state = Mouse.GetState();
             var v = GraphicsDevice.Viewport;
@@ -90,7 +90,7 @@ namespace temp1.Screens
             _world.Draw(gameTime);
             _sb.End();
 
-            _context.Hud.Draw();
+            //_context.UI.Draw();
         }
     }
 }

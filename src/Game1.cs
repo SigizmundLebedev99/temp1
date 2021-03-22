@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
+using MonoGame.Squid;
 using temp1.Screens;
 
 namespace temp1
@@ -24,6 +26,8 @@ namespace temp1
 
         protected override void Initialize()
         {
+            Gui.Renderer = new MonoGameSquidRenderer(GraphicsDevice, new ContentManager(Services, "ui"));
+            Components.Add(new MonoGameSquidInputManager(this));
             _screenManager.LoadScreen(new MenuScreen(_screenManager, this), new FadeTransition(this.GraphicsDevice, Color.White, 0.5f));
             base.Initialize();
         }

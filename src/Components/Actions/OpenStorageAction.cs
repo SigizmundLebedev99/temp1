@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using temp1.UI;
 
 namespace temp1.Components
 {
@@ -19,13 +20,13 @@ namespace temp1.Components
 
         public override void Abort()
         {
-            _context.Hud.Default();
+            _context.UI.Default();
             status = ActionStatus.Canceled;
         }
 
         public override void Update(GameTime time)
         { 
-            if(_context.Hud.HudState == HudState.Default)
+            if(_context.UI.State == UIState.Default)
                 status = ActionStatus.Success;
         }
     }

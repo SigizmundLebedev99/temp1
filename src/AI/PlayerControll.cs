@@ -5,6 +5,7 @@ using MonoGame.Extended.Entities;
 using MonoGame.Extended.Input;
 using temp1.Components;
 using temp1.Data;
+using temp1.UI;
 
 namespace temp1.AI
 {
@@ -27,8 +28,8 @@ namespace temp1.AI
         {
             var newState = MouseExtended.GetState();
             if (mouseState.LeftButton == ButtonState.Pressed && newState.LeftButton == ButtonState.Released
-            && Context.HudState == HudState.Default
-            && !Context.Hud.IsMouseOnHud)
+            && Context.UIState == UIState.Default
+            && !Context.UI.IsMouseOnHud)
             {
                 mouseState = newState;
                 var mapObj = _moMapper.Get(EntityId);

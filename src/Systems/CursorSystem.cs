@@ -7,7 +7,7 @@ using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Sprites;
 using temp1.Components;
-using temp1.Data;
+using temp1.UI;
 
 namespace temp1.Systems
 {
@@ -49,7 +49,7 @@ namespace temp1.Systems
 
         public void Update(GameTime gameTime)
         {
-            if (_context.HudState != HudState.Default || _context.Hud.IsMouseOnHud ||  !_allowedMap.Has(_context.PlayerId))
+            if (_context.UIState != UIState.Default || _context.UI.IsMouseOnHud ||  !_allowedMap.Has(_context.PlayerId))
             {
                 shouldShow = false;
                 return;

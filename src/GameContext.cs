@@ -16,6 +16,7 @@ using temp1.AI;
 using temp1.Components;
 using temp1.Data;
 using temp1.PathFinding;
+using temp1.UI;
 using temp1.Util;
 
 namespace temp1
@@ -31,7 +32,7 @@ namespace temp1
         public World World;
         public StaticGrid MovementGrid;
         public OrthographicCamera Camera;
-        public HudService Hud;
+        public UIService UI;
         public Bag<int> Actors => actorsSubscription.ActiveEntities;
         public Bag<int> MapObjects => mapObjectsSubscription.ActiveEntities;
         public GameState GameState = GameState.Peace;
@@ -43,8 +44,9 @@ namespace temp1
         public int PlayerId;
         public int PointedId;
 
-        public HudState HudState => Hud.HudState;
+        public UIState UIState => UI.State;
 
+        Game _game;
         ContentManager _content;
         JsonContentLoader loader = new JsonContentLoader();
         EntitySubscription actorsSubscription;
@@ -53,9 +55,10 @@ namespace temp1
         Mapper<TurnOccured> _combatantMapper;
         Mapper<BaseAction> _actionMapper;
 
-        public GameContext(ContentManager content, OrthographicCamera camera)
+        public GameContext(Game game, OrthographicCamera camera)
         {
-            _content = content;
+            _game = game;
+            _content = _game.Content;
             Camera = camera;
             GameObjectTypes = new Dictionary<string, GameObjectTypeInfo>();
         }
@@ -75,7 +78,7 @@ namespace temp1
             ConfigureObstacles();
             ConfigureMapObjects();
             PathFinder = new PathFinder(this);
-            Hud = new HudService(_content, this);
+            UI = new UIService(_game);
             _allowedMapper = world.ComponentManager.Get<AllowedToAct>();
             _actionMapper = world.ComponentManager.Get<BaseAction>();
             _combatantMapper = world.ComponentManager.Get<TurnOccured>();

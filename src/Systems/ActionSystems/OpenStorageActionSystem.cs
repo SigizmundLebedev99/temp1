@@ -43,7 +43,7 @@ namespace temp1.Systems
             var sprite = _aSpriteMap.Get(storageId);
             sprite.Play("open");
             if(_context.PlayerId == actorId)
-                _context.Hud.OpenInventory2(storage, actor);
+                _context.UI.OpenInventory2(storage, actor);
             return true;
         }
     }
