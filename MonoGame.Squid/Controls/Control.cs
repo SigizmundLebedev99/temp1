@@ -1570,9 +1570,6 @@ namespace MonoGame.Squid.Controls
 
                     if (Tint != -1)
                     {
-                        //blend = ColorInt.Overlay(Tint, style.Tint);
-                        //blend = ColorInt.Multiply(Tint, style.Tint);
-                        //blend = ColorInt.Screen(style.Tint, Tint);
                         blend = ColorInt.Blend(Tint, style.Tint);
                     }
 

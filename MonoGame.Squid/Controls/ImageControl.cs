@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.TextureAtlases;
 using MonoGame.Squid.Skinning;
 using MonoGame.Squid.Structs;
 using MonoGame.Squid.Util;
@@ -23,6 +25,8 @@ namespace MonoGame.Squid.Controls
             get { return _texture; }
             set { _texture = value; TextureRect = new Rectangle(0, 0, 0, 0); }
         }
+
+        private TextureRegion2D customRegion;
 
         /// <summary>
         /// Gets or sets the color.
@@ -66,6 +70,15 @@ namespace MonoGame.Squid.Controls
             Inset = new Margin();
         }
 
+        public void SetCustomTexture(Texture2D texture)
+        {
+            customRegion = new TextureRegion2D(texture, 0, 0, texture.Width, texture.Height);
+        }
+
+        public void SetCustomTexture(TextureRegion2D region){
+            customRegion = region;
+        }
+
         protected override void DrawStyle(Style style, float opacity)
         {
             base.DrawStyle(style, opacity);
@@ -73,12 +86,12 @@ namespace MonoGame.Squid.Controls
             var texture = Gui.Renderer.GetTexture(Texture);
             if (texture < 0) return;
 
-            if(ColorByTint)
+            if (ColorByTint)
                 Color = style.Tint;
 
             var color = Color;
 
-            if(Tint != -1)
+            if (Tint != -1)
                 color = ColorInt.Blend(Tint, color);
 
             color = ColorInt.FromArgb(opacity, color);

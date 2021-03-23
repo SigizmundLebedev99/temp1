@@ -20,6 +20,7 @@ namespace temp1.Screens
 
         public override void Update(GameTime gameTime)
         { 
+            _desktop.Size = new MonoGame.Squid.Structs.Point(Game.GraphicsDevice.Viewport.Width, Game.GraphicsDevice.Viewport.Height);
             _desktop.Update();
         }
     }
