@@ -32,7 +32,7 @@ namespace temp1.UI
             itemStyle.TextAlign = Alignment.MiddleLeft;
 
             var buttonStyle = new ControlStyle(baseStyle);
-            buttonStyle.TextPadding = new Margin(0);
+            buttonStyle.TextPadding = new Margin(10);
             buttonStyle.TextAlign = Alignment.MiddleCenter;
 
             var tooltipStyle = new ControlStyle(buttonStyle);
@@ -125,14 +125,18 @@ namespace temp1.UI
             comboButtonStyle.Focused.Texture = "combo_button_hot.dds";
 
             var borderStyle = new ControlStyle();
-            borderStyle.Hot.Texture = "border.dds";
-            borderStyle.Pressed.Texture = "border.dds";
+            borderStyle.Texture = "border.dds";
             borderStyle.Tiling = TextureMode.Grid;
             borderStyle.Grid = new Margin(4);
 
             var labelStyle = new ControlStyle();
             labelStyle.TextAlign = Alignment.TopLeft;
             labelStyle.TextPadding = new Margin(8);
+            
+            var titleStyle = new ControlStyle();
+            titleStyle.TextAlign = Alignment.TopCenter;
+            titleStyle.TextPadding = new Margin(8);
+            titleStyle.Font = "sativa";
 
             var handleNw = new ControlStyle();
             handleNw.Texture = "handleNW.dds";
@@ -159,6 +163,7 @@ namespace temp1.UI
             skin.Add("hscrollButton", hscrollButtonStyle);
             skin.Add("hscrollUp", hscrollUp);
             skin.Add("multiline", labelStyle);
+            skin.Add("title", titleStyle);
             skin.Add("tooltip", tooltipStyle);
             skin.Add("border", borderStyle);
             skin.Add("handleNE", handleNe);

@@ -273,8 +273,8 @@ namespace MonoGame.Squid.Controls
 
             if (string.IsNullOrEmpty(masked)) return;
 
-            var font = Gui.Renderer.GetFont(style.Font);
-            if (font < 0) return;
+            var font = style.Font;
+            if (font == null) return;
 
             var p = Gui.MousePosition - Location;
             var s1 = Gui.Renderer.GetTextSize(masked, font);
@@ -325,8 +325,8 @@ namespace MonoGame.Squid.Controls
 
             if (string.IsNullOrEmpty(masked)) return;
 
-            var font = Gui.Renderer.GetFont(style.Font);
-            if (font < 0) return;
+            var font = style.Font;
+            if (font == null) return;
 
             var p = Gui.MousePosition - Location;
             var s1 = Gui.Renderer.GetTextSize(masked, font);
@@ -781,8 +781,8 @@ namespace MonoGame.Squid.Controls
             if (IsPassword)
                 masked = new string(PasswordChar, masked.Length);
 
-            var font = Gui.Renderer.GetFont(style.Font);
-            if (font < 0) return;
+            var font = style.Font;
+            if (font == null) return;
 
             var p = AlignText(masked, Alignment.MiddleLeft, style.TextPadding, font);
 

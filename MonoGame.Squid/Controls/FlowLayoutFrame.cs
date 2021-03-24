@@ -151,7 +151,7 @@ namespace MonoGame.Squid.Controls
             {
                 if (!control.Visible) continue;
 
-                if (y + control.Size.Y + VSpacing <= Size.Y)
+                if (y + control.Size.Y + VSpacing <= Size.Y || AutoSize == AutoSize.Vertical || AutoSize == AutoSize.HorizontalVertical)
                 {
                     control.Position = new Point(x, y);
 

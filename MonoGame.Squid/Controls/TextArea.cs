@@ -309,7 +309,7 @@ namespace MonoGame.Squid.Controls
                     {
                         var p = new Point(line.Elements[i].Rectangle.Left, line.Elements[i].Rectangle.Top);
                         var mb = m - p;
-                        var font = Gui.Renderer.GetFont(line.Elements[i].Font);
+                        var font = line.Elements[i].Font;
                         var off = 0;
                         var c = 0;
 
@@ -366,7 +366,7 @@ namespace MonoGame.Squid.Controls
                     {
                         var p = new Point(line.Elements[i].Rectangle.Left, line.Elements[i].Rectangle.Top);
                         var mb = m - p;
-                        var font = Gui.Renderer.GetFont(line.Elements[i].Font);
+                        var font = line.Elements[i].Font;
                         var off = 0;
                         var c = 0;
 
@@ -910,7 +910,7 @@ namespace MonoGame.Squid.Controls
                 #region TextWrap = true
                 foreach (var element in elements)
                 {
-                    var font = Gui.Renderer.GetFont(element.Font);
+                    var font = element.Font;
 
                     if (element.Linebreak)
                     {
@@ -1022,7 +1022,7 @@ namespace MonoGame.Squid.Controls
             {
                 foreach (var element in elements)
                 {
-                    var font = Gui.Renderer.GetFont(element.Font);
+                    var font = element.Font;
 
                     if (element.Linebreak)
                     {
@@ -1186,7 +1186,7 @@ namespace MonoGame.Squid.Controls
         {
             if (_isDirty) UpdateText(style);
 
-            int font;
+            string font;
             var total = 0;
             var numLine = 0;
             Point p1, p2, size;
@@ -1198,7 +1198,7 @@ namespace MonoGame.Squid.Controls
                 if (drawCaret)
                 {
                     p1 = Location;
-                    font = Gui.Renderer.GetFont(style.Font);
+                    font = style.Font;
 
                     if (align == Alignment.TopLeft || align == Alignment.TopCenter || align == Alignment.TopRight)
                         p1.Y += style.TextPadding.Top;
@@ -1235,7 +1235,7 @@ namespace MonoGame.Squid.Controls
                     //if (element.Linebreak)
                     //    continue;
 
-                    font = Gui.Renderer.GetFont(element.Font);
+                    font = element.Font;
 
                     if (element.Linebreak)
                         total++;

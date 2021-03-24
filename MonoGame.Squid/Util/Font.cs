@@ -11,13 +11,12 @@ namespace MonoGame.Squid.Util
         public static readonly string Default = "default";
 
         public string Name { get; set; }
-        public string Family { get; set; }
         
-        public bool Bold { get; set; }
-        public bool Italic { get; set; }
-        public bool Underlined { get; set; }
-        public bool International { get; set; }
+        public bool Bold;
+        public bool Italic;
+        public bool Underlined;
+        public bool International;
 
-        public int Size { get; set; }
+        public int Size;
     }
 }

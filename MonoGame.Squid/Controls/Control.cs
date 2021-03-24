@@ -322,67 +322,47 @@ namespace MonoGame.Squid.Controls
         /// <summary>
         /// Gets/Sets the color used to Tint the used Style
         /// </summary>
-        [IntColor]
-        [Category("Design")]
-        [DefaultValue(-1)]
-        public int Tint { get; set; }
+        public int Tint;
 
         /// <summary>
         /// Name of the control
-        /// </summary>
-        [DefaultValue("")]
-        [Category("Base")]
-        public string Name { get; set; }
+        /// </summary> 
+        public string Name;
 
         /// <summary>
         /// Opacity of the control
         /// This is multiplied with any style opacity and hierarchical opacity
         /// </summary>
-        [ValueRange(0, 1)]
-        [DefaultValue(1.0f)]
-        [Category("Design")]
-        public float Opacity { get; set; }
+        public float Opacity;
 
         /// <summary>
         /// Gets/Sets the autosize behavior
         /// </summary>
-        [DefaultValue(AutoSize.None)]
-        [Category("Layout")]
-        public AutoSize AutoSize { get; set; }
+        public AutoSize AutoSize;
 
         /// <summary>
         /// Gets/Sets whether or not the control processes DragDrop events
         /// </summary>
-        [DefaultValue(false)]
-        [Category("Behavior")]
-        public bool AllowDrop { get; set; }
+        public bool AllowDrop;
 
         /// <summary>
         /// Gets/Sets whether or not the control is able to acquire focus
         /// </summary>
-        [DefaultValue(false)]
-        [Category("Behavior")]
-        public bool AllowFocus { get; set; }
+        public bool AllowFocus;
 
         /// <summary>
         /// Gets/Sets whether or not the control prevents the focus to change
         /// </summary>
-        [DefaultValue(false)]
-        [Category("Behavior")]
-        public bool PreventFocusChange { get; set; }
+        public bool PreventFocusChange;
 
         /// <summary>
         /// Gets/Sets whether or not hardware scissor test is used
         /// </summary>
-        [DefaultValue(false)]
-        [Category("Design")]
-        public bool Scissor { get; set; }
+        public bool Scissor;
 
         /// <summary>
         /// Gets/Sets the docking behavior
         /// </summary>
-        [DefaultValue(DockStyle.None)]
-        [Category("Layout")]
         public DockStyle Dock
         {
             get { return _dock; }
@@ -406,47 +386,36 @@ namespace MonoGame.Squid.Controls
         /// <summary>
         /// Name of the ControlStyle 
         /// </summary>
-        [Style]
-        [DefaultValue("")]
-        [Category("Design")]
-        public string Style { get; set; }
+        public string Style;
 
         /// <summary>
         /// Gets/Sets whether or not the control is interactive and processes any events
         /// </summary>
-        [Category("Behavior")]
-        public bool NoEvents { get; set; }
+        public bool NoEvents;
 
         /// <summary>
         /// user defined data object
         /// </summary>
-        [XmlIgnore, Hidden]
-        public object Tag { get; set; }
+        public object Tag;
 
         /// <summary>
         /// user defined data object
         /// </summary>
-        [XmlIgnore, Hidden]
-        public object UserData { get; set; }
+        public object UserData;
 
         /// <summary>
         /// internal data object
         /// </summary>
-        [XmlIgnore, Hidden]
-        internal object InternalTag { get; set; }
+        internal object InternalTag;
 
         /// <summary>
         /// tab index
         /// </summary>
-        [DefaultValue(0)]
-        [Category("Behavior")]
-        public int TabIndex { get; set; }
+        public int TabIndex;
 
         /// <summary>
         /// Gets/Sets whether or not the control is visible
         /// </summary>
-        [DefaultValue(true)]
-        [Category("Base")]
         public bool Visible { get { return _visible; } set { _visible = value; } }
 
         /// <summary>
@@ -457,10 +426,7 @@ namespace MonoGame.Squid.Controls
         /// <summary>
         /// Name of the cursor to use 
         /// </summary>
-        [Cursor]
-        [DefaultValue("")]
-        [Category("Behavior")]
-        public string Cursor { get; set; }
+        public string Cursor;
 
         private string _tooltip;
         private string _originalTooltip;
@@ -468,9 +434,6 @@ namespace MonoGame.Squid.Controls
         /// <summary>
         /// Tooltip text 
         /// </summary>
-        [DefaultValue("")]
-        [Multiline]
-        [Category("Base")]
         public string Tooltip
         {
             get { return _tooltip; }
@@ -485,8 +448,8 @@ namespace MonoGame.Squid.Controls
             }
         }
 
-        [DefaultValue(Alignment.TopCenter)]
-        public Alignment TooltipAlign { get; set; }
+
+        public Alignment TooltipAlign;
 
         /// <summary>
         /// Returns the z-index
@@ -504,8 +467,6 @@ namespace MonoGame.Squid.Controls
         /// <summary>
         /// Gets/Sets whether or not the control, and all its children, is enabled
         /// </summary>
-        [DefaultValue(true)]
-        [Category("Base")]
         public bool Enabled
         {
             get
@@ -536,7 +497,6 @@ namespace MonoGame.Squid.Controls
         /// <summary>
         /// Gets/Sets the parent
         /// </summary>
-        [XmlIgnore, Hidden]
         public Control Parent
         {
             get { return _parent; }
@@ -565,23 +525,17 @@ namespace MonoGame.Squid.Controls
         /// Gets/Sets the minimum size.
         /// This is only used during Control.Resize
         /// </summary>
-        [DefaultValue(typeof(Point), "0; 0")]
-        [Category("Layout")]
-        public Point MinSize { get; set; }
+        public Point MinSize;
 
         /// <summary>
         /// Gets/Sets the maximum size.
         /// This is only used during Control.Resize
         /// </summary>
-        [DefaultValue(typeof(Point), "0; 0")]
-        [Category("Layout")]
-        public Point MaxSize { get; set; }
+        public Point MaxSize;
 
         /// <summary>
         /// Gets/Sets the size
         /// </summary>
-        [DefaultValue(typeof(Point), "0; 0")]
-        [Category("Layout")]
         public Point Size
         {
             get { return _size; }
@@ -599,8 +553,6 @@ namespace MonoGame.Squid.Controls
         /// <summary>
         /// Gets/Sets the position (relative to parent)
         /// </summary>
-        [DefaultValue(typeof(Point), "0; 0")]
-        [Category("Layout")]
         public Point Position
         {
             get { return _position; }
@@ -618,8 +570,6 @@ namespace MonoGame.Squid.Controls
         /// <summary>
         /// Gets/Sets the anchoring behavior
         /// </summary>
-        [DefaultValue(AnchorStyles.Top | AnchorStyles.Left)]
-        [Category("Layout")]
         public AnchorStyles Anchor
         {
             get { return _anchor; }
@@ -634,8 +584,6 @@ namespace MonoGame.Squid.Controls
         /// <summary>
         /// Defines the space around a control that keeps other controls at a specified distance from the control's borders.
         /// </summary>
-        [DefaultValue(typeof(Margin), "0; 0; 0; 0")]
-        [Category("Layout")]
         public Margin Margin
         {
             get { return _margin; }
@@ -645,8 +593,6 @@ namespace MonoGame.Squid.Controls
         /// <summary>
         /// Defines the space inside of a control that keeps child controls at a specified distance from the control's borders.
         /// </summary>
-        [DefaultValue(typeof(Margin), "0; 0; 0; 0")]
-        [Category("Layout")]
         public Margin Padding
         {
             get { return _padding; }
@@ -656,7 +602,6 @@ namespace MonoGame.Squid.Controls
         /// <summary>
         /// Gets/Sets the state
         /// </summary>
-        [XmlIgnore, Hidden]
         public ControlState State
         {
             get { return _state; }
@@ -669,7 +614,7 @@ namespace MonoGame.Squid.Controls
                 _oldState = _state;
                 _state = value;
 
-                var last =  Desktop.GetStyle(Style).Styles[_oldState];
+                var last = Desktop.GetStyle(Style).Styles[_oldState];
                 var next = Desktop.GetStyle(Style).Styles[_state];
 
                 _textureFade = last.IsTextureDifferent(next);
@@ -686,9 +631,7 @@ namespace MonoGame.Squid.Controls
         /// <summary>
         /// Gets/Sets the local fading speed
         /// </summary>
-        [DefaultValue(0.0f)]
-        [Category("Design")]
-        public float FadeSpeed { get; set; }
+        public float FadeSpeed;
 
         /// <summary>
         /// Returns the screen position
@@ -724,13 +667,12 @@ namespace MonoGame.Squid.Controls
         ///// <summary>
         ///// Name of a property or field to bind to this control
         ///// </summary>
-        //public string Aspect { get; set; }
+        //public string Aspect ;
 
         /// <summary>
         /// Gets the unique auto id.
         /// </summary>
         /// <value>The auto id.</value>
-        [XmlIgnore]
         public int AutoId { get; private set; }
 
         private static int _autoIncrement;
@@ -760,15 +702,6 @@ namespace MonoGame.Squid.Controls
                 ((IControlContainer)this).Controls = new ControlCollection(this);
             }
         }
-
-        //protected virtual void Bind(object value)
-        //{
-        //    if (this is IControlContainer)
-        //    {
-        //        foreach (Control child in ((IControlContainer)this).Controls)
-        //            child.Bind(value);
-        //    }
-        //}
 
         /// <summary>
         /// Makes the control the focused control
@@ -1088,126 +1021,6 @@ namespace MonoGame.Squid.Controls
         /// </summary>
         public void ProcessEvents() { DoEvents(); }
 
-        #region old
-
-        ///// <summary>
-        ///// Performs the layout.
-        ///// </summary>
-        //public void PerformLayout()
-        //{
-        //    if (!Visible && !Desktop.DesignMode) return;
-
-        //    OnUpdate();
-        //    PerformLayoutAndClip();
-
-        //    Point auto = Point.Zero;
-
-        //    for (int i = 0; i < Elements.Count; i++)
-        //    {
-        //        Control child = Elements[i];
-
-        //        child.PerformUpdate();
-
-        //        if (AutoSize != AutoSize.None && !child.IsRemoved && child.Visible)
-        //        {
-        //            auto.x = Math.Max(auto.x, child.Position.x + child.Size.x);
-        //            auto.y = Math.Max(auto.y, child.Position.y + child.Size.y);
-
-        //            if (i == Elements.Count - 1)
-        //            {
-        //                if (child.Dock != DockStyle.None)
-        //                {
-        //                    auto.x += child.Margin.Right;
-        //                    auto.y += child.Margin.Bottom;
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    if (this is IControlContainer)
-        //    {
-        //        auto = Point.Zero;
-        //        ControlCollection controls = ((IControlContainer)this).Controls;
-
-        //        controls.SafeRemoval = true;
-
-        //        for (int i = 0; i < controls.Count; i++)
-        //        {
-        //            Control child = controls[i];
-        //            child.PerformUpdate();
-
-        //            if (AutoSize != AutoSize.None && !child.IsRemoved && child.Visible)
-        //            {
-        //                auto.x = Math.Max(auto.x, child.Position.x + child.Size.x);
-        //                auto.y = Math.Max(auto.y, child.Position.y + child.Size.y);
-
-        //                if (i == controls.Count - 1)
-        //                {
-        //                    if (child.Dock != DockStyle.None)
-        //                    {
-        //                        auto.x += child.Margin.Right;
-        //                        auto.y += child.Margin.Bottom;
-        //                    }
-        //                }
-        //            }
-        //        }
-
-        //        controls.SafeRemoval = false;
-
-        //        for (int i = controls.Count - 1; i >= 0; i--)
-        //        {
-        //            Control c = controls[i];
-
-        //            if (c.IsRemoved)
-        //            {
-        //                controls.RemoveAt(i);
-        //                c.Parent = null;
-        //            }
-        //        }
-        //    }
-
-        //    if (AutoSize != AutoSize.None)
-        //    {
-        //        if (MinSize.x > 0 && auto.x < MinSize.x) auto.x = MinSize.x;
-        //        if (MinSize.y > 0 && auto.y < MinSize.y) auto.y = MinSize.y;
-
-        //        if (AutoSize == AutoSize.Vertical)
-        //            _size = new Point(_size.x, auto.y);
-        //        else if (AutoSize == AutoSize.Horizontal)
-        //            _size = new Point(auto.x, _size.y);
-        //        else
-        //            _size = new Point(auto.x, auto.y);
-
-        //        OnAutoSize();
-        //    }
-
-        //    DetermineState();
-        //}
-
-        //internal void PerformUpdate()
-        //{
-        //    SetDepth();
-
-        //    if (!Visible) return;
-
-        //    if (FadeSpeed > 0 || Gui.GlobalFadeSpeed > 0)
-        //    {
-        //        float speed = FadeSpeed > 0 ? FadeSpeed : Gui.GlobalFadeSpeed;
-        //        float delta = Gui.TimeElapsed / speed;
-
-        //        FadeOut -= delta; FadeIn += delta;
-
-        //        FadeIn = FadeIn < 0 ? 0 : (FadeIn > 1 ? 1 : FadeIn);
-        //        FadeOut = FadeOut < 0 ? 0 : (FadeOut > 1 ? 1 : FadeOut);
-        //    }
-
-        //    Animation.Update();
-
-        //    PerformLayout();
-        //}
-
-        #endregion
-
         #region new
 
         private int _localLanguage;
@@ -1296,21 +1109,12 @@ namespace MonoGame.Squid.Controls
                 {
                     auto.X = Math.Max(auto.X, child.Position.X + child.Size.X + child.Margin.Right);
                     auto.Y = Math.Max(auto.Y, child.Position.Y + child.Size.Y + child.Margin.Bottom);
-
-                    //if (i == count - 1)
-                    //{
-                    //    if (child.Dock != DockStyle.None)
-                    //    {
-                    //        auto.x += child.Margin.Right;
-                    //        auto.y += child.Margin.Bottom;
-                    //    }
-                    //}
                 }
             }
 
             if (this is IControlContainer)
             {
-                auto = Point.Zero;
+                auto = new Point(Padding.Left, Padding.Top);
                 var controls = ((IControlContainer)this).Controls;
 
                 child = null;
@@ -1323,17 +1127,8 @@ namespace MonoGame.Squid.Controls
 
                     if (AutoSize != AutoSize.None && !child.IsRemoved && child.Visible)
                     {
-                        auto.X = Math.Max(auto.X, child.Position.X + child.Size.X + child.Margin.Right);
-                        auto.Y = Math.Max(auto.Y, child.Position.Y + child.Size.Y + child.Margin.Bottom);
-
-                        //if (i == count - 1)
-                        //{
-                        //    if (child.Dock != DockStyle.None)
-                        //    {
-                        //        auto.x += child.Margin.Right;
-                        //        auto.y += child.Margin.Bottom;
-                        //    }
-                        //}
+                        auto.X = Math.Max(auto.X, child.Position.X + child.Size.X + child.Margin.Right + Padding.Right);
+                        auto.Y = Math.Max(auto.Y, child.Position.Y + child.Size.Y + child.Margin.Bottom + Padding.Bottom);
                     }
                 }
             }
@@ -1346,12 +1141,10 @@ namespace MonoGame.Squid.Controls
                 if (AutoSize == AutoSize.Vertical)
                 {
                     _size.Y = auto.Y;
-                    //_size = new Point(_size.x, auto.y);
                 }
                 else if (AutoSize == AutoSize.Horizontal)
                 {
                     _size.X = auto.X;
-                    //_size = new Point(auto.x, _size.y);
                 }
                 else
                 {
@@ -1404,7 +1197,7 @@ namespace MonoGame.Squid.Controls
         /// <param name="padding">The padding.</param>
         /// <param name="font">The font.</param>
         /// <returns>Point.</returns>
-        protected Point AlignText(string text, Alignment align, Margin padding, int font)
+        protected Point AlignText(string text, Alignment align, Margin padding, string font)
         {
             var tsize = Gui.Renderer.GetTextSize(text, font);
 
@@ -1442,7 +1235,7 @@ namespace MonoGame.Squid.Controls
         /// <param name="font">The font.</param>
         /// <param name="tsize">The tsize.</param>
         /// <returns>Point.</returns>
-        protected Point AlignText(string text, Alignment align, Margin padding, int font, out Point tsize)
+        protected Point AlignText(string text, Alignment align, Margin padding, string font, out Point tsize)
         {
             tsize = Gui.Renderer.GetTextSize(text, font);
 
@@ -1562,45 +1355,41 @@ namespace MonoGame.Squid.Controls
 
             if (!string.IsNullOrEmpty(style.Texture))
             {
-                var texture = Gui.Renderer.GetTexture(style.Texture);
 
-                if (texture > -1)
+                blend = style.Tint;
+
+                if (Tint != -1)
                 {
-                    blend = style.Tint;
+                    blend = ColorInt.Blend(Tint, style.Tint);
+                }
 
-                    if (Tint != -1)
-                    {
-                        blend = ColorInt.Blend(Tint, style.Tint);
-                    }
+                if (style.TextureRect.IsEmpty())
+                {
+                    var texsize = Gui.Renderer.GetTextureSize(style.Texture);
+                    style.TextureRect = new Rectangle(Point.Zero, texsize);
+                }
 
-                    if (style.TextureRect.IsEmpty())
-                    {
-                        var texsize = Gui.Renderer.GetTextureSize(texture);
-                        style.TextureRect = new Rectangle(Point.Zero, texsize);
-                    }
+                var color = ColorInt.FromArgb(opacity, blend);
 
-                    var color = ColorInt.FromArgb(opacity, blend);
+                if (style.Tiling == TextureMode.Grid || style.Tiling == TextureMode.GridRepeat)
+                {
+                    SliceTexture(style.Texture, style.Tiling, style.TextureRect, style.Grid, opacity, color);
+                }
+                else if (style.Tiling == TextureMode.Stretch)
+                {
+                    Gui.Renderer.DrawTexture(style.Texture, loc.X, loc.Y, _size.X, _size.Y, style.TextureRect, color);
+                }
+                else if (style.Tiling == TextureMode.Center)
+                {
+                    var center = loc + _size / 2;
+                    var rectsize = new Point(style.TextureRect.Width, style.TextureRect.Height);
+                    var pos = center - rectsize / 2;
 
-                    if (style.Tiling == TextureMode.Grid || style.Tiling == TextureMode.GridRepeat)
-                    {
-                        SliceTexture(texture, style.Tiling, style.TextureRect, style.Grid, opacity, color);
-                    }
-                    else if (style.Tiling == TextureMode.Stretch)
-                    {
-                        Gui.Renderer.DrawTexture(texture, loc.X, loc.Y, _size.X, _size.Y, style.TextureRect, color);
-                    }
-                    else if (style.Tiling == TextureMode.Center)
-                    {
-                        var center = loc + _size / 2;
-                        var rectsize = new Point(style.TextureRect.Width, style.TextureRect.Height);
-                        var pos = center - rectsize / 2;
-
-                        Gui.Renderer.DrawTexture(texture, pos.X, pos.Y, rectsize.X, rectsize.Y, style.TextureRect, color);
-                    }
-                    else
-                    {
-                        RepeatTexture(texture, Location, style.TextureRect, style.Tiling, opacity, color);
-                    }
+                    Gui.Renderer.DrawTexture(style.Texture, pos.X, pos.Y, rectsize.X, rectsize.Y, style.TextureRect, color);
+                }
+                else
+                {
+                    RepeatTexture(style.Texture, Location, style.TextureRect, style.Tiling, opacity, color);
                 }
             }
         }
@@ -2036,7 +1825,7 @@ namespace MonoGame.Squid.Controls
                 Elements[i].Draw();
         }
 
-        protected void RepeatTexture(int texture, Point loc, Rectangle rect, TextureMode mode, float opacity, int color)
+        protected void RepeatTexture(string texture, Point loc, Rectangle rect, TextureMode mode, float opacity, int color)
         {
             var texsize = Gui.Renderer.GetTextureSize(texture);
 
@@ -2078,7 +1867,7 @@ namespace MonoGame.Squid.Controls
             }
         }
 
-        protected void SliceTexture(int texture, TextureMode mode, Rectangle rect, Margin grid, float opacity, int color)
+        protected void SliceTexture(string texture, TextureMode mode, Rectangle rect, Margin grid, float opacity, int color)
         {
             var repeat = mode == TextureMode.GridRepeat;
 

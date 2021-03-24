@@ -17,9 +17,9 @@ namespace MonoGame.Squid.Util
 
         private Rectangle _rect = new Rectangle();
 
-        public void Draw(int texture, int x, int y, int width, int height, int color)
+        public void Draw(string texture, int x, int y, int width, int height, int color)
         {
-            if (texture < 0) return;
+            if (texture == null) return;
 
             _timer += Gui.TimeElapsed;
             

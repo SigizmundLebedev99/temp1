@@ -57,17 +57,14 @@ namespace MonoGame.Squid.Util
         /// <param name="y">The y.</param>
         public virtual void Draw(int x, int y)
         {
-            var texture = Gui.Renderer.GetTexture(Texture);
-            if (texture < 0) return;
-
             if (TextureRect.IsEmpty())
             {
-                var texsize = Gui.Renderer.GetTextureSize(texture);
+                var texsize = Gui.Renderer.GetTextureSize(Texture);
                 TextureRect = new Rectangle(Point.Zero, texsize);
             }
 
             var p = new Point(x, y) - HotSpot;
-            Gui.Renderer.DrawTexture(texture, p.X, p.Y, Size.X, Size.Y, TextureRect, Color);
+            Gui.Renderer.DrawTexture(Texture, p.X, p.Y, Size.X, Size.Y, TextureRect, Color);
         }
     }
 
@@ -115,15 +112,12 @@ namespace MonoGame.Squid.Util
         /// <param name="y">The y.</param>
         public override void Draw(int x, int y)
         {
-            var index = Gui.Renderer.GetTexture(Texture);
-            if (index < 0) return;
-
             var p = new Point(x, y) - HotSpot;
 
             _flip.Speed = Speed;
             _flip.Rows = Rows;
             _flip.Columns = Columns;
-            _flip.Draw(index, p.X, p.Y, Size.X, Size.Y, Color);       
+            _flip.Draw(Texture, p.X, p.Y, Size.X, Size.Y, Color);       
         }
     }
 }

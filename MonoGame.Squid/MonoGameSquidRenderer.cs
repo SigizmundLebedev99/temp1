@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.BitmapFonts;
 using MonoGame.Squid.Interfaces;
 using MonoGame.Squid.Util;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
@@ -27,21 +28,13 @@ namespace MonoGame.Squid
 
         private static int _keyboardLayout;
         private readonly byte[] _keyStates;
+        private readonly Dictionary<string, BitmapFont> _fonts = new Dictionary<string, BitmapFont>();
 
-        private readonly Dictionary<int, SpriteFont> _fonts = new Dictionary<int, SpriteFont>();
-        private readonly Dictionary<string, int> _fontLookup = new Dictionary<string, int>();
-
-        private readonly Dictionary<int, Texture2D> _textures = new Dictionary<int, Texture2D>();
-        private readonly Dictionary<string, int> _textureLookup = new Dictionary<string, int>();
-
-        private readonly Dictionary<string, Font> _fontTypes = new Dictionary<string, Font>();
+        private readonly Dictionary<string, Texture2D> _textures = new Dictionary<string, Texture2D>();
 
         private readonly SpriteBatch _batch;
 
-        private int _fontIndex;
-        private int _textureIndex;
         private readonly Texture2D _blankTexture;
-
 
         private readonly RasterizerState _rasterizer;
         private readonly SamplerState _sampler;
@@ -56,14 +49,14 @@ namespace MonoGame.Squid
             _blankTexture = new Texture2D(graphicsDevice, 1, 1);
             _blankTexture.SetData(new[] { new Color(255, 255, 255, 255) });
 
-            _fontTypes.Add(Font.Default, new Font { Name = "Arial10", Family = "Arial", Size = 8, Bold = true, International = true });
-
+            _fonts.Add(Font.Default, _contentManager.Load<BitmapFont>("fonts/commodore64"));
+            _fonts.Add("sativa", _contentManager.Load<BitmapFont>("fonts/sativa"));
             _keyboardLayout = GetKeyboardLayout(0);
             _keyStates = new byte[0x100];
 
-            _rasterizer = new RasterizerState {ScissorTestEnable = true};
+            _rasterizer = new RasterizerState { ScissorTestEnable = true };
 
-            _sampler = new SamplerState {Filter = TextureFilter.Anisotropic};
+            _sampler = new SamplerState { Filter = TextureFilter.Anisotropic };
         }
 
         public static int VirtualKeyToScancode(int key)
@@ -94,52 +87,18 @@ namespace MonoGame.Squid
             return new Color(bytes[2], bytes[1], bytes[0], bytes[3]);
         }
 
-        public int GetTexture(string name)
-        {
-            if (_textureLookup.ContainsKey(name))
-                return _textureLookup[name];
-
-            var texture = _contentManager.Load<Texture2D>(Path.ChangeExtension(name, null));
-            _textureIndex++;
-
-            _textureLookup.Add(name, _textureIndex);
-            _textures.Add(_textureIndex, texture);
-
-            return _textureIndex;
-        }
-
-        public int GetFont(string name)
-        {
-            if (_fontLookup.ContainsKey(name))
-                return _fontLookup[name];
-
-            if (!_fontTypes.ContainsKey(name))
-                return -1;
-
-            var type = _fontTypes[name];
-
-            var font = _contentManager.Load<SpriteFont>(type.Name);
-            _fontIndex++;
-
-            _fontLookup.Add(name, _fontIndex);
-            _fonts.Add(_fontIndex, font);
-
-            return _fontIndex;
-        }
-
-        public global::MonoGame.Squid.Structs.Point GetTextSize(string text, int font)
+        public global::MonoGame.Squid.Structs.Point GetTextSize(string text, string font)
         {
             if (string.IsNullOrEmpty(text))
                 return new global::MonoGame.Squid.Structs.Point();
-
             var f = _fonts[font];
             var size = f.MeasureString(text);
-            return new global::MonoGame.Squid.Structs.Point((int)size.X, (int)size.Y);
+            return new global::MonoGame.Squid.Structs.Point((int)size.Width, (int)size.Height);
         }
 
-        public global::MonoGame.Squid.Structs.Point GetTextureSize(int texture)
+        public global::MonoGame.Squid.Structs.Point GetTextureSize(string texture)
         {
-            var tex = _textures[texture];
+            var tex = GetTexture(texture);
             return new global::MonoGame.Squid.Structs.Point(tex.Width, tex.Height);
         }
 
@@ -149,21 +108,19 @@ namespace MonoGame.Squid
             _batch.Draw(_blankTexture, destination, destination, ColorFromtInt32(color));
         }
 
-        public void DrawText(string text, int x, int y, int font, int color)
+        public void DrawText(string text, int x, int y, string font, int color)
         {
-            if (!_fonts.ContainsKey(font)) 
+            if (!_fonts.ContainsKey(font))
                 return;
 
             var f = _fonts[font];
             _batch.DrawString(f, text, new Vector2(x, y), ColorFromtInt32(color));
         }
 
-        public void DrawTexture(int texture, int x, int y, int w, int h, global::MonoGame.Squid.Structs.Rectangle rect, int color)
+        public void DrawTexture(string texture, int x, int y, int w, int h, global::MonoGame.Squid.Structs.Rectangle rect, int color)
         {
-            if (!_textures.ContainsKey(texture))
+            if (!_textures.TryGetValue(texture, out var t))
                 return;
-
-            var tex = _textures[texture];
 
             var destination = new Rectangle(x, y, w, h);
             var source = new Rectangle();
@@ -173,7 +130,7 @@ namespace MonoGame.Squid
             source.Width = rect.Width;
             source.Height = rect.Height;
 
-            _batch.Draw(tex, destination, source, ColorFromtInt32(color));
+            _batch.Draw(t, destination, source, ColorFromtInt32(color));
         }
 
         public void Scissor(int x, int y, int w, int h)
@@ -185,7 +142,7 @@ namespace MonoGame.Squid
 
         public void StartBatch()
         {
-            _batch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, _sampler, null, _rasterizer); 
+            _batch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, _sampler, null, _rasterizer);
         }
 
         public void EndBatch(bool final)
@@ -193,6 +150,12 @@ namespace MonoGame.Squid
             _batch.End();
         }
 
-        public void Dispose() { }
+        Texture2D GetTexture(string texture)
+        {
+            if (_textures.TryGetValue(texture, out var t))
+                return t;
+            t = _textures[texture] = _contentManager.Load<Texture2D>(Path.ChangeExtension(texture, null));
+            return t;
+        }
     }
 }

@@ -93,12 +93,6 @@ namespace MonoGame.Squid.Controls
         public Alignment TextAlign { get; set; }
 
         /// <summary>
-        /// Gets or sets the text padding.
-        /// </summary>
-        /// <value>The text padding.</value>
-        public Margin TextPadding { get; set; }
-
-        /// <summary>
         /// Get or sets the ellipsis
         /// </summary>
         public bool AutoEllipsis { get; set; }
@@ -193,7 +187,7 @@ namespace MonoGame.Squid.Controls
 
                 foreach (var element in elements)
                 {
-                    var font = Gui.Renderer.GetFont(element.Font);
+                    var font = element.Font;
 
                     if (element.Linebreak)
                     {
@@ -305,8 +299,6 @@ namespace MonoGame.Squid.Controls
                             }
                             else
                             {
-                                #region new
-
                                 if (firstInLine)
                                 {
                                     // the word fits, add to current element
@@ -346,62 +338,6 @@ namespace MonoGame.Squid.Controls
                                     lineHeight = Math.Max(lineHeight, e.Size.Y);
                                     firstInLine = false;
                                 }
-
-                                #endregion
-
-                                #region old
-
-                                //if (c > 0)
-                                //{
-                                //    isBreak = true;
-
-                                //    // the word does not fit
-                                //    pos.x = 0;
-                                //    pos.y += lineHeight + Leading;
-                                //}
-
-                                //// is more than one word in this line exceeding the break limit?
-                                //if (c > 0)
-                                //{
-                                //    // if so, we need to first add the current element,
-                                //    thisLine.Add(e);
-                                //    sub.Add(e);
-
-                                //    foreach (TextElement el in thisLine)
-                                //    {
-                                //        el.Position.y += lineHeight - el.Size.y;
-                                //        // el.Size.y += lineHeight - el.Size.y;
-                                //    }
-
-                                //    thisLine.Clear();
-                                //    lineHeight = 0;
-
-                                //    TextElement linebreak = new TextElement(e);
-                                //    linebreak.Linebreak = true;
-                                //    sub.Add(linebreak);
-
-                                //    e = new TextElement(element);
-                                //    e.Text = temp.TrimStart();
-                                //    e.Position = pos;
-                                //    e.Size = Gui.Renderer.GetTextSize(e.Text, font);
-
-                                //    lineHeight = Math.Max(lineHeight, e.Size.y);
-
-                                //    if (c <= words.Length)
-                                //        isBreak = false;
-                                //}
-                                //else
-                                //{
-                                //    // if not, we just add the current word
-                                //    e.Position = pos;
-                                //    e.Text = temp;
-                                //    e.Size = Gui.Renderer.GetTextSize(e.Text, font);
-                                //    //sub.Add(e);
-                                //}
-
-                                #endregion
-
-                                //pos.x += tsize.x;
                             }
 
                             c++;
@@ -436,7 +372,7 @@ namespace MonoGame.Squid.Controls
 
                 foreach (var element in elements)
                 {
-                    var font = Gui.Renderer.GetFont(element.Font);
+                    var font = element.Font;
 
                     if (element.Linebreak)
                     {
@@ -535,7 +471,7 @@ namespace MonoGame.Squid.Controls
                     {
                         for (var i = 0; i < textElements.Count; i++)
                         {
-                            var font = Gui.Renderer.GetFont(textElements[i].Font);
+                            var font = textElements[i].Font;
                             var ellipsis = Gui.Renderer.GetTextSize("...", font).X;
 
                             if (width + textElements[i].Size.X + ellipsis <= limit)
@@ -578,7 +514,7 @@ namespace MonoGame.Squid.Controls
                     {
                         for (var i = textElements.Count - 1; i >= 0; i--)
                         {
-                            var font = Gui.Renderer.GetFont(textElements[i].Font);
+                            var font = textElements[i].Font;
                             var ellipsis = Gui.Renderer.GetTextSize("...", font).X;
                             var fullsize = textElements[i].Size.X;
                             var oldpos = textElements[i].Position;
@@ -739,7 +675,7 @@ namespace MonoGame.Squid.Controls
         {
             if (_lines.Count == 0) return;
 
-            int font;
+            string font;
             Point p1, p2, size;
 
             var align = TextAlign != Alignment.Inherit ? TextAlign : style.TextAlign;
@@ -750,7 +686,7 @@ namespace MonoGame.Squid.Controls
                 {
                     if (element.Linebreak) continue;
 
-                    font = Gui.Renderer.GetFont(element.Font);
+                    font = element.Font;
 
                     size = element.Size;
                     p1 = Point.Zero;
@@ -800,7 +736,7 @@ namespace MonoGame.Squid.Controls
             if (_lines.Count == 0)
                 return;
 
-            int font;
+            string font;
             Point p2, size;
 
             foreach (var line in _lines)
@@ -809,7 +745,7 @@ namespace MonoGame.Squid.Controls
                 {
                     if (element.Linebreak) continue;
 
-                    font = Gui.Renderer.GetFont(element.Font);
+                    font = element.Font;
                     size = element.Size;
                     p2 = element.Position + Location;
 

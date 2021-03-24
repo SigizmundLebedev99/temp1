@@ -10,16 +10,9 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:..\..\..\..\.nuget\packages\monogame.extended.content.pipeline\3.8.0\tools\MonoGame.Extended.Content.Pipeline.dll
+/reference:..\..\..\..\..\.nuget\packages\monogame.extended.content.pipeline\3.8.0\tools\MonoGame.Extended.Content.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
-
-#begin Arial10.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Arial10.spritefont
 
 #begin border.dds
 /importer:TextureImporter
@@ -200,6 +193,52 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:combo_hot.dds
+
+#begin fonts/commodore64.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:fonts/commodore64.fnt
+
+#begin fonts/commodore64_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:fonts/commodore64_0.png
+
+#begin fonts/sativa.fnt
+/importer:BitmapFontImporter
+/processor:BitmapFontProcessor
+/build:fonts/sativa.fnt
+
+#begin fonts/sativa_0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:fonts/sativa_0.png
+
+#begin fonts/sativa_1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:fonts/sativa_1.png
 
 #begin frame.dds
 /importer:TextureImporter
