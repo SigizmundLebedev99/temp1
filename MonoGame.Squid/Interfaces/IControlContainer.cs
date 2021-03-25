@@ -11,7 +11,6 @@ namespace MonoGame.Squid.Interfaces
         /// Gets or sets the controls.
         /// </summary>
         /// <value>The controls.</value>
-        [Hidden]
         ControlCollection Controls { get; set; }
     }
 }

@@ -38,7 +38,7 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets a value indicating whether [show always].
         /// </summary>
         /// <value><c>true</c> if [show always]; otherwise, <c>false</c>.</value>
-        public bool ShowAlways { get; set; }
+        public bool ShowAlways ;
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="ScrollBar"/> is ease.

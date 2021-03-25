@@ -61,31 +61,31 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets the items.
         /// </summary>
         /// <value>The items.</value>
-        public ListBoxItemCollection Items { get; set; }
+        public ListBoxItemCollection Items ;
 
         /// <summary>
         /// Gets or sets the scroll.
         /// </summary>
         /// <value>The scroll.</value>
         [Hidden]
-        public float Scroll { get; set; }
+        public float Scroll ;
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="ListBox"/> is multiselect.
         /// </summary>
         /// <value><c>true</c> if multiselect; otherwise, <c>false</c>.</value>
-        public bool Multiselect { get; set; }
+        public bool Multiselect ;
 
         /// <summary>
         /// Gets or sets the max selected.
         /// </summary>
         /// <value>The max selected.</value>
-        public int MaxSelected { get; set; }
+        public int MaxSelected ;
 
         /// <summary>
         /// Gets or sets wether to scroll with the mouse wheel
         /// </summary>
-        public bool MouseScroll { get; set; }
+        public bool MouseScroll ;
 
         /// <summary>
         /// Gets or sets the selected item.
@@ -375,7 +375,7 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets the value.
         /// </summary>
         /// <value>The value.</value>
-        public object Value { get; set; }
+        public object Value ;
 
         /// <summary>
         /// Raised when [selected changed].

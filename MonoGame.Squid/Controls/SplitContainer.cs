@@ -37,13 +37,13 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets a value indicating whether [retain aspect].
         /// </summary>
         /// <value><c>true</c> if [retain aspect]; otherwise, <c>false</c>.</value>
-        public bool RetainAspect { get; set; }
+        public bool RetainAspect ;
 
         /// <summary>
         /// Gets or sets the aspect ratio.
         /// </summary>
         /// <value>The aspect ratio.</value>
-        public float AspectRatio { get; set; }
+        public float AspectRatio ;
 
          /// <summary>
         /// Gets or sets the orientation.

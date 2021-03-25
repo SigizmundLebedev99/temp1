@@ -11,7 +11,7 @@ namespace MonoGame.Squid.Structs
         /// Gets or sets a value indicating whether this <see cref="SquidEventArgs"/> is cancel.
         /// </summary>
         /// <value><c>true</c> if cancel; otherwise, <c>false</c>.</value>
-        public bool Cancel { get; set; }
+        public bool Cancel ;
     }
 
     /// <summary>
@@ -23,7 +23,7 @@ namespace MonoGame.Squid.Structs
         /// Gets or sets the button.
         /// </summary>
         /// <value>The button.</value>
-        public int Button { get; set; }
+        public int Button ;
     }
 
     /// <summary>
@@ -51,18 +51,18 @@ namespace MonoGame.Squid.Structs
         /// Gets or sets the key.
         /// </summary>
         /// <value>The key.</value>
-        public Keys Key { get; set; }
+        public Keys Key ;
 
         /// <summary>
         /// Gets or sets the scancode.
         /// </summary>
         /// <value>The scancode.</value>
-        //public int Scancode { get; set; }
+        //public int Scancode ;
 
         /// <summary>
         /// Gets or sets the char.
         /// </summary>
-        public char? Char { get; set; }
+        public char? Char ;
 
     }
 

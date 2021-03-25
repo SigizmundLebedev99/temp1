@@ -51,60 +51,60 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets a value indicating whether [read only].
         /// </summary>
         /// <value><c>true</c> if [read only]; otherwise, <c>false</c>.</value>
-        public bool ReadOnly { get; set; }
+        public bool ReadOnly ;
 
         /// <summary>
         /// Gets or sets a value indicating whether [text wrap].
         /// </summary>
-        public bool TextWrap { get; set; }
+        public bool TextWrap ;
 
         /// <summary>
         /// Gets or sets the leading.
         /// </summary>
         /// <value>The leading.</value>
         [DefaultValue(0)]
-        public int Leading { get; set; }
+        public int Leading ;
 
         /// <summary>
         /// Gets or sets the color of the link.
         /// </summary>
         /// <value>The color of the link.</value>
         [IntColor, DefaultValue(-1)]
-        public int LinkColor { get; set; }
+        public int LinkColor ;
 
         /// <summary>
         /// Gets or sets the color of the text.
         /// </summary>
         /// <value>The color of the text.</value>
         [IntColor, DefaultValue(-1)]
-        public int TextColor { get; set; }
+        public int TextColor ;
 
         /// <summary>
         /// Gets or sets the color of the blink.
         /// </summary>
         /// <value>The color of the blink.</value>
         [IntColor, DefaultValue(-1)]
-        public int BlinkColor { get; set; }
+        public int BlinkColor ;
 
         /// <summary>
         /// Gets or sets a value indicating whether [use text color].
         /// </summary>
         /// <value><c>true</c> if [use text color]; otherwise, <c>false</c>.</value>
         [Category("Skin"), DefaultValue(false)]
-        public bool UseTextColor { get; set; }
+        public bool UseTextColor ;
 
         /// <summary>
         /// Gets or sets the text align.
         /// </summary>
         /// <value>The text align.</value>
-        public Alignment TextAlign { get; set; }
+        public Alignment TextAlign ;
 
         /// <summary>
         /// Gets or sets the blink interval.
         /// </summary>
         /// <value>The blink interval.</value>
         [DefaultValue(500f)]
-        public float BlinkInterval { get; set; }
+        public float BlinkInterval ;
 
         /// <summary>
         /// Gets or sets the text.
@@ -221,7 +221,7 @@ namespace MonoGame.Squid.Controls
         /// </summary>
         /// <value>The color of the selection.</value>
         [IntColor, DefaultValue(-1)]
-        public int SelectionColor { get; set; }
+        public int SelectionColor ;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TextArea"/> class.

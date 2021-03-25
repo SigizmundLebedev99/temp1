@@ -1,6 +1,8 @@
+using Microsoft.Xna.Framework;
 using MonoGame.Squid.Skinning;
 using MonoGame.Squid.Structs;
 using MonoGame.Squid.Util;
+using s = MonoGame.Squid.Structs;
 
 namespace temp1.UI
 {
@@ -35,12 +37,21 @@ namespace temp1.UI
             buttonStyle.TextPadding = new Margin(10);
             buttonStyle.TextAlign = Alignment.MiddleCenter;
 
+            var labelStyle = new ControlStyle();
+            labelStyle.TextPadding = new Margin(8, 0, 8, 0);
+            labelStyle.TextAlign = Alignment.MiddleLeft;
+            labelStyle.BackColor = ColorInt.FromColor(Color.Gray);
+            labelStyle.Default.BackColor = 0;
+
+            var mainButtonStyle = new ControlStyle(buttonStyle);
+            mainButtonStyle.Font = Font.Subtitle;
+
             var tooltipStyle = new ControlStyle(buttonStyle);
             tooltipStyle.TextPadding = new Margin(8);
             tooltipStyle.TextAlign = Alignment.TopLeft;
             tooltipStyle.Texture = "border.dds";
             tooltipStyle.Tiling = TextureMode.Grid;
-            tooltipStyle.Grid = new Margin(2);
+            tooltipStyle.Grid = new Margin(3);
             tooltipStyle.BackColor = ColorInt.Argb(0, 0, 0, .9f);
 
             var inputStyle = new ControlStyle();
@@ -127,16 +138,17 @@ namespace temp1.UI
             var borderStyle = new ControlStyle();
             borderStyle.Texture = "border.dds";
             borderStyle.Tiling = TextureMode.Grid;
-            borderStyle.Grid = new Margin(4);
+            borderStyle.Grid = new Margin(3);
 
-            var labelStyle = new ControlStyle();
-            labelStyle.TextAlign = Alignment.TopLeft;
-            labelStyle.TextPadding = new Margin(8);
-            
             var titleStyle = new ControlStyle();
             titleStyle.TextAlign = Alignment.TopCenter;
             titleStyle.TextPadding = new Margin(8);
-            titleStyle.Font = "sativa";
+            titleStyle.Font = Font.Title;
+
+            var subtitleStyle = new ControlStyle();
+            subtitleStyle.TextAlign = Alignment.TopCenter;
+            subtitleStyle.TextPadding = new Margin(8);
+            subtitleStyle.Font = Font.Subtitle;
 
             var handleNw = new ControlStyle();
             handleNw.Texture = "handleNW.dds";
@@ -144,13 +156,12 @@ namespace temp1.UI
             var handleNe = new ControlStyle();
             handleNe.Texture = "handleNE.dds";
 
-            labelStyle.TextPadding = new Margin(8);
-
             var skin = new Skin();
 
             skin.Add("item", itemStyle);
             skin.Add("textbox", inputStyle);
             skin.Add("button", buttonStyle);
+            skin.Add("mainButton", mainButtonStyle);
             skin.Add("window", windowStyle);
             skin.Add("frame", frameStyle);
             skin.Add("checkBox", checkButtonStyle);
@@ -162,16 +173,18 @@ namespace temp1.UI
             skin.Add("hscrollTrack", hscrollTrackStyle);
             skin.Add("hscrollButton", hscrollButtonStyle);
             skin.Add("hscrollUp", hscrollUp);
-            skin.Add("multiline", labelStyle);
+            skin.Add("label", labelStyle);
             skin.Add("title", titleStyle);
             skin.Add("tooltip", tooltipStyle);
             skin.Add("border", borderStyle);
             skin.Add("handleNE", handleNe);
             skin.Add("handleNW", handleNw);
             Skin = skin;
+
             var collection = new CursorCollection();
-            collection.Add(CursorNames.Default, new Cursor { Texture = "cursors\\Arrow.png", Size = new Point(25, 25), HotSpot = Point.Zero });
-            collection.Add(CursorNames.Link, new Cursor { Texture = "cursors\\Link.png", Size = new Point(25, 25), HotSpot = Point.Zero });
+            collection.Add(CursorNames.Default, new Cursor { Texture = "cursors/cursor_default.png", HotSpot = s.Point.Zero });
+            collection.Add(CursorNames.Link, new Cursor { Texture = "cursors/cursor_pointer.png", HotSpot = s.Point.Zero });
+            Cursors = collection;
         }
     }
 }

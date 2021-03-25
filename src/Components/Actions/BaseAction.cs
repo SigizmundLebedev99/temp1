@@ -11,7 +11,7 @@ namespace temp1.Components
 
     abstract class BaseAction
     {
-        public bool IsChecked { get; set; }
+        public bool IsChecked ;
 
         public abstract int PointsTaken { get; }
 

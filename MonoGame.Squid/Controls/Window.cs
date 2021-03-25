@@ -24,21 +24,21 @@ namespace MonoGame.Squid.Controls
         /// </summary>
         /// <value><c>true</c> if modal; otherwise, <c>false</c>.</value>
         [Hidden]
-        public bool Modal { get; set; }
+        public bool Modal ;
 
         /// <summary>
         /// Gets or sets the snap distance.
         /// </summary>
         /// <value>The snap distance.</value>
         [Category("Behavior")]
-        public int SnapDistance { get; set; }
+        public int SnapDistance ;
 
         /// <summary>
         /// Gets or sets a value indicating whether [allow drag out].
         /// </summary>
         /// <value><c>true</c> if [allow drag out]; otherwise, <c>false</c>.</value>
         [Category("Behavior")]
-        public bool AllowDragOut { get; set; }
+        public bool AllowDragOut ;
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Window"/> is resizable.

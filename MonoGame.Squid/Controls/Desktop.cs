@@ -93,20 +93,20 @@ namespace MonoGame.Squid.Controls
         }
 
         [Xml.XmlIgnore]
-        public CursorCollection CursorSet { get; set; }
+        public CursorCollection CursorSet;
 
         /// <summary>
         /// Gets or sets a value indicating whether [design mode].
         /// </summary>
         /// <value><c>true</c> if [design mode]; otherwise, <c>false</c>.</value>
         [Xml.XmlIgnore]
-        public bool DesignMode { get; set; }
+        public bool DesignMode;
 
         /// <summary>
         /// Gets or sets the drag drop snap.
         /// </summary>
         /// <value>The drag drop snap.</value>
-        public int DragDropSnap { get; set; }
+        public int DragDropSnap;
 
         /// <summary>
         /// Gets the drop target control.
@@ -141,7 +141,7 @@ namespace MonoGame.Squid.Controls
         public Control HotControl { get; internal set; }
 
         [IntColor]
-        public int ModalColor { get; set; }
+        public int ModalColor;
 
         /// <summary>
         /// Gets the pressed control.
@@ -153,17 +153,17 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets a value indicating whether [show cursor].
         /// </summary>
         /// <value><c>true</c> if [show cursor]; otherwise, <c>false</c>.</value>
-        public bool ShowCursor { get; set; }
+        public bool ShowCursor;
 
         [Xml.XmlIgnore]
-        public Skin Skin { get; set; }
+        public Skin Skin;
 
         /// <summary>
         /// Gets or sets the tooltip control.
         /// </summary>
         /// <value>The tooltip control.</value>
         [Xml.XmlIgnore]
-        public Tooltip TooltipControl { get; set; }
+        public Tooltip TooltipControl;
 
         /// <summary>
         /// Closes the dropdowns.

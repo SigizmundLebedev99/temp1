@@ -24,33 +24,33 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets the steps.
         /// </summary>
         /// <value>The steps.</value>
-        public float Steps { get; set; }
+        public float Steps ;
 
         /// <summary>
         /// Gets or sets the scale.
         /// </summary>
         /// <value>The scale.</value>
-        public float Scale { get; set; }
+        public float Scale ;
 
         /// <summary>
         /// Gets or sets a value indicating whether [auto scale].
         /// </summary>
         /// <value><c>true</c> if [auto scale]; otherwise, <c>false</c>.</value>
-        public bool AutoScale { get; set; }
+        public bool AutoScale ;
 
-        public int MinHandleSize { get; set; }
+        public int MinHandleSize ;
 
         /// <summary>
         /// Gets or sets the minimum.
         /// </summary>
         /// <value>The minimum.</value>
-        public float Minimum { get; set; }
+        public float Minimum ;
 
         /// <summary>
         /// Gets or sets the maximum.
         /// </summary>
         /// <value>The maximum.</value>
-        public float Maximum { get; set; }
+        public float Maximum ;
 
         /// <summary>
         /// Gets the button.
@@ -61,14 +61,14 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets the orientation.
         /// </summary>
         /// <value>The orientation.</value>
-        public Orientation Orientation { get; set; }
+        public Orientation Orientation ;
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="Slider"/> is ease.
         /// </summary>
         /// <value><c>true</c> if ease; otherwise, <c>false</c>.</value>
         [DefaultValue(true)]
-        public bool Ease { get; set; }
+        public bool Ease ;
 
         /// <summary>
         /// Gets the eased value.

@@ -18,29 +18,35 @@ namespace MonoGame.Squid.Util
         /// </summary>
         /// <value>The color.</value>
         [IntColor]
-        public int Color { get; set; }
+        public int Color ;
 
+        string _texture;
+        
         /// <summary>
         /// Gets or sets the texture.
         /// </summary>
-        /// <value>The texture.</value>
-        [Texture]
-        public string Texture { get; set; }
+        public string Texture
+        {
+            get => _texture; set
+            {
+                _texture = value;
+                Size = Gui.Renderer.GetTextureSize(value);
+            }
+        }
         /// <summary>
         /// Gets or sets the hot spot.
         /// </summary>
-        /// <value>The hot spot.</value>
-        public Point HotSpot { get; set; }
+        public Point HotSpot ;
+
         /// <summary>
         /// Gets or sets the size.
         /// </summary>
-        /// <value>The size.</value>
-        public Point Size { get; set; }
+        public Point Size ;
+        
         /// <summary>
         /// Gets or sets the texture rect.
         /// </summary>
-        /// <value>The texture rect.</value>
-        public Rectangle TextureRect { get; set; }
+        public Rectangle TextureRect ;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Cursor"/> class.
@@ -57,12 +63,6 @@ namespace MonoGame.Squid.Util
         /// <param name="y">The y.</param>
         public virtual void Draw(int x, int y)
         {
-            if (TextureRect.IsEmpty())
-            {
-                var texsize = Gui.Renderer.GetTextureSize(Texture);
-                TextureRect = new Rectangle(Point.Zero, texsize);
-            }
-
             var p = new Point(x, y) - HotSpot;
             Gui.Renderer.DrawTexture(Texture, p.X, p.Y, Size.X, Size.Y, TextureRect, Color);
         }
@@ -77,17 +77,19 @@ namespace MonoGame.Squid.Util
         /// Gets or sets the rows.
         /// </summary>
         /// <value>The rows.</value>
-        public int Rows { get; set; }
+        public int Rows ;
+        
         /// <summary>
         /// Gets or sets the columns.
         /// </summary>
         /// <value>The columns.</value>
-        public int Columns { get; set; }
+        public int Columns ;
+        
         /// <summary>
         /// Gets or sets the speed.
         /// </summary>
         /// <value>The speed.</value>
-        public float Speed { get; set; }
+        public float Speed ;
 
         /// <summary>
         /// The flip
@@ -117,7 +119,7 @@ namespace MonoGame.Squid.Util
             _flip.Speed = Speed;
             _flip.Rows = Rows;
             _flip.Columns = Columns;
-            _flip.Draw(Texture, p.X, p.Y, Size.X, Size.Y, Color);       
+            _flip.Draw(Texture, p.X, p.Y, Size.X, Size.Y, Color);
         }
     }
 }

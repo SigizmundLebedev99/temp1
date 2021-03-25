@@ -11,19 +11,19 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets the offset.
         /// </summary>
         /// <value>The offset.</value>
-        public Point Offset { get; set; }
+        public Point Offset ;
 
         /// <summary>
         /// Gets or sets the alignment.
         /// </summary>
         /// <value>The alignment.</value>
-        public Alignment Alignment { get; set; }
+        public Alignment Alignment ;
 
         ///// <summary>
         ///// Gets or sets a value indicating whether [auto layout].
         ///// </summary>
         ///// <value><c>true</c> if [auto layout]; otherwise, <c>false</c>.</value>
-        //public bool AutoLayout { get; set; }
+        //public bool AutoLayout ;
 
         public Tooltip()
         {

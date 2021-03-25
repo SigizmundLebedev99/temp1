@@ -75,7 +75,7 @@ namespace MonoGame.Squid.Controls
         /// </summary>
         /// <value>The indent.</value>
         [DefaultValue(0)]
-        public int Indent { get; set; }
+        public int Indent ;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TreeView"/> class.
@@ -315,7 +315,7 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets the value.
         /// </summary>
         /// <value>The value.</value>
-        public object Value { get; set; }
+        public object Value ;
 
         /// <summary>
         /// Gets the node depth.
@@ -327,7 +327,7 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets the nodes.
         /// </summary>
         /// <value>The nodes.</value>
-        public TreeNodeCollection Nodes { get; set; }
+        public TreeNodeCollection Nodes ;
 
         /// <summary>
         /// Gets the parent.

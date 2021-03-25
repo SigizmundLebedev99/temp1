@@ -34,7 +34,7 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets the group.
         /// </summary>
         /// <value>The group.</value>
-        public int Group { get; set; }
+        public int Group ;
 
         /// <summary>
         /// Gets or sets the text.

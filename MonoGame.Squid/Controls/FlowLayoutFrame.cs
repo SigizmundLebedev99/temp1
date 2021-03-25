@@ -17,19 +17,19 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets the flow direction.
         /// </summary>
         /// <value>The flow direction.</value>
-        public FlowDirection FlowDirection { get; set; }
+        public FlowDirection FlowDirection ;
 
         /// <summary>
         /// Gets or sets the H spacing.
         /// </summary>
         /// <value>The H spacing.</value>
-        public int HSpacing { get; set; }
+        public int HSpacing ;
 
         /// <summary>
         /// Gets or sets the V spacing.
         /// </summary>
         /// <value>The V spacing.</value>
-        public int VSpacing { get; set; }
+        public int VSpacing ;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FlowLayoutFrame"/> class.

@@ -11,7 +11,6 @@ namespace MonoGame.Squid.Interfaces
         /// Gets or sets a value indicating whether this <see cref="ICheckable"/> is checked.
         /// </summary>
         /// <value><c>true</c> if checked; otherwise, <c>false</c>.</value>
-        [DefaultValue(false)]
         bool Checked { get; set; }
     }
 }

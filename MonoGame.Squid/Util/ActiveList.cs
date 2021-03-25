@@ -358,7 +358,7 @@ namespace MonoGame.Squid.Util
         /// Gets or sets a value indicating whether this <see cref="ListEventArgs{T}"/> is cancel.
         /// </summary>
         /// <value><c>true</c> if cancel; otherwise, <c>false</c>.</value>
-        public bool Cancel { get; set; }
+        public bool Cancel ;
 
         /// <summary>
         /// Default constructor

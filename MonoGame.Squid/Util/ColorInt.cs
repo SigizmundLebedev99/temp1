@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 
 namespace MonoGame.Squid.Util
 {
@@ -155,6 +156,11 @@ namespace MonoGame.Squid.Util
         {
             return ((a & 0xff) << 24) | ((r & 0xff) << 16) | ((g & 0xff) << 8) | b;
         }
+
+        public static int FromColor(Color color){
+            color.Deconstruct(out byte r, out var g, out var b, out var a);
+            return Argb(a,r,g,b);
+        } 
 
         /// <summary>
         /// Returns the color expressed as integer

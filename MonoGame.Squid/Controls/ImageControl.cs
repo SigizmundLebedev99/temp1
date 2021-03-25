@@ -33,33 +33,33 @@ namespace MonoGame.Squid.Controls
         /// </summary>
         /// <value>The color.</value>
         
-        public int Color { get; set; }
+        public int Color ;
 
         /// <summary>
         /// Gets or sets the texture rect.
         /// </summary>
         /// <value>The texture rect.</value>
         
-        public Rectangle TextureRect { get; set; }
+        public Rectangle TextureRect ;
 
         /// <summary>
         /// Gets or sets the texture tiling
         /// </summary>
         
-        public TextureMode Tiling { get; set; }
+        public TextureMode Tiling ;
 
         /// <summary>
         /// Gets or sets the slice9 grid
         /// </summary>
         
-        public Margin Grid { get; set; }
+        public Margin Grid ;
 
         public bool ExcludeFromAtlas = false;
 
         
-        public Margin Inset { get; set; }
+        public Margin Inset ;
 
-        public bool ColorByTint { get; set; }
+        public bool ColorByTint ;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageControl"/> class.
@@ -92,12 +92,6 @@ namespace MonoGame.Squid.Controls
                 color = ColorInt.Blend(Tint, color);
 
             color = ColorInt.FromArgb(opacity, color);
-
-            if (TextureRect.IsEmpty())
-            {
-                var texsize = Gui.Renderer.GetTextureSize(Texture);
-                TextureRect = new Rectangle(Point.Zero, texsize);
-            }
 
             if (Tiling == TextureMode.Grid || Tiling == TextureMode.GridRepeat)
             {

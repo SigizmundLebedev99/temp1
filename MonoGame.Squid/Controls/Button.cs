@@ -18,7 +18,7 @@ namespace MonoGame.Squid.Controls
         /// </summary>
         /// <value><c>true</c> if [check on click]; otherwise, <c>false</c>.</value>
         [DefaultValue(false)]
-        public bool CheckOnClick { get; set; }
+        public bool CheckOnClick ;
 
         /// <summary>
         /// Raised when Checked changed].

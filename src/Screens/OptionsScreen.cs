@@ -4,16 +4,16 @@ using MonoGame.Squid.Controls;
 using MonoGame.Squid.Structs;
 using MonoGame.Squid.Util;
 using temp1.UI;
-using temp1.UI.Controls;
+using s = MonoGame.Squid.Structs;
 
 namespace temp1.Screens
 {
-    class MenuScreen : GameScreen
+    class OptionsScreen : GameScreen
     {
         Desktop _desktop;
-        public MenuScreen(ScreenManager manager,Game game) : base(game)
+        public OptionsScreen(ScreenManager manager,Game game) : base(game)
         {
-            CreateMenu(manager, game);
+            CreateOptions(manager, game);
         }
 
         public override void Draw(GameTime gameTime)
@@ -27,7 +27,7 @@ namespace temp1.Screens
             _desktop.Update();
         }
 
-        public void CreateMenu(ScreenManager sm, Game game)
+        public void CreateOptions(ScreenManager sm, Game game)
         {
             _desktop = new Desktop();
             _desktop.Skin = Styling.Skin;
@@ -35,8 +35,9 @@ namespace temp1.Screens
             _desktop.CursorSet = Styling.Cursors;
 
             var label = new Label();
-            label.Text = "My awesome game";
+            label.Text = "Options";
             label.Style = "title";
+            label.AutoSize = AutoSize.HorizontalVertical;
             label.Dock = DockStyle.CenterX;
 
             var outer = new Frame
@@ -47,32 +48,27 @@ namespace temp1.Screens
             };
             var frame = new FlowLayoutFrame
             {
-                Dock = DockStyle.Center,
+                Dock = DockStyle.CenterX,
                 FlowDirection = FlowDirection.TopToBottom,
                 AutoSize = AutoSize.HorizontalVertical
             };
-            var ng = Create("New game");
-            ng.MouseClick += (s, e) =>
-            {
-                sm.LoadScreen(new PlayScreen(game));
-            };
 
-            var st = Create("Settings");
-            st.MouseClick += (s,e) => {
-                sm.LoadScreen(new OptionsScreen(sm, game));
-            };
-
-            var qt = Create("Quit");
-            qt.MouseClick += (s, e) =>
-            {
-                game.Exit();
-            };
-
-
-            frame.Controls.Add(ng);
-            frame.Controls.Add(st);
-            frame.Controls.Add(qt);
-            outer.Controls.Add(label);
+            var list = new ListBox();
+            list.Size = new s.Point(200,200);
+            
+            foreach(var (w,h) in Resolutions()){
+                var item = new ListBoxItem();
+                item.Margin = new Margin(5);
+                item.Padding = new Margin(3);
+                item.TextAlign = Alignment.MiddleCenter;
+                item.Text = $"{w} x {h}";
+                item.Style = "label";
+                list.Items.Add(item);
+            }
+            
+            frame.Controls.Add(label);
+            frame.Controls.Add(list);
+            
             outer.Controls.Add(frame);
 
             _desktop.Controls.Add(outer);
@@ -82,10 +78,17 @@ namespace temp1.Screens
         {
             return new Button
             {
-                Style = "mainButton",
                 Text = text,
                 AutoSize = AutoSize.Horizontal,
                 Cursor = CursorNames.Link
+            };
+        }
+
+        private (int, int)[] Resolutions(){
+            return new (int, int)[]{
+                (800,600),
+                (1024,768),
+                (1280, 768)
             };
         }
     }

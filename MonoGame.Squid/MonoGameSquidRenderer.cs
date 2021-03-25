@@ -28,7 +28,10 @@ namespace MonoGame.Squid
 
         private static int _keyboardLayout;
         private readonly byte[] _keyStates;
+
         private readonly Dictionary<string, BitmapFont> _fonts = new Dictionary<string, BitmapFont>();
+
+        public Dictionary<string, BitmapFont> Fonts => _fonts;
 
         private readonly Dictionary<string, Texture2D> _textures = new Dictionary<string, Texture2D>();
 
@@ -49,8 +52,10 @@ namespace MonoGame.Squid
             _blankTexture = new Texture2D(graphicsDevice, 1, 1);
             _blankTexture.SetData(new[] { new Color(255, 255, 255, 255) });
 
-            _fonts.Add(Font.Default, _contentManager.Load<BitmapFont>("fonts/commodore64"));
-            _fonts.Add("sativa", _contentManager.Load<BitmapFont>("fonts/sativa"));
+            _fonts.Add(Font.Default, _contentManager.Load<BitmapFont>("fonts/regular"));
+            _fonts.Add(Font.Title, _contentManager.Load<BitmapFont>("fonts/sativa"));
+            _fonts.Add(Font.Subtitle, _contentManager.Load<BitmapFont>("fonts/commodore64"));
+
             _keyboardLayout = GetKeyboardLayout(0);
             _keyStates = new byte[0x100];
 
@@ -87,19 +92,21 @@ namespace MonoGame.Squid
             return new Color(bytes[2], bytes[1], bytes[0], bytes[3]);
         }
 
-        public global::MonoGame.Squid.Structs.Point GetTextSize(string text, string font)
+        public MonoGame.Squid.Structs.Point GetTextSize(string text, string font)
         {
             if (string.IsNullOrEmpty(text))
-                return new global::MonoGame.Squid.Structs.Point();
+                return new MonoGame.Squid.Structs.Point();
             var f = _fonts[font];
             var size = f.MeasureString(text);
-            return new global::MonoGame.Squid.Structs.Point((int)size.Width, (int)size.Height);
+            return new MonoGame.Squid.Structs.Point((int)size.Width, (int)size.Height);
         }
 
-        public global::MonoGame.Squid.Structs.Point GetTextureSize(string texture)
+        public MonoGame.Squid.Structs.Point GetTextureSize(string texture)
         {
+            if (string.IsNullOrEmpty(texture))
+                return MonoGame.Squid.Structs.Point.Zero;
             var tex = GetTexture(texture);
-            return new global::MonoGame.Squid.Structs.Point(tex.Width, tex.Height);
+            return new MonoGame.Squid.Structs.Point(tex.Width, tex.Height);
         }
 
         public void DrawBox(int x, int y, int w, int h, int color)
@@ -119,18 +126,16 @@ namespace MonoGame.Squid
 
         public void DrawTexture(string texture, int x, int y, int w, int h, global::MonoGame.Squid.Structs.Rectangle rect, int color)
         {
-            if (!_textures.TryGetValue(texture, out var t))
-                return;
-
+            var t = GetTexture(texture);
             var destination = new Rectangle(x, y, w, h);
-            var source = new Rectangle();
-
-            source.X = rect.Left;
-            source.Y = rect.Top;
-            source.Width = rect.Width;
-            source.Height = rect.Height;
-
-            _batch.Draw(t, destination, source, ColorFromtInt32(color));
+            if (rect.IsEmpty())
+            {
+                _batch.Draw(t, destination, ColorFromtInt32(color));
+            }
+            else
+            {
+                _batch.Draw(t, destination, rect, ColorFromtInt32(color));
+            }
         }
 
         public void Scissor(int x, int y, int w, int h)

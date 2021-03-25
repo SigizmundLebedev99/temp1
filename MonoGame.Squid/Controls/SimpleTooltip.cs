@@ -23,13 +23,13 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets the duration of the fade.
         /// </summary>
         /// <value>The duration of the fade.</value>
-        public float FadeDuration { get; set; }
+        public float FadeDuration ;
 
         /// <summary>
         /// Gets or sets the delay.
         /// </summary>
         /// <value>The delay.</value>
-        public float Delay { get; set; }
+        public float Delay ;
 
         protected Control Context { get { return _context; } }
         /// <summary>

@@ -19,13 +19,17 @@ namespace temp1
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = false;
             _screenManager = new ScreenManager();
             Components.Add(_screenManager);
         }
 
         protected override void Initialize()
         {
+            _graphics.PreferredBackBufferWidth = 1500;
+            _graphics.PreferredBackBufferHeight = 500;
+            _graphics.ApplyChanges();
+
             Gui.Renderer = new MonoGameSquidRenderer(GraphicsDevice, new ContentManager(Services, "ui"));
             Components.Add(new MonoGameSquidInputManager(this));
             _screenManager.LoadScreen(new MenuScreen(_screenManager, this), new FadeTransition(this.GraphicsDevice, Color.White, 0.5f));
@@ -39,7 +43,7 @@ namespace temp1
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             base.Update(gameTime);
         }

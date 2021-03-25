@@ -77,12 +77,12 @@ namespace MonoGame.Squid.Controls
             /// Gets or sets the text.
             /// </summary>
             /// <value>The text.</value>
-            public string Text { get; set; }
+            public string Text ;
             /// <summary>
             /// Gets or sets the aspect.
             /// </summary>
             /// <value>The aspect.</value>
-            public string Aspect { get; set; }
+            public string Aspect ;
 
             /// <summary>
             /// Gets the frame.
@@ -273,13 +273,13 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets a value indicating whether [stretch last column].
         /// </summary>
         /// <value><c>true</c> if [stretch last column]; otherwise, <c>false</c>.</value>
-        public bool StretchLastColumn { get; set; }
+        public bool StretchLastColumn ;
 
         /// <summary>
         /// Gets or sets a value indicating whether [full row select].
         /// </summary>
         /// <value><c>true</c> if [full row select]; otherwise, <c>false</c>.</value>
-        public bool FullRowSelect { get; set; }
+        public bool FullRowSelect ;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ListView"/> class.

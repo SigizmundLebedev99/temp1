@@ -1363,12 +1363,6 @@ namespace MonoGame.Squid.Controls
                     blend = ColorInt.Blend(Tint, style.Tint);
                 }
 
-                if (style.TextureRect.IsEmpty())
-                {
-                    var texsize = Gui.Renderer.GetTextureSize(style.Texture);
-                    style.TextureRect = new Rectangle(Point.Zero, texsize);
-                }
-
                 var color = ColorInt.FromArgb(opacity, blend);
 
                 if (style.Tiling == TextureMode.Grid || style.Tiling == TextureMode.GridRepeat)

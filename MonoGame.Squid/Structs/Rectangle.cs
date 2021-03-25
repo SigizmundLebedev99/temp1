@@ -143,6 +143,10 @@ namespace MonoGame.Squid.Structs
         {
             return Left == Right && Top == Bottom;
         }
+
+        public static implicit operator Microsoft.Xna.Framework.Rectangle(Rectangle rect){
+            return new Microsoft.Xna.Framework.Rectangle(rect.Left, rect.Top, rect.Width, rect.Height);
+        }
     }
 
     /// <summary>

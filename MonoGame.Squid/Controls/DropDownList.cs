@@ -64,12 +64,12 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets the size of the dropdown.
         /// </summary>
         /// <value>The size of the dropdown.</value>
-        public Point DropdownSize { get; set; }
+        public Point DropdownSize ;
         /// <summary>
         /// Gets or sets a value indicating whether [dropdown auto size].
         /// </summary>
         /// <value><c>true</c> if [dropdown auto size]; otherwise, <c>false</c>.</value>
-        public bool DropdownAutoSize { get; set; }
+        public bool DropdownAutoSize ;
 
         /// <summary>
         /// Gets the items.

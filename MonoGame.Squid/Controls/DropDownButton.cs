@@ -16,12 +16,12 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets the align.
         /// </summary>
         /// <value>The align.</value>
-        public Alignment Align { get; set; }
+        public Alignment Align ;
         /// <summary>
         /// Gets or sets a value indicating whether [hot drop].
         /// </summary>
         /// <value><c>true</c> if [hot drop]; otherwise, <c>false</c>.</value>
-        public bool HotDrop { get; set; }
+        public bool HotDrop ;
 
         /// <summary>
         /// Gets a value indicating whether this instance is open.

@@ -43,60 +43,60 @@ namespace MonoGame.Squid.Controls
         /// Gets or sets a value indicating whether [read only].
         /// </summary>
         /// <value><c>true</c> if [read only]; otherwise, <c>false</c>.</value>
-        public bool ReadOnly { get; set; }
+        public bool ReadOnly ;
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is password.
         /// </summary>
         /// <value><c>true</c> if this instance is password; otherwise, <c>false</c>.</value>
-        public bool IsPassword { get; set; }
+        public bool IsPassword ;
 
         /// <summary>
         /// Gets or sets the password char.
         /// </summary>
         /// <value>The password char.</value>
-        public char PasswordChar { get; set; }
+        public char PasswordChar ;
 
         /// <summary>
         /// Gets or sets the mode.
         /// </summary>
         /// <value>The mode.</value>
-        public TextBoxMode Mode { get; set; }
+        public TextBoxMode Mode ;
 
         /// <summary>
         /// Gets or sets the blink interval.
         /// </summary>
         /// <value>The blink interval.</value>
         [DefaultValue(500f)]
-        public float BlinkInterval { get; set; }
+        public float BlinkInterval ;
 
         /// <summary>
         /// Gets or sets the color of the selection.
         /// </summary>
         /// <value>The color of the selection.</value>
         [IntColor, DefaultValue(-1)]
-        public int SelectionColor { get; set; }
+        public int SelectionColor ;
 
         /// <summary>
         /// Gets or sets the color of the text.
         /// </summary>
         /// <value>The color of the text.</value>
         [IntColor, DefaultValue(-1)]
-        public int TextColor { get; set; }
+        public int TextColor ;
 
         /// <summary>
         /// Gets or sets the color of the blink.
         /// </summary>
         /// <value>The color of the blink.</value>
         [IntColor, DefaultValue(-1)]
-        public int BlinkColor { get; set; }
+        public int BlinkColor ;
 
         /// <summary>
         /// Gets or sets a value indicating whether [use text color].
         /// </summary>
         /// <value><c>true</c> if [use text color]; otherwise, <c>false</c>.</value>
         [DefaultValue(false)]
-        public bool UseTextColor { get; set; }
+        public bool UseTextColor ;
 
         /// <summary>
         /// Gets or sets the text.

@@ -42,24 +42,24 @@ namespace MonoGame.Squid
         /// This is set to NoRenderer by default.
         /// </summary>
         /// <value>The renderer.</value>
-        public static ISquidRenderer Renderer { get; set; }
+        public static ISquidRenderer Renderer ;
 
         /// <summary>
         /// Elapsed time since last frame in milliseconds
         /// </summary>
-        public static float TimeElapsed { get; set; }
+        public static float TimeElapsed ;
 
         /// <summary>
         /// Gets or sets a value indicating whether [always scissor].
         /// </summary>
         /// <value><c>true</c> if [always scissor]; otherwise, <c>false</c>.</value>
-        public static bool AlwaysScissor { get; set; }
+        public static bool AlwaysScissor ;
 
         /// <summary>
         /// Gets or sets the global fade speed.
         /// </summary>
         /// <value>The global fade speed.</value>
-        public static float GlobalFadeSpeed { get; set; }
+        public static float GlobalFadeSpeed ;
 
         internal static ButtonState[] Buttons;
         internal static KeyData[] KeyBuffer { get; private set; }
@@ -105,7 +105,7 @@ namespace MonoGame.Squid
         /// Gets or sets the double click speed.
         /// </summary>
         /// <value>The double click speed.</value>
-        public static float DoubleClickSpeed { get; set; }
+        public static float DoubleClickSpeed ;
 
         /// <summary>
         /// return the state of the given button index

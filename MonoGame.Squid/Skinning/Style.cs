@@ -39,79 +39,89 @@ namespace MonoGame.Squid.Skinning
         /// user data
         /// </summary>
         [Hidden, XmlIgnore]
-        public object Tag { get; set; }
+        public object Tag ;
 
         /// <summary>
         /// color for any text to be drawn (argb)
         /// </summary>
         [IntColor]
         [Category("Text")]
-        public int TextColor { get; set; }
+        public int TextColor ;
 
         /// <summary>
         /// name of the font to use for text
         /// </summary>
         [Font]
         [Category("Text")]
-        public string Font { get; set; }
+        public string Font ;
 
         /// <summary>
         /// text padding (distance to control borders)
         /// </summary>
         [Category("Text")]
-        public Margin TextPadding { get; set; }
+        public Margin TextPadding ;
 
         /// <summary>
         /// text alignment
         /// </summary>
         [Category("Text")]
-        public Alignment TextAlign { get; set; }
+        public Alignment TextAlign ;
 
         /// <summary>
         /// color to tint the texture (argb)
         /// </summary>
         [IntColor]
         [Category("Graphics")]
-        public int Tint { get; set; }
+        public int Tint ;
 
         /// <summary>
         /// background color (argb)
         /// </summary>
         [IntColor]
         [Category("Graphics")]
-        public int BackColor { get; set; }
+        public int BackColor ;
 
         /// <summary>
         /// opacity (0-1)
         /// </summary>
         [ValueRange(0, 1)]
         [Category("Graphics")]
-        public float Opacity { get; set; }
+        public float Opacity ;
 
+        string _texture;
         /// <summary>
         /// name of the texture to draw
         /// </summary>
         [Texture]
         [Category("Graphics")]
-        public string Texture { get; set; }
+        public string Texture
+        {
+            get => _texture; 
+            set
+            {
+                _texture = value;
+                if(TextureRect.IsEmpty())
+                    TextureRect = new Rectangle(Point.Zero, Gui.Renderer.GetTextureSize(_texture));
+            }
+        }
 
         /// <summary>
         /// source rectangle of the texture expressed in pixels
         /// </summary>
         [Category("Graphics")]
-        public Rectangle TextureRect { get; set; }
+        public Rectangle TextureRect ;
 
         /// <summary>
         /// describes the 9sclice texture regions expressed as margin
         /// </summary>
         [Category("Graphics")]
-        public Margin Grid { get; set; }
+        public Margin Grid ;
 
         /// <summary>
         /// enables/disables the 9sclice grid
         /// </summary>
         [Category("Graphics")]
-        public TextureMode Tiling { get; set; }
+        public TextureMode Tiling ;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Style"/> class.
@@ -180,7 +190,7 @@ namespace MonoGame.Squid.Skinning
             return Texture != other.Texture
                     || !TextureRect.Equals(other.TextureRect)
                     || Tiling != other.Tiling
-                    || Tint != other.Tint 
+                    || Tint != other.Tint
                     || BackColor != other.BackColor;
         }
 

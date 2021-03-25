@@ -16,14 +16,14 @@ namespace MonoGame.Squid.Skinning
         /// </summary>
         /// <value>The styles.</value>
         [Hidden]
-        public StyleCollection Styles { get; set; }
+        public StyleCollection Styles ;
 
         /// <summary>
         /// user data
         /// </summary>
         /// <value>The tag.</value>
         [Hidden, XmlIgnore]
-        public object Tag{ get; set; }
+        public object Tag;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ControlStyle"/> class.

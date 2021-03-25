@@ -49,53 +49,53 @@ namespace MonoGame.Squid.Controls
         /// </summary>
         /// <value>The leading.</value>
         [DefaultValue(0)]
-        public int Leading { get; set; }
+        public int Leading ;
 
         /// <summary>
         /// Gets or sets a value indicating whether [text wrap].
         /// </summary>
         /// <value><c>true</c> if [text wrap]; otherwise, <c>false</c>.</value>
         [DefaultValue(false)]
-        public bool TextWrap { get; set; }
+        public bool TextWrap ;
 
         /// <summary>
         /// Gets or sets a value indicating whether [BB code enabled].
         /// </summary>
         /// <value><c>true</c> if [BB code enabled]; otherwise, <c>false</c>.</value>
         [DefaultValue(true)]
-        public bool BbCodeEnabled { get; set; }
+        public bool BbCodeEnabled ;
 
         /// <summary>
         /// Gets or sets the color of the text.
         /// </summary>
         /// <value>The color of the text.</value>
         [IntColor, DefaultValue(-1)]
-        public int TextColor { get; set; }
+        public int TextColor ;
 
         /// <summary>
         /// Gets or sets the color of the link.
         /// </summary>
         /// <value>The color of the link.</value>
         [IntColor, DefaultValue(-1)]
-        public int LinkColor { get; set; }
+        public int LinkColor ;
 
         /// <summary>
         /// Gets or sets a value indicating whether [use text color].
         /// </summary>
         /// <value><c>true</c> if [use text color]; otherwise, <c>false</c>.</value>
         [DefaultValue(false)]
-        public bool UseTextColor { get; set; }
+        public bool UseTextColor ;
 
         /// <summary>
         /// Gets or sets the text align.
         /// </summary>
         /// <value>The text align.</value>
-        public Alignment TextAlign { get; set; }
+        public Alignment TextAlign ;
 
         /// <summary>
         /// Get or sets the ellipsis
         /// </summary>
-        public bool AutoEllipsis { get; set; }
+        public bool AutoEllipsis ;
 
         /// <summary>
         /// Gets or sets the text.
