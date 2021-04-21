@@ -37,6 +37,7 @@ namespace temp1.Screens
             _context.LoadMap("tiled/map", _world);
             _tiledMapRenderer.LoadMap(_context.Map);
             ConfigureWorld();
+            _context.UI.Default();
         }
 
         private void ConfigureWorld()
@@ -65,13 +66,13 @@ namespace temp1.Screens
                 return;
             _world.Update(gameTime);
             _tiledMapRenderer.Update(gameTime);
+            _context.UI.Update(gameTime);
             if(_context.UIState != UIState.Default)
                 return;
             var state = Mouse.GetState();
             var v = GraphicsDevice.Viewport;
             var map = _context.Map;
-            if (!this.Game.IsActive)
-                return;
+            
             if (state.X <= 0 && camera.Position.X > 0)
                 camera.Move(new Vector2(-5, 0));
             if (state.Y <= 0 && camera.Position.Y > 0)
@@ -90,7 +91,7 @@ namespace temp1.Screens
             _world.Draw(gameTime);
             _sb.End();
 
-            //_context.UI.Draw();
+            _context.UI.Draw(gameTime);
         }
     }
 }

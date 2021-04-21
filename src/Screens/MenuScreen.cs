@@ -1,8 +1,5 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Screens;
-using MonoGame.Squid.Controls;
-using MonoGame.Squid.Structs;
-using MonoGame.Squid.Util;
 using temp1.UI;
 using temp1.UI.Controls;
 
@@ -10,83 +7,64 @@ namespace temp1.Screens
 {
     class MenuScreen : GameScreen
     {
-        Desktop _desktop;
-        public MenuScreen(ScreenManager manager,Game game) : base(game)
+        private Desktop _desktop;
+        private ControlsFactory _factory;
+
+        public MenuScreen(Game game) : base(game)
         {
-            CreateMenu(manager, game);
+            _factory = game.Services.GetService<ControlsFactory>();
+            CreateMenu(game, game.Services.GetService<ScreenManager>());
         }
 
         public override void Draw(GameTime gameTime)
         {
-            _desktop.Draw();
+            _desktop.Draw(gameTime);
         }
 
         public override void Update(GameTime gameTime)
-        { 
-            _desktop.Size = new MonoGame.Squid.Structs.Point(Game.GraphicsDevice.Viewport.Width, Game.GraphicsDevice.Viewport.Height);
-            _desktop.Update();
+        {
+            _desktop.Update(gameTime);
         }
 
-        public void CreateMenu(ScreenManager sm, Game game)
+        public void CreateMenu(Game game, ScreenManager screenManager)
         {
-            _desktop = new Desktop();
-            _desktop.Skin = Styling.Skin;
-            _desktop.ShowCursor = true;
-            _desktop.CursorSet = Styling.Cursors;
+            _desktop = new Desktop(game.GraphicsDevice);
 
-            var label = new Label();
-            label.Text = "My awesome game";
-            label.Style = "title";
-            label.Dock = DockStyle.CenterX;
+            var root = new ContentControll();
+            root.Size = _desktop.Size;
+            
+            var label = _factory.CreateLabel(1);
+            label.OffsetFrom = Anchors.TopCenter;
+            label.Offset = new Vector2(0, 20);
+            label.Text = "My cool game";
+            root.AddChild(label);
 
-            var outer = new Frame
-            {
-                Dock = DockStyle.Fill,
-                Margin = new Margin(10),
-                Style = "border"
-            };
-            var frame = new FlowLayoutFrame
-            {
-                Dock = DockStyle.Center,
-                FlowDirection = FlowDirection.TopToBottom,
-                AutoSize = AutoSize.HorizontalVertical
-            };
-            var ng = Create("New game");
-            ng.MouseClick += (s, e) =>
-            {
-                sm.LoadScreen(new PlayScreen(game));
+            var content = new ContentControll();
+            content.OffsetFrom = Anchors.Center;
+
+            var start = _factory.CreateTextButton(0);
+            start.Text = "New game";
+            start.MouseUp += (s,e) => {
+                screenManager.LoadScreen(new PlayScreen(game));
             };
 
-            var st = Create("Settings");
-            st.MouseClick += (s,e) => {
-                sm.LoadScreen(new OptionsScreen(sm, game));
-            };
+            var options = _factory.CreateTextButton(0);
+            options.Offset = new Vector2(0, 60);
+            options.Text = "Options";
 
-            var qt = Create("Quit");
-            qt.MouseClick += (s, e) =>
-            {
-                game.Exit();
-            };
+            var exit = _factory.CreateTextButton(0);
+            exit.Offset = new Vector2(0, 120);
+            exit.Text = "Exit";
 
+            content.AddChild(start);
+            content.AddChild(options);
+            content.AddChild(exit);
 
-            frame.Controls.Add(ng);
-            frame.Controls.Add(st);
-            frame.Controls.Add(qt);
-            outer.Controls.Add(label);
-            outer.Controls.Add(frame);
+            content.ComputeSize(root.Size, Autosize.Content);
 
-            _desktop.Controls.Add(outer);
-        }
+            root.AddChild(content);
 
-        private Button Create(string text)
-        {
-            return new Button
-            {
-                Style = "mainButton",
-                Text = text,
-                AutoSize = AutoSize.Horizontal,
-                Cursor = CursorNames.Link
-            };
+            _desktop.Root = root;
         }
     }
 }

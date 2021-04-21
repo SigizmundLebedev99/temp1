@@ -12,9 +12,6 @@
         <None Update="Content\**\*.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Content\fonts\**">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
     </ItemGroup>
     <ItemGroup>
         <MonoGameContentReference Include="Content\Content.mgcb" />

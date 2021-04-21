@@ -3,9 +3,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Screens;
-using MonoGame.Extended.Screens.Transitions;
-using MonoGame.Squid;
 using temp1.Screens;
+using temp1.UI;
 
 namespace temp1
 {
@@ -19,20 +18,23 @@ namespace temp1
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = false;
+            IsMouseVisible = true;
             _screenManager = new ScreenManager();
             Components.Add(_screenManager);
+
+            Services.AddService(Content);
+            Services.AddService(_screenManager);
+
+            var controlsFactory = new ControlsFactory(new ContentManager(Services, "ui"));
+            Services.AddService(controlsFactory);
         }
 
         protected override void Initialize()
         {
-            _graphics.PreferredBackBufferWidth = 1500;
+            _graphics.PreferredBackBufferWidth = 1024;
             _graphics.PreferredBackBufferHeight = 500;
             _graphics.ApplyChanges();
-
-            Gui.Renderer = new MonoGameSquidRenderer(GraphicsDevice, new ContentManager(Services, "ui"));
-            Components.Add(new MonoGameSquidInputManager(this));
-            _screenManager.LoadScreen(new MenuScreen(_screenManager, this), new FadeTransition(this.GraphicsDevice, Color.White, 0.5f));
+            _screenManager.LoadScreen(new MenuScreen(this));
             base.Initialize();
         }
 
