@@ -15,13 +15,11 @@ namespace temp1.Systems
         Mapper<Sprite> _spriteMapper;
         Mapper<MapObject> _moMapper;
         Mapper<Hull> _hullMapper;
-        GameContext _context;
 
         Dictionary<int, (int, int, Color[])> _cache = new Dictionary<int, (int, int, Color[])>();
 
-        public TransparensySystem(GameContext context) : base(Aspect.All(typeof(Sprite), typeof(Hull)))
+        public TransparensySystem() : base(Aspect.All(typeof(Sprite), typeof(Hull)))
         {
-            _context = context;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -34,11 +32,11 @@ namespace temp1.Systems
 
         public override void Process(GameTime gameTime, int entityId)
         {
-            var playerPos = _moMapper.Get(_context.PlayerId).Position;
+            var playerPos = _moMapper.Get(GameContext.PlayerId).Position;
             var hullPos = _moMapper.Get(entityId).Position;
             if (playerPos.Y > hullPos.Y)
                 return;
-            var playerRect = _aSpriteMapper.Get(_context.PlayerId).GetBoundingRectangle(playerPos, 0, Vector2.One);
+            var playerRect = _aSpriteMapper.Get(GameContext.PlayerId).GetBoundingRectangle(playerPos, 0, Vector2.One);
             
             _hullMapper.Get(entityId).IsPlayerIn = Overlaps(entityId, hullPos, playerRect);
         }

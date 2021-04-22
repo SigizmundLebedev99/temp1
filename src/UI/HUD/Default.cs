@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using temp1.Factories;
 using temp1.UI.Controls;
 
 namespace temp1.UI

@@ -3,6 +3,7 @@ using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using temp1.Components;
 using temp1.Data;
+using temp1.UI;
 
 namespace temp1.Systems
 {
@@ -13,11 +14,14 @@ namespace temp1.Systems
         Mapper<BaseAction> _baseActionMapper;
         Mapper<MapObject> _moMap;
         Mapper<Direction> _dirMap;
-        GameContext _context;
 
-        public WalkActionSystem(GameContext context) : base(Aspect.All(typeof(WalkAction)))
+        WorldContext _context;
+        HudContext _hud;
+
+        public WalkActionSystem(WorldContext context, HudContext hud) : base(Aspect.All(typeof(WalkAction)))
         {
             _context = context;
+            _hud = hud;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -42,7 +46,7 @@ namespace temp1.Systems
                 switch (mapObj.Type)
                 {
                     case GameObjectType.Storage : 
-                        _storageActionMap.Put(entityId, new OpenStorageAction(mapObjects[i], _context));
+                        _storageActionMap.Put(entityId, new OpenStorageAction(mapObjects[i], _hud));
                         return;
                 }
             }

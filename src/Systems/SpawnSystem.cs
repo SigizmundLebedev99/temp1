@@ -1,18 +1,26 @@
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
+using MonoGame.Extended.Serialization;
 using temp1.Components;
 
 namespace temp1.Systems
 {
     class SpawnSystem : EntityUpdateSystem
     {
-        GameContext _context;
+        MapContext _map;
+        GameObjectsContext _gameObjects;
+        ContentManager _content;
+
         bool spawned = false;
-        public SpawnSystem(GameContext context) : base(Aspect.One())
+        
+        public SpawnSystem(MapContext map, GameObjectsContext gameObjects, ContentManager content) : base(Aspect.One())
         {
-            _context = context;
+            _map = map;
+            _gameObjects = gameObjects;
+            _content = content;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -26,7 +34,7 @@ namespace temp1.Systems
             
             var portal = CreateEntity();
             var random = new Random();
-            var grid = _context.MovementGrid;
+            var grid = _map.MovementGrid;
             Point point = new Point(random.Next(0, grid.width), random.Next(0, grid.height));
             if (!grid.IsWalkableAt(point.X, point.Y))
                 return;
@@ -35,10 +43,10 @@ namespace temp1.Systems
             {
                 Position = point.ToVector2() * 32 + new Vector2(16)
             });
-            portal.Attach(_context.GetAnimatedSprite("images/portal.sf"));
+            portal.Attach(_content.GetAnimatedSprite("images/portal.sf"));
             portal.Attach<Expired>(new Timer(1.5f, () =>
             {
-                _context.CreateEntity("enemy", point.ToVector2() * 32 + new Vector2(16));
+                _gameObjects.CreateMapObject("enemy", point.ToVector2() * 32 + new Vector2(16));
             }, true));
         }
     }

@@ -12,9 +12,12 @@ namespace temp1.Systems
         Mapper<PossibleMoves> _moveMap;
         Mapper<MapObject> _moMap;
         Mapper<ActionPoints> _pointsMap;
-        GameContext _context;
+
+        MapContext _context;
+
         HashSet<Point> searched = new HashSet<Point>();
-        public PossibleMovementBuildSystem(GameContext context) : base(Aspect.All(typeof(AllowedToAct)).Exclude(typeof(BaseAction)))
+
+        public PossibleMovementBuildSystem(MapContext context) : base(Aspect.All(typeof(AllowedToAct)).Exclude(typeof(BaseAction)))
         {
             _context = context;
         }
@@ -28,7 +31,7 @@ namespace temp1.Systems
 
         public override void Process(GameTime gameTime, int entityId)
         {
-            if(_context.GameState == GameState.Peace)
+            if(GameContext.GameState == GameState.Peace)
                 return;
             var position = _moMap.Get(entityId).MapPosition;
             var possibleMoves = BuildMoves(position, entityId);

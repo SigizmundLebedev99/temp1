@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.BitmapFonts;
 using temp1.UI.Controls;
 
-namespace temp1.UI
+namespace temp1.Factories
 {
     public class ControlsFactory
     {

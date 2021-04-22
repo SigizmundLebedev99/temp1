@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Screens;
-using temp1.UI;
+using temp1.Factories;
 using temp1.UI.Controls;
 
 namespace temp1.Screens

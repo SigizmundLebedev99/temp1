@@ -11,7 +11,7 @@ namespace temp1.Systems
     {
         Mapper<BaseAI> _aiMapper;
         
-        public AISystem(StaticGrid grid) : base(Aspect.All(typeof(BaseAI), typeof(AllowedToAct)))
+        public AISystem() : base(Aspect.All(typeof(BaseAI), typeof(AllowedToAct)))
         {}
 
         public override void Initialize(IComponentMapperService mapperService)

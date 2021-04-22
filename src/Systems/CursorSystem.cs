@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Entities;
@@ -26,15 +27,16 @@ namespace temp1.Systems
         Mapper<Cursor> _pointableMapper;
 
         SpriteBatch _spriteBatch;
-        GameContext _context;
-        OrthographicCamera _camera;
+        
+        HudContext _hud;
+        MapContext _map;
 
-        public CursorSystem(SpriteBatch sb, GameContext context) : base(Aspect.All(typeof(Cursor)).One(typeof(Sprite), typeof(AnimatedSprite)))
+        public CursorSystem(SpriteBatch sb, HudContext hud, MapContext map, ContentManager content) : base(Aspect.All(typeof(Cursor)).One(typeof(Sprite), typeof(AnimatedSprite)))
         {
-            _context = context;
+            _hud = hud;
+            _map = map;
             _spriteBatch = sb;
-            _camera = context.Camera;
-            mark = _context.GetAnimatedSprite("images/mark.sf");
+            mark = content.GetAnimatedSprite("images/mark.sf");
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -49,19 +51,19 @@ namespace temp1.Systems
 
         public void Update(GameTime gameTime)
         {
-            if (_context.UIState != UIState.Default || _context.UI.IsMouseOnHud ||  !_allowedMap.Has(_context.PlayerId))
+            if (_hud.State != HUDState.Default || _hud.IsMouseOnHud ||  !_allowedMap.Has(GameContext.PlayerId))
             {
                 shouldShow = false;
                 return;
             }
             var state = MouseExtended.GetState();
-            var worldPos = _camera.ScreenToWorld(state.Position.X, state.Position.Y);
+            var worldPos = GameContext.Camera.ScreenToWorld(state.Position.X, state.Position.Y);
             var point = (worldPos / 32).ToPoint();
             position = point.ToVector2() * 32 + new Vector2(16);
-            _context.PointedId = -1;
-            if (_context.GameState == GameState.Peace)
+            GameContext.PointedId = -1;
+            if (GameContext.GameState == GameState.Peace)
             {
-                if (!_context.MovementGrid.Contains(point))
+                if (!_map.MovementGrid.Contains(point))
                 {
                     shouldShow = false;
                     return;
@@ -69,7 +71,7 @@ namespace temp1.Systems
 
                 if (!HandlePoint(worldPos))
                 {
-                    if (_context.MovementGrid.IsWalkableAt(point.X, point.Y))
+                    if (_map.MovementGrid.IsWalkableAt(point.X, point.Y))
                         mark.Play("idle");
                     else
                         mark.Play("no");
@@ -77,7 +79,7 @@ namespace temp1.Systems
             }
             else
             {
-                var possibleMoves = _possibleMovesMap.Get(_context.PlayerId);
+                var possibleMoves = _possibleMovesMap.Get(GameContext.PlayerId);
                 if (possibleMoves.Contains(point))
                 {
                     if (!HandlePoint(worldPos))
@@ -106,7 +108,7 @@ namespace temp1.Systems
                 {
                     mark.Play(pointable.SpriteName);
                     position = pos;
-                    _context.PointedId = id;
+                    GameContext.PointedId = id;
                     return true;
                 }
             }

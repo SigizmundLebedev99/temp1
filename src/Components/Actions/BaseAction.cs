@@ -11,15 +11,15 @@ namespace temp1.Components
 
     abstract class BaseAction
     {
-        public bool IsChecked ;
+        public bool IsChecked;
 
         public abstract int PointsTaken { get; }
 
-        public abstract ActionStatus Status { get; }
+        public virtual ActionStatus Status { get; set; }
 
-        public abstract void Update(GameTime time);
+        public virtual void Update(GameTime time) { }
 
-        public abstract void Abort();
+        public virtual void Abort() { Status = ActionStatus.Canceled; }
 
         public BaseAction After;
 

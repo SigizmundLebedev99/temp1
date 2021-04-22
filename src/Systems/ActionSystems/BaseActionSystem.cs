@@ -7,14 +7,13 @@ namespace temp1.Systems
 {
     class BaseActionSystem : EntityProcessingSystem
     {
-        GameContext context;
+
         Mapper<ActionPoints> _pointsMapper;
         Mapper<TurnOccured> _endOfTurnMapper;
         Mapper<BaseAction> _actionMapper;
 
-        public BaseActionSystem(GameContext context) : base(Aspect.All(typeof(BaseAction)))
+        public BaseActionSystem() : base(Aspect.All(typeof(BaseAction)))
         {
-            this.context = context;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -27,7 +26,7 @@ namespace temp1.Systems
         public override void Process(GameTime gameTime, int entityId)
         {
             var action = _actionMapper.Get(entityId);
-            if (context.GameState == GameState.Combat)
+            if (GameContext.GameState == GameState.Combat)
             {
                 if (!action.IsChecked)
                 {
@@ -49,7 +48,7 @@ namespace temp1.Systems
         protected void Complete(BaseAction action, int entityId)
         {
             var entity = GetEntity(entityId);
-            if (context.GameState == GameState.Combat)
+            if (GameContext.GameState == GameState.Combat)
             {
                 var actionPoints = _pointsMapper.Get(entityId);
                 actionPoints.Remain -= action.PointsTaken;

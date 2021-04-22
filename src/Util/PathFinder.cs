@@ -6,10 +6,10 @@ namespace temp1.Util
 {
     class PathFinder
     {
-        GameContext _context;
+        MapContext _context;
         AStarParam _param;
 
-        public PathFinder(GameContext context)
+        public PathFinder(MapContext context)
         {
             _context = context;
             _param = new AStarParam(context.MovementGrid, DiagonalMovement.Never);

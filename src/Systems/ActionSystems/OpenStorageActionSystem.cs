@@ -3,6 +3,7 @@ using MonoGame.Extended.Entities;
 using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Sprites;
 using temp1.Components;
+using temp1.UI;
 
 namespace temp1.Systems
 {
@@ -12,11 +13,11 @@ namespace temp1.Systems
         Mapper<AnimatedSprite> _aSpriteMap;
         Mapper<Storage> _storageMap;
 
-        GameContext _context;
-
-        public OpenStorageActionSystem(GameContext context) : base(Aspect.All(typeof(OpenStorageAction)))
+        HudContext _hud;
+        
+        public OpenStorageActionSystem(HudContext hud) : base(Aspect.All(typeof(OpenStorageAction)))
         {
-            _context = context;
+            _hud = hud;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -42,8 +43,8 @@ namespace temp1.Systems
                 return false;
             var sprite = _aSpriteMap.Get(storageId);
             sprite.Play("open");
-            if(_context.PlayerId == actorId)
-                _context.UI.OpenInventory2(storage, actor);
+            if(GameContext.PlayerId == actorId)
+                _hud.OpenInventory2(storage, actor);
             return true;
         }
     }

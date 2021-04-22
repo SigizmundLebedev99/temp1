@@ -10,9 +10,9 @@ namespace temp1.Systems
     {
         Mapper<AllowedToAct> _allowanceMapper;
         Mapper<TurnOccured> _endOfTurnMapper;
-        GameContext _context;
+        WorldContext _context;
 
-        public TurnBasedCombatSystem(GameContext context) : base(Aspect.All(typeof(AllowedToAct), typeof(TurnOccured)).Exclude(typeof(BaseAction)))
+        public TurnBasedCombatSystem(WorldContext context) : base(Aspect.All(typeof(AllowedToAct), typeof(TurnOccured)).Exclude(typeof(BaseAction)))
         {
             _context = context;
         }

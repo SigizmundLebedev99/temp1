@@ -4,13 +4,11 @@ namespace temp1.AI
 {
     abstract class BaseAI
     {
-        protected GameContext Context;
         public readonly int EntityId;
 
-        public BaseAI(int entityId, GameContext context)
+        public BaseAI(int entityId)
         {
             EntityId = entityId;
-            Context = context;
         }
 
         public abstract void Update(GameTime time);

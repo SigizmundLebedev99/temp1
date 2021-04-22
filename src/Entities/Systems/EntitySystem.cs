@@ -11,17 +11,17 @@ namespace MonoGame.Extended.Entities.Systems
 
         public void Dispose()
         {
-            if (_world != null)
+            if (World != null)
             {
-                _world.EntityManager.EntityAdded -= OnEntityAdded;
-                _world.EntityManager.EntityRemoved -= OnEntityRemoved;
+                World.EntityManager.EntityAdded -= OnEntityAdded;
+                World.EntityManager.EntityRemoved -= OnEntityRemoved;
             }
         }
 
         private readonly AspectBuilder _aspectBuilder;
         private EntitySubscription _subscription;
 
-        private World _world;
+        protected World World;
 
         protected virtual void OnEntityChanged(int entityId) { }
         protected virtual void OnEntityAdded(int entityId) { }
@@ -31,21 +31,21 @@ namespace MonoGame.Extended.Entities.Systems
 
         public virtual void Initialize(World world)
         {
-            _world = world;
+            World = world;
 
-            var aspect = _aspectBuilder.Build(_world.ComponentManager);
-            _subscription = new EntitySubscription(_world.EntityManager, aspect);
-            _world.EntityManager.EntityAdded += OnEntityAdded;
-            _world.EntityManager.EntityRemoved += OnEntityRemoved;
-            _world.EntityManager.EntityChanged += OnEntityChanged;
+            var aspect = _aspectBuilder.Build(World.ComponentManager);
+            _subscription = new EntitySubscription(World.EntityManager, aspect);
+            World.EntityManager.EntityAdded += OnEntityAdded;
+            World.EntityManager.EntityRemoved += OnEntityRemoved;
+            World.EntityManager.EntityChanged += OnEntityChanged;
 
             Initialize(world.ComponentManager);
         }
 
         public abstract void Initialize(IComponentMapperService mapperService);
 
-        protected void DestroyEntity(int entityId) => _world.DestroyEntity(entityId);
-        protected Entity CreateEntity() => _world.CreateEntity();
-        protected Entity GetEntity(int entityId) => _world.GetEntity(entityId);
+        protected void DestroyEntity(int entityId) => World.DestroyEntity(entityId);
+        protected Entity CreateEntity() => World.CreateEntity();
+        protected Entity GetEntity(int entityId) => World.GetEntity(entityId);
     }
 }

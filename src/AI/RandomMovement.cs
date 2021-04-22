@@ -13,12 +13,14 @@ namespace temp1.AI
         MapObject _mo;
         IBehaviourTreeNode _tree;
         float _time = 0;
-        public RandomMovement(int entityId, GameContext context) : base(entityId, context)
+        
+        public RandomMovement(int entityId) : base(entityId)
         {
-            var cm = context.World.ComponentManager;
-            _mo = context.World.GetEntity(entityId).Get<MapObject>();
-            _actionMap = cm.Get<BaseAction>();
-            _walkMap = cm.Get<WalkAction>();
+            var world = GameContext.World;
+            var mapContext = GameContext.Map;
+            _mo = world.GetEntity(entityId).Get<MapObject>();
+            _actionMap = world.GetMapper<BaseAction>();
+            _walkMap = world.GetMapper<WalkAction>();
 
             _tree = new BehaviourTreeBuilder()
                 .Sequence("start")
@@ -41,9 +43,9 @@ namespace temp1.AI
                         })
                         .Do("create", t =>
                         {
-                            if (!TryGetPoint(out var point))
+                            if (!TryGetPoint(out var point, mapContext))
                                 return BehaviourTreeStatus.Success;
-                            if (Context.PathFinder.FindPath(_mo, point, out var first, out var last))
+                            if (mapContext.PathFinder.FindPath(_mo, point, out var first, out var last))
                             {
                                 _walkMap.Put(EntityId, first);
                             }
@@ -53,10 +55,10 @@ namespace temp1.AI
                 .End().Build();
         }
 
-        bool TryGetPoint(out Point point)
+        bool TryGetPoint(out Point point, MapContext map)
         {
             var random = new Random();
-            var grid = Context.MovementGrid;
+            var grid = map.MovementGrid;
             point = new Point(random.Next(0, grid.width), random.Next(0, grid.height));
             if (!grid.IsZeroAt(point.X, point.Y))
                 return false;

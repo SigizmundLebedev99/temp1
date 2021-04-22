@@ -7,10 +7,7 @@
             "x": 26,
             "y": 65
         },
-        "handler":"ActorHandler",
-        "ai":{
-            "type":"player"
-        }
+        "handler":"ActorHandler"
     },
     {
         "typeName": "enemy",
@@ -20,10 +17,7 @@
             "x": 26,
             "y": 65
         },
-        "handler":"ActorHandler",
-        "ai":{
-            "type":"randomMovement"
-        }
+        "handler":"ActorHandler"
     },
     {
         "typeName": "tree",

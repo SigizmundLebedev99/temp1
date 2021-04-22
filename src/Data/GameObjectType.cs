@@ -3,7 +3,8 @@ using temp1.Components;
 
 namespace temp1.Data
 {
-    public enum GameObjectType{
+    enum GameObjectType
+    {
         None,
         Storage,
         Enemy,
@@ -17,18 +18,37 @@ namespace temp1.Data
         public float speed;
     }
 
-    class Origin{
+    class Origin
+    {
         public int x;
         public int y;
     }
 
-    class Region{
+    class Region
+    {
         public int x;
         public int y;
         public int width;
         public int height;
 
-        public Rectangle Rectangle => new Rectangle(x,y,width, height);
+        public Region(){}
+
+        public Region(int x, int y, int width, int height){
+            this.x = x;
+            this.y = y;
+            this.height = height;
+            this.width = width;
+        }
+
+        public static implicit operator Rectangle(Region r)
+        {
+            return new Rectangle(r.x, r.y, r.width, r.height);
+        }
+
+        public static implicit operator Region(Rectangle r)
+        {
+            return new Region(r.X, r.Y, r.Width, r.Height);
+        }
     }
 
     class GameObjectTypeInfo
@@ -39,7 +59,6 @@ namespace temp1.Data
         public Origin origin;
         public Region region;
         public string handler;
-        public AIParams ai;
         public int stackSize;
         public int flags;
     }
