@@ -22,12 +22,12 @@ namespace temp1.UI.Controls
 
         private Vector2 textPosition;
 
-        public override void Draw(GameTime time, SpriteBatch batch, Vector2 position)
+        public override void Draw(GameTime time, SpriteBatch batch, Vector2 position, float depth = 0)
         {
             if (Font == null || Text == null)
                 return;
 
-            batch.DrawString(Font, Text, textPosition, Color.White);
+            batch.DrawString(Font, Text, textPosition, Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, depth);
         }
 
         public override void Update(GameTime time, MouseState mouse, Vector2 position)

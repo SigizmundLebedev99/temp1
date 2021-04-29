@@ -44,10 +44,10 @@ namespace temp1.UI.Controls
             Border = new Margin(3, 3);
         }
 
-        public override void Draw(GameTime time, SpriteBatch batch, Vector2 position)
+        public override void Draw(GameTime time, SpriteBatch batch, Vector2 position, float depth = 0)
         {
             Texture2D texture = StretchedTexture ?? Texture;
-            batch.Draw(texture, position, Color.White);
+            batch.Draw(texture, position, null, Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, depth);
         }
 
         public override void ComputeSize(Vector2 size, Autosize autosize)

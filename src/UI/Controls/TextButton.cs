@@ -30,10 +30,10 @@ namespace temp1.UI.Controls
             }
         }
 
-        public override void Draw(GameTime time, SpriteBatch batch, Vector2 position)
+        public override void Draw(GameTime time, SpriteBatch batch, Vector2 position, float depth = 0)
         {
-            base.Draw(time, batch, position);
-            label.Draw(time, batch, position);
+            base.Draw(time, batch, position, depth);
+            label.Draw(time, batch, position, depth);
         }
 
         public override void Update(GameTime time, MouseState mouse, Vector2 position)
