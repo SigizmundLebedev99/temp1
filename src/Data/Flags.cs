@@ -6,9 +6,8 @@ namespace temp1.Data
     enum ItemTypeFlags
     {
         Comsumable = 1,
-        Offensive = 2,
-        Armor = 4,
-        Weapon = 8
+        Armor = 2,
+        Weapon = 4,
     }
 
     class ItemStack

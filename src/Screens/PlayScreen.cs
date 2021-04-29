@@ -10,7 +10,7 @@ namespace temp1.Screens
     class PlayScreen : GameScreen
     {
 
-        public PlayScreen(Game game) : base(game)
+        public PlayScreen(Game1 game) : base(game)
         {
         }
 
@@ -21,7 +21,7 @@ namespace temp1.Screens
 
         public override void LoadContent()
         {
-            GameContext.Init(Game, Content);
+            GameContext.Init((Game1)Game, Content);
         }
         
         public override void Update(GameTime gameTime)

@@ -1,8 +1,6 @@
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended;
 
 namespace temp1.UI.Controls
 {
@@ -10,20 +8,24 @@ namespace temp1.UI.Controls
     {
         private GraphicsDevice _device;
         private SpriteBatch _batch;
+        
+        protected SpriteSortMode SortMode;
+
         public Vector2 Size;
 
         public Control Root;
 
-        public Desktop(GraphicsDevice device)
+        public Desktop(SpriteBatch batch, SpriteSortMode sortMode = SpriteSortMode.Deferred)
         {
-            _device = device;
-            _batch = new SpriteBatch(device);
-            Size = new Vector2(device.Viewport.Width, device.Viewport.Height);
+            _device = batch.GraphicsDevice;
+            SortMode = sortMode;
+            _batch = batch;
+            Size = new Vector2(_device.Viewport.Width, _device.Viewport.Height);
         }
 
         public void Draw(GameTime time)
         {
-            _batch.Begin();
+            _batch.Begin(sortMode: SortMode);
             Root.Draw(time, _batch, Root.ComputePosition(Vector2.Zero, Size));
             _batch.End();
         }

@@ -10,7 +10,7 @@ namespace temp1.Components
 
         public void Add(ItemStack slot)
         {
-            var existing = Content.FirstOrDefault(e => e.ItemType == slot.ItemType && e.Count < e.ItemType.stackSize);
+            var existing = Content.FirstOrDefault(e => e.ItemType == slot.ItemType && e.Count < e.ItemType.StackSize);
 
             if (existing == null)
             {
@@ -19,7 +19,7 @@ namespace temp1.Components
             }
 
             var total = existing.Count + slot.Count;
-            existing.Count = total > slot.ItemType.stackSize ? slot.ItemType.stackSize : total;
+            existing.Count = total > slot.ItemType.StackSize ? slot.ItemType.StackSize : total;
             slot.Count = total - existing.Count;
             if (slot.Count > 0)
                 Content.Add(slot);

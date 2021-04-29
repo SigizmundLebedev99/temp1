@@ -7,24 +7,18 @@ namespace temp1.UI.Controls
 {
     public class ContentControll : Control
     {
-        private List<Control> Children = new List<Control>();
+        public List<Control> Children { get; } = new List<Control>();
 
-        public void AddChild(Control child)
-        {
-            if (child.Size.Length() == 0)
-                child.Size = this.Size - child.Offset;
-            Children.Add(child);
-        }
-
-        public override void Draw(GameTime time, SpriteBatch batch, Vector2 position)
+        public override void Draw(GameTime time, SpriteBatch batch, Vector2 position, float depth = 0)
         {
             for (var i = 0; i < Children.Count; i++)
-                Children[i].Draw(time, batch, Children[i].ComputePosition(position, Size));
+                Children[i].Draw(time, batch, Children[i].ComputePosition(position, Size), depth);
         }
 
         public override void Update(GameTime time, MouseState mouse, Vector2 position)
         {
-            for (var i = 0; i < Children.Count; i++){
+            for (var i = 0; i < Children.Count; i++)
+            {
                 Children[i].Update(time, mouse, Children[i].ComputePosition(position, Size));
             }
         }

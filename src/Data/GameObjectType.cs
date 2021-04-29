@@ -11,38 +11,31 @@ namespace temp1.Data
         Item
     }
 
-    class AIParams
-    {
-        public string type;
-        public int targetMapId;
-        public float speed;
-    }
-
     class Origin
     {
-        public int x;
-        public int y;
+        public int X;
+        public int Y;
     }
 
     class Region
     {
-        public int x;
-        public int y;
-        public int width;
-        public int height;
+        public int X;
+        public int Y;
+        public int Width;
+        public int Height;
 
         public Region(){}
 
         public Region(int x, int y, int width, int height){
-            this.x = x;
-            this.y = y;
-            this.height = height;
-            this.width = width;
+            this.X = x;
+            this.Y = y;
+            this.Height = height;
+            this.Width = width;
         }
 
         public static implicit operator Rectangle(Region r)
         {
-            return new Rectangle(r.x, r.y, r.width, r.height);
+            return new Rectangle(r.X, r.Y, r.Width, r.Height);
         }
 
         public static implicit operator Region(Rectangle r)
@@ -53,14 +46,14 @@ namespace temp1.Data
 
     class GameObjectTypeInfo
     {
-        public string typeName;
-        public GameObjectType type;
-        public string path;
-        public Origin origin;
-        public Region region;
-        public string handler;
-        public int stackSize;
-        public int flags;
+        public string TypeName;
+        public GameObjectType Type;
+        public string Path;
+        public Origin Origin;
+        public Region Region;
+        public string Handler;
+        public int StackSize;
+        public ItemTypeFlags Flags;
     }
 }
 

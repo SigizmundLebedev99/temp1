@@ -11,20 +11,38 @@ namespace temp1.Factories
     {
         private ContentManager _content;
 
+        public ContentManager Content => _content;
+
         private static string[][] ResorceSets = new string[][]{
             new string[]{   // 0 - textures for menu button
-                "button_default",
-                "button_down",
-                "button_hot",
+                "ui/button_default",
+                "ui/button_down",
+                "ui/button_hot",
                 "fonts/commodore64"
             },
-            new string[]{   // 0 - textures for menu button
+            new string[]{   // 1 - font for label
                 "fonts/sativa"
             },
-            new string[]{   // 0 - textures for menu button
-                "inventory",
-                "inventory-hot",
-                "inventory-pressed"
+            new string[]{   // 2 - textures for inventory button
+                "ui/inventory",
+                "ui/inventory-hot",
+                "ui/inventory-pressed"
+            },
+            new string[]{   // 3 - texture for panel
+                "ui/border"
+            },
+            new string[]{   // 4 - texture for panel
+                "ui/panel1"
+            },
+            new string[]{   // 5 - texture for panel
+                "ui/panel2"
+            },
+            new string[]{   // 6 - font for label
+                "fonts/minor"
+            },
+            new string[]{   //7 - texture for inventory item
+                "ui/cell",
+                "ui/cell-hot"
             }
         };
 
@@ -33,45 +51,53 @@ namespace temp1.Factories
             _content = manager;
         }
 
-        public Button CreateButton(int resourceSet)
+        public T CreateButton<T>(int resourceSet) where T : Button, new()
         {
-            var textures = ResorceSets[resourceSet];
-            var button = new Button();
-            button.Texture = LoadTxr(textures, 0);
+            var button = new T();
+            button.Texture = LoadTxr(resourceSet, 0);
             if (button.Texture == null)
                 throw new InvalidOperationException("Button texture not found, resource set - " + resourceSet);
-            button.TextureHot = LoadTxr(textures, 1);
-            button.TexturePress = LoadTxr(textures, 2);
+            button.TextureHot = LoadTxr(resourceSet, 1);
+            button.TexturePress = LoadTxr(resourceSet, 2);
             button.Size = new Vector2(button.Texture.Width, button.Texture.Height);
             return button;
         }
 
         public TextButton CreateTextButton(int resourceSet)
         {
-            var resources = ResorceSets[resourceSet];
             var button = new TextButton();
-            button.Texture = LoadTxr(resources, 0);
+            button.Texture = LoadTxr(resourceSet, 0);
             if (button.Texture == null)
                 throw new InvalidOperationException("Button texture not found, resource set - " + resourceSet);
-            button.TextureHot = LoadTxr(resources, 1);
-            button.TexturePress = LoadTxr(resources, 2);
+            button.TextureHot = LoadTxr(resourceSet, 1);
+            button.TexturePress = LoadTxr(resourceSet, 2);
             button.Size = new Vector2(button.Texture.Width, button.Texture.Height);
-            button.Font = LoadFnt(resources, 3);
+            button.Font = LoadFnt(resourceSet, 3);
             return button;
         }
 
-        public Label CreateLabel(int resoueceSet)
+        public Label CreateLabel(int resourceSet)
         {
-            var fonts = ResorceSets[resoueceSet];
-            var font = LoadFnt(fonts,0);
+            var font = LoadFnt(resourceSet, 0);
             var label = new Label();
             label.Font = font;
-            label.Size = new Vector2(200, 50);
             return label;
         }
 
-        private Texture2D LoadTxr(string[] set, int index)
+        public Panel CreatePanel(int resourceSet)
         {
+            var panel = new Panel();
+            var texture = LoadTxr(resourceSet, 0);
+            if (texture == null)
+                throw new InvalidOperationException("Border texture not found, resource set - " + resourceSet);
+            panel.Texture = texture;
+            panel.ComputeSize(Vector2.Zero, Autosize.Content);
+            return panel;
+        }
+
+        private Texture2D LoadTxr(int setIndex, int index)
+        {
+            var set = ResorceSets[setIndex];
             if (set.Length <= index)
                 return null;
             if (!string.IsNullOrEmpty(set[index]))
@@ -79,8 +105,9 @@ namespace temp1.Factories
             return null;
         }
 
-        private BitmapFont LoadFnt(string[] set, int index)
+        private BitmapFont LoadFnt(int setIndex, int index)
         {
+            var set = ResorceSets[setIndex];
             if (set.Length <= index)
                 return null;
             if (!string.IsNullOrEmpty(set[index]))

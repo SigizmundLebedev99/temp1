@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Screens;
 using temp1.Factories;
 using temp1.Screens;
-using temp1.UI;
 
 namespace temp1
 {
@@ -14,7 +13,9 @@ namespace temp1
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private ScreenManager _screenManager;
-        
+
+        public SpriteBatch Batch => _spriteBatch;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -22,26 +23,28 @@ namespace temp1
             IsMouseVisible = true;
             _screenManager = new ScreenManager();
             Components.Add(_screenManager);
+            
+            var controlsFactory = new ControlsFactory(Content);
 
             Services.AddService(Content);
             Services.AddService(_screenManager);
-
-            var controlsFactory = new ControlsFactory(new ContentManager(Services, "ui"));
             Services.AddService(controlsFactory);
         }
 
         protected override void Initialize()
         {
             _graphics.PreferredBackBufferWidth = 1024;
-            _graphics.PreferredBackBufferHeight = 500;
+            _graphics.PreferredBackBufferHeight = 600;
             _graphics.ApplyChanges();
+
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+
             _screenManager.LoadScreen(new MenuScreen(this));
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
         }
 
         protected override void Update(GameTime gameTime)

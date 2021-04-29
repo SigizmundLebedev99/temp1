@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -49,7 +48,7 @@ namespace temp1.UI.Controls
 
         public abstract void Update(GameTime time, MouseState mouse, Vector2 position);
 
-        public abstract void Draw(GameTime time, SpriteBatch batch, Vector2 position);
+        public abstract void Draw(GameTime time, SpriteBatch batch, Vector2 position, float depth = 0);
 
         public Vector2 ComputePosition(Vector2 position, Vector2 size)
         {

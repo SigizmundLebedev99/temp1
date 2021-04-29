@@ -50,6 +50,7 @@
     {
         "typeName": "blue_potion1",
         "stackSize":10,
+        "flags":4,
         "path":"images/dragons_blade",
         "region":{
             "x":224,
@@ -61,6 +62,7 @@
     {
         "typeName": "red_potion1",
         "stackSize":10,
+        "flags":4,
         "path":"images/dragons_blade",
         "region":{
             "x":192,
@@ -73,6 +75,7 @@
         "typeName": "gladius1",
         "stackSize":1,
         "path":"images/dragons_blade_2",
+        "flags":4,
         "region":{
             "x":96,
             "y":0,

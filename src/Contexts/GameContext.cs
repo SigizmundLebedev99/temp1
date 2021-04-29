@@ -1,25 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
-using MonoGame.Extended.Collections;
-using MonoGame.Extended.Content;
-using MonoGame.Extended.Entities;
-using MonoGame.Extended.Serialization;
-using MonoGame.Extended.Sprites;
-using MonoGame.Extended.TextureAtlases;
-using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
-using temp1.AI;
-using temp1.Components;
-using temp1.Data;
-using temp1.PathFinding;
 using temp1.UI;
-using temp1.Util;
 
 namespace temp1
 {
@@ -40,15 +25,17 @@ namespace temp1
         public static GameObjectsContext GameObjectsContext;
         public static HudContext Hud;
         public static MapContext Map;
-        public static Game Game;
+        public static Game1 Game;
+
+        public static ContentManager Content => Game.Content;
         
         static SpriteBatch _sb;
         static TiledMapRenderer _tiledMapRenderer;
 
-        public static void Init(Game game, ContentManager Content)
+        public static void Init(Game1 game, ContentManager Content)
         {
             Game = game;
-            _sb = new SpriteBatch(game.GraphicsDevice);
+            _sb = game.Batch;
 
             World = new WorldContext();
             GameObjectsContext = new GameObjectsContext(Content);

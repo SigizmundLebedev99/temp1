@@ -32,7 +32,7 @@ namespace temp1
         {
             _world = world;
             var mapTypes = _content.Load<GameObjectTypeInfo[]>(gameObjectTypesPath, loader);
-            GameObjectTypes = mapTypes.ToDictionary(e => e.typeName);
+            GameObjectTypes = mapTypes.ToDictionary(e => e.TypeName);
             Handlers = new Dictionary<string, Action<Entity, GameObjectTypeInfo, TiledMapObject>>
             {
                 {"ActorHandler", ActorHandler},
@@ -51,11 +51,11 @@ namespace temp1
             if (position.HasValue)
                 entity.Attach(new MapObject(position.Value, GameObjectType.None));
 
-            if (objType.path.EndsWith(".sf"))
+            if (objType.Path.EndsWith(".sf"))
             {
-                var sprite = _content.GetAnimatedSprite(objType.path);
-                if (objType.origin != null)
-                    sprite.Origin = new Vector2(objType.origin.x, objType.origin.y);
+                var sprite = _content.GetAnimatedSprite(objType.Path);
+                if (objType.Origin != null)
+                    sprite.Origin = new Vector2(objType.Origin.X, objType.Origin.Y);
                 entity.Attach(sprite);
             }
             else
@@ -64,7 +64,7 @@ namespace temp1
                 entity.Attach(sprite);
             }
 
-            if (objType.handler == null || !Handlers.TryGetValue(objType.handler, out var handler))
+            if (objType.Handler == null || !Handlers.TryGetValue(objType.Handler, out var handler))
                 return entity.Id;
 
             handler(entity, objType, tiledMapObj);
@@ -75,13 +75,13 @@ namespace temp1
         void ActorHandler(Entity e, GameObjectTypeInfo type, TiledMapObject tiledMapObj)
         {
             var mapObj = e.Get<MapObject>();
-            if (type.typeName == "player")
+            if (type.TypeName == "player")
             {
                 e.Attach(new Storage());
                 GameContext.PlayerId = e.Id;
                 e.Attach<BaseAI>(new PlayerControll(e.Id));
             }
-            if (type.typeName == "enemy")
+            if (type.TypeName == "enemy")
             {
                 mapObj.Type = GameObjectType.Enemy;
                 e.Attach(new Cursor("sword"));
@@ -104,19 +104,19 @@ namespace temp1
             foreach (var prop in mapObject.Properties)
             {
                 var type = GameObjectTypes[prop.Key];
-                var count = int.Parse(prop.Value);
-                if (count == 0)
+                var countInStack = int.Parse(prop.Value);
+                if (countInStack == 0)
                     continue;
-                var _count = count;
-                while (_count > 0)
+
+                while (countInStack > 0)
                 {
-                    if (type.stackSize < _count)
+                    if (type.StackSize < countInStack)
                     {
-                        _count -= type.stackSize;
+                        countInStack -= type.StackSize;
                         storage.Content.Add(new ItemStack
                         {
                             ItemType = type,
-                            Count = type.stackSize
+                            Count = type.StackSize
                         });
                     }
                     else
@@ -124,7 +124,7 @@ namespace temp1
                         storage.Content.Add(new ItemStack
                         {
                             ItemType = type,
-                            Count = _count
+                            Count = countInStack,
                         });
                         break;
                     }

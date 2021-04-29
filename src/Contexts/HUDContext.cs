@@ -16,16 +16,15 @@ namespace temp1.UI
     {
         private HUDState _state;
         private Desktop _ui;
-        private Game _game;
+        private Game1 _game;
 
         public HUDState State => _state;
         public bool IsMouseOnHud => false;
 
-        public HudContext(Game game)
+        public HudContext(Game1 game)
         {
             _game = game;
         }
-
         
         public void Default()
         {
@@ -35,12 +34,18 @@ namespace temp1.UI
 
         public void OpenInventory1(Storage storage)
         {
-
+            var inventory = new InventoryOpen(_game);
+            inventory.BuildItems(storage);
+            _ui = inventory;
+            _state = HUDState.Inventory1;
         }
 
         public void OpenInventory2(Storage left, Storage right)
         {
-
+            var inventory = new InventoryOpen(_game);
+            inventory.BuildItems(left);
+            _ui = inventory;
+            _state = HUDState.Inventory2;
         }
 
         public void Draw(GameTime time)

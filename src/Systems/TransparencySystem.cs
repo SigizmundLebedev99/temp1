@@ -66,7 +66,7 @@ namespace temp1.Systems
                 if (point.X > textureWidth || point.Y > textureHeight || i < 0 || i >= pixels.Length)
                     return false;
                 var a = pixels[i].A;
-                return a > 200;
+                return a > 150;
             }
 
             if (ContainsPoint(player.BottomLeft) || ContainsPoint(player.BottomRight))

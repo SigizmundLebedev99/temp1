@@ -7,7 +7,7 @@ namespace temp1.UI.Controls
 {
     public class TextButton : Button
     {
-        private Label label;
+        protected Label label;
 
         public TextButton()
         {
