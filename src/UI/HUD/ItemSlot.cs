@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using temp1.Data;
+using temp1.UI.Controls;
 
 namespace temp1.UI
 {
@@ -10,10 +11,13 @@ namespace temp1.UI
         public ItemTypeFlags Flags;
 
         private InventoryItem StoredItem;
+        private Panel _backPanel;
 
-        public ItemSlot(ItemTypeFlags type)
+        public ItemSlot(Panel backPanel, ItemTypeFlags type)
         {
             Flags = type;
+            _backPanel = backPanel;
+            Size = backPanel.Size;
         }
 
         public override void Update(GameTime time, MouseState mouse, Vector2 position)
@@ -23,17 +27,11 @@ namespace temp1.UI
                 StoredItem.Update(time, mouse, position);
         }
 
-        public override void Draw(GameTime time, SpriteBatch batch, Vector2 position)
+        public override void Draw(GameTime time, SpriteBatch batch, Vector2 position, float depth)
         {
+            _backPanel.Draw(time, batch, position, depth);
             if (StoredItem != null)
-                StoredItem.Draw(time, batch, position);
-        }
-
-        private void TryAddItem()
-        {
-            DraggingItem.SetContainer(this);
-            StoredItem = DraggingItem;
-            DraggingItem = null;
+                StoredItem.Draw(time, batch, position, depth + 0.05f);
         }
 
         public override void RemoveItem(InventoryItem item)
@@ -41,9 +39,19 @@ namespace temp1.UI
             StoredItem = null;
         }
 
-        protected override void AddItem()
+        public override void AddItem(InventoryItem item)
         {
-            StoredItem = DraggingItem;
+            if(!Valid(item))
+                return;
+            if (StoredItem != null && item != StoredItem)
+                item.Container.AddItem(StoredItem);
+            StoredItem = item;
+            item.SetContainer(this);
+        }
+
+        private bool Valid(InventoryItem item)
+        {
+            return (item.Item.ItemType.Flags & Flags) != 0;
         }
     }
 }

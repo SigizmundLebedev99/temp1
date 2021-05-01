@@ -11,23 +11,19 @@ namespace temp1.Systems
 {
     class TransparensySystem : EntityProcessingSystem
     {
-        Mapper<AnimatedSprite> _aSpriteMapper;
-        Mapper<Sprite> _spriteMapper;
+        Mapper<RenderingObject> _spriteMapper;
         Mapper<MapObject> _moMapper;
-        Mapper<Hull> _hullMapper;
 
         Dictionary<int, (int, int, Color[])> _cache = new Dictionary<int, (int, int, Color[])>();
 
-        public TransparensySystem() : base(Aspect.All(typeof(Sprite), typeof(Hull)))
+        public TransparensySystem() : base(Aspect.All(typeof(RenderingObject), typeof(Hull)))
         {
         }
 
         public override void Initialize(IComponentMapperService mapperService)
         {
             _moMapper = mapperService.Get<MapObject>();
-            _spriteMapper = mapperService.Get<Sprite>();
-            _aSpriteMapper = mapperService.Get<AnimatedSprite>();
-            _hullMapper = mapperService.Get<Hull>();
+            _spriteMapper = mapperService.Get<RenderingObject>();
         }
 
         public override void Process(GameTime gameTime, int entityId)
@@ -36,22 +32,24 @@ namespace temp1.Systems
             var hullPos = _moMapper.Get(entityId).Position;
             if (playerPos.Y > hullPos.Y)
                 return;
-            var playerRect = _aSpriteMapper.Get(GameContext.PlayerId).GetBoundingRectangle(playerPos, 0, Vector2.One);
             
-            _hullMapper.Get(entityId).IsPlayerIn = Overlaps(entityId, hullPos, playerRect);
+            var playerSprite = _spriteMapper.Get(GameContext.PlayerId);
+            var hullSprite = _spriteMapper.Get(entityId);
+            var playerRect = playerSprite.Sprite.GetBoundingRectangle(playerPos, 0, Vector2.One);
+            
+            hullSprite.Visible = !Overlaps(entityId, hullSprite, hullPos, playerRect);
         }
 
-        bool Overlaps(int id, Vector2 hullPos, RectangleF player)
+        bool Overlaps(int id, RenderingObject sprite, Vector2 hullPos, RectangleF player)
         {
-            var sprite = _spriteMapper.Get(id);
             var playerRect = player.ToRectangle();
-            var hullRect = sprite.GetBoundingRectangle(hullPos, 0, Vector2.One).ToRectangle();
+            var hullRect = sprite.Sprite.GetBoundingRectangle(hullPos, 0, Vector2.One).ToRectangle();
             if (!hullRect.Intersects(playerRect) && !hullRect.Contains(playerRect))
                 return false;
 
             if (!_cache.ContainsKey(id))
             {
-                var texture = sprite.TextureRegion.Texture;
+                var texture = sprite.Texture;
                 var data = new Color[texture.Width * texture.Height];
                 texture.GetData(data);
                 _cache.Add(id, (texture.Width, texture.Height, data));

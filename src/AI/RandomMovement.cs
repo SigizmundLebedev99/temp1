@@ -46,9 +46,8 @@ namespace temp1.AI
                             if (!TryGetPoint(out var point, mapContext))
                                 return BehaviourTreeStatus.Success;
                             if (mapContext.PathFinder.FindPath(_mo, point, out var first, out var last))
-                            {
                                 _walkMap.Put(EntityId, first);
-                            }
+                            
                             return BehaviourTreeStatus.Success;
                         })
                     .End()

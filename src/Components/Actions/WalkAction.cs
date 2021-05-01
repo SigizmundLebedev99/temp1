@@ -4,10 +4,11 @@ namespace temp1.Components
 {
     class WalkAction : BaseAction
     {
-        public Point from;
-        public Point to;
+        public Point From;
+        public Point To;
         public override int PointsTaken => 1;
         public override ActionStatus Status => status;
+        
         private ActionStatus status = ActionStatus.Running;
 
         private MapObject _objToMove;
@@ -15,8 +16,8 @@ namespace temp1.Components
         public WalkAction(Point from, Point to, MapObject objToMove, float speed)
         {
             this._speed = speed;
-            this.from = from;
-            this.to = to;
+            this.From = from;
+            this.To = to;
             this._from = from.ToVector2() * 32 + new Vector2(16);
             this._to = to.ToVector2() * 32 + new Vector2(16);
             _objToMove = objToMove;

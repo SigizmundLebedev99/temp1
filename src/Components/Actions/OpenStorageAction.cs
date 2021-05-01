@@ -9,23 +9,20 @@ namespace temp1.Components
 
         public int StorageId;
 
-        HudContext _hud;
-
-        public OpenStorageAction(int storageId, HudContext context)
+        public OpenStorageAction(int storageId)
         {
             StorageId = storageId;
-            _hud = context;
         }
 
         public override void Abort()
         {
-            _hud.Default();
+            GameContext.Hud.Default();
             Status = ActionStatus.Canceled;
         }
 
         public override void Update(GameTime time)
         { 
-            if(_hud.State == HUDState.Default)
+            if(GameContext.Hud.State == HUDState.Default)
                 Status = ActionStatus.Success;
         }
     }

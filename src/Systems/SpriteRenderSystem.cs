@@ -7,20 +7,21 @@ using temp1.Components;
 
 namespace temp1.Systems
 {
-    class AnimationRenderSystem : EntitySystem, IDrawSystem, IUpdateSystem
+    class SpriteRenderSystem : EntitySystem, IDrawSystem, IUpdateSystem
     {
-        private Mapper<AnimatedSprite> _spriteMapper;
-        private Mapper<MapObject> _boxMapper;
+        private Mapper<RenderingObject> _spriteMapper;
+        private Mapper<MapObject> _mapObjectMapper;
         private SpriteBatch _spriteBatch;
-        public AnimationRenderSystem(SpriteBatch sb) : base(Aspect.All(typeof(AnimatedSprite), typeof(MapObject)))
+
+        public SpriteRenderSystem(SpriteBatch sb) : base(Aspect.All(typeof(RenderingObject), typeof(MapObject)))
         {
             _spriteBatch = sb;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
         {
-            _spriteMapper = mapperService.Get<AnimatedSprite>();
-            _boxMapper = mapperService.Get<MapObject>();
+            _spriteMapper = mapperService.Get<RenderingObject>();
+            _mapObjectMapper = mapperService.Get<MapObject>();
         }
 
         public void Update(GameTime gameTime)
@@ -28,7 +29,8 @@ namespace temp1.Systems
             var entities = this.ActiveEntities;
             for(var i = 0; i < entities.Count; i ++){
                 var sprite = _spriteMapper.Get(entities[i]);
-                sprite.Update(gameTime);
+                if(sprite.Sprite is AnimatedSprite animated)
+                    animated.Update(gameTime);
             }
         }
 
@@ -37,11 +39,13 @@ namespace temp1.Systems
             var entities = this.ActiveEntities;
             for(var i = 0; i < entities.Count; i ++){
                 var sprite = _spriteMapper.Get(entities[i]);
-                var box = _boxMapper.Get(entities[i]);
+                if(!sprite.Visible)
+                    continue;
+                var box = _mapObjectMapper.Get(entities[i]);
                 _spriteBatch.Draw(
-                    sprite.TextureRegion.Texture,
+                    sprite.Texture,
                     box.Position,
-                    new Rectangle(sprite.TextureRegion.X, sprite.TextureRegion.Y, sprite.TextureRegion.Width, sprite.TextureRegion.Height),
+                    sprite.Bounds,
                     Color.White,
                     0, 
                     sprite.Origin,

@@ -8,6 +8,6 @@ namespace temp1.Components
             SpriteName = spriteName;
         }
 
-        public string SpriteName ;
+        public string SpriteName;
     }
 }

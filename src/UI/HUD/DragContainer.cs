@@ -26,11 +26,10 @@ namespace temp1.UI
 
             this.MouseUp += (s, e) =>
             {
-                if (DraggingItem == null || InventoryItem.Dragging == null)
+                if (DraggingItem == null)
                     return;
 
-                AddItem();
-                DraggingItem.SetContainer(this);
+                AddItem(DraggingItem);
                 DraggingItem = null;
             };
         }
@@ -40,7 +39,7 @@ namespace temp1.UI
             base.Update(time, mouse, position);
         }
 
-        protected abstract void AddItem();
+        public abstract void AddItem(InventoryItem item);
 
         public abstract void RemoveItem(InventoryItem item);
     }

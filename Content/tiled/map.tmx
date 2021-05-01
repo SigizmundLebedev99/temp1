@@ -95,6 +95,7 @@
    <properties>
     <property name="blue_potion1" type="int" value="20"/>
     <property name="gladius1" type="int" value="1"/>
+    <property name="helmet1" type="int" value="1"/>
     <property name="red_potion1" type="int" value="20"/>
    </properties>
    <point/>

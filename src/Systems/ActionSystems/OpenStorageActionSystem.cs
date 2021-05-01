@@ -10,20 +10,17 @@ namespace temp1.Systems
     class OpenStorageActionSystem : EntityProcessingSystem
     {
         Mapper<OpenStorageAction> _actionMap;
-        Mapper<AnimatedSprite> _aSpriteMap;
+        Mapper<RenderingObject> _spriteMap;
         Mapper<Storage> _storageMap;
-
-        HudContext _hud;
         
-        public OpenStorageActionSystem(HudContext hud) : base(Aspect.All(typeof(OpenStorageAction)))
+        public OpenStorageActionSystem() : base(Aspect.All(typeof(OpenStorageAction)))
         {
-            _hud = hud;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
         {
             _actionMap = mapperService.Get<OpenStorageAction>();
-            _aSpriteMap = mapperService.Get<AnimatedSprite>();
+            _spriteMap = mapperService.Get<RenderingObject>();
             _storageMap = mapperService.Get<Storage>();
         }
 
@@ -41,10 +38,10 @@ namespace temp1.Systems
             var actor = _storageMap.Get(actorId);
             if(storage == null || actor == null)
                 return false;
-            var sprite = _aSpriteMap.Get(storageId);
+            var sprite = _spriteMap.Get(storageId);
             sprite.Play("open");
             if(GameContext.PlayerId == actorId)
-                _hud.OpenInventory2(storage, actor);
+                GameContext.Hud.OpenChest(storage, actor);
             return true;
         }
     }

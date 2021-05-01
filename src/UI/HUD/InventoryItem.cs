@@ -15,7 +15,7 @@ namespace temp1.UI
 
         public ItemStack Item;
 
-        private DragArea Container;
+        public DragArea Container;
 
         private Sprite sprite;
         private Label label;
@@ -28,7 +28,6 @@ namespace temp1.UI
                 if (Dragging != null)
                     return;
                 Dragging = this;
-                this.Depth = 1;
                 MousePosition = e.Position.ToVector2();
             };
 
@@ -37,7 +36,6 @@ namespace temp1.UI
                 if (Dragging != this)
                     return;
                 Dragging = null;
-                this.Depth = 0;
             };
         }
 
@@ -47,7 +45,8 @@ namespace temp1.UI
 
             Item = stack;
             sprite = GameContext.Content.GetSprite(stack.ItemType.Path, stack.ItemType.Region);
-
+            if((stack.ItemType.Flags & ItemTypeFlags.Consumable) == 0)
+                return;
             label = factory.CreateLabel(6);
             label.TextAlign = TextAlign.Right;
             label.Text = stack.Count.ToString();
@@ -56,22 +55,24 @@ namespace temp1.UI
 
         public void SetContainer(DragArea container)
         {
-            if(Container != null)
+            if(Container != null && Container != container)
                 Container.RemoveItem(this);
             Container = container;
         }
 
-        public override void Draw(GameTime time, SpriteBatch batch, Vector2 position)
+        public override void Draw(GameTime time, SpriteBatch batch, Vector2 position, float depth)
         {
             if (Dragging == this)
                 position = MousePosition;
 
-            base.Draw(time, batch, position);
+            depth = Dragging == this ? 0.1f : depth + 0.01f;
+            
+            base.Draw(time, batch, position, depth);
 
             if (sprite != null)
-                batch.Draw(sprite.TextureRegion, position + Size / 2 - ((Vector2)sprite.TextureRegion.Size / 2), Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, Depth + 0.01f);
+                batch.Draw(sprite.TextureRegion, position + Size / 2 - ((Vector2)sprite.TextureRegion.Size / 2), Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, depth + 0.01f);
 
-            label.Draw(time, batch, position);
+            label?.Draw(time, batch, position, depth + 0.02f);
         }
 
         public override void Update(GameTime time, MouseState mouse, Vector2 position)
@@ -79,7 +80,7 @@ namespace temp1.UI
             if (Dragging == this)
                 position = MousePosition = mouse.Position.ToVector2();
             base.Update(time, mouse, position);
-            label.Update(time, mouse, position + new Vector2(5, 25));
+            label?.Update(time, mouse, position + new Vector2(5, 25));
         }
     }
 }

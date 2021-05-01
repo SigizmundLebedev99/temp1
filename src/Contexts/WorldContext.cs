@@ -5,7 +5,6 @@ using MonoGame.Extended.Entities;
 using temp1.AI;
 using temp1.Components;
 using temp1.Systems;
-using temp1.UI;
 
 namespace temp1
 {
@@ -18,24 +17,22 @@ namespace temp1
         public Bag<int> Actors => actorsSubscription.ActiveEntities;
         public Bag<int> MapObjects => mapObjectsSubscription.ActiveEntities;
 
-        public World World => _world; 
+        public World World => _world;
 
-        public void ConfigureWorld(MapContext map, HudContext hud, SpriteBatch batch, GameObjectsContext go, ContentManager content)
+        public void ConfigureWorld(MapContext map, SpriteBatch batch, GameObjectsContext go, ContentManager content)
         {
             _world = new WorldBuilder().AddSystem(new TurnBasedCombatSystem(this))
-            .AddSystem(new WalkActionSystem(this, hud))
-            .AddSystem(new OpenStorageActionSystem(hud))
+            .AddSystem(new WalkActionSystem(this))
+            .AddSystem(new OpenStorageActionSystem())
             .AddSystem(new PeakItemActionSystem())
             .AddSystem(new BaseActionSystem())
             .AddSystem(new PossibleMovementBuildSystem(map))
-            .AddSystem(new CursorSystem(batch, hud, map, content))
+            .AddSystem(new CursorSystem(batch, map, content))
             .AddSystem(new AISystem())
             .AddSystem(new TransparensySystem())
-            .AddSystem(new MoveOriginSystem())
             .AddSystem(new ExpirationSystem())
             .AddSystem(new DirectionToAnimationSystem())
-            .AddSystem(new AnimationRenderSystem(batch))
-            .AddSystem(new StaticSpriteRenderSystem(batch))
+            .AddSystem(new SpriteRenderSystem(batch))
             .AddSystem(new PossibleMovementDrawSystem(batch, content))
             .AddSystem(new SpawnSystem(map, go, content)).Build();
 

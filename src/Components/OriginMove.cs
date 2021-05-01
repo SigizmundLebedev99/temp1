@@ -4,12 +4,7 @@ using MonoGame.Extended.Sprites;
 
 namespace temp1.Components
 {
-    interface IOriginMove
-    {
-        void Update(GameTime gameTime);
-    }
-
-    class JumpOriginMove : IOriginMove
+    class JumpOriginMove : Expired
     {
         Sprite _sprite;
         Vector2 _origin;
@@ -19,13 +14,14 @@ namespace temp1.Components
             _origin = sprite.Origin;
         }
 
-        public void Update(GameTime gameTime)
+        public override bool Update(GameTime gameTime)
         {
             _sprite.Origin = _origin + new Vector2(0, (float)Math.Abs(Math.Sin(gameTime.TotalGameTime.Milliseconds / 64) * 10));
+            return true;
         }
     }
 
-    class SinOriginMove : IOriginMove
+    class SinOriginMove : Expired
     {
         Sprite _sprite;
         public SinOriginMove(Sprite sprite)
@@ -33,9 +29,10 @@ namespace temp1.Components
             _sprite = sprite;
         }
 
-        public void Update(GameTime gameTime)
+        public override bool Update(GameTime gameTime)
         {
             _sprite.Origin += new Vector2(0, (float)Math.Sin(gameTime.TotalGameTime.Milliseconds / 64) * 3);
+            return true;
         }
     }
 }

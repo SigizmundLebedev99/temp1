@@ -9,24 +9,25 @@ namespace temp1.Systems
 {
     class DirectionToAnimationSystem : EntityProcessingSystem
     {
-        Mapper<AnimatedSprite> _spriteMapper;
+        Mapper<RenderingObject> _spriteMapper;
         Mapper<Direction> _directionMapper;
         Mapper<BaseAction> _actionMapper;
 
-        public DirectionToAnimationSystem() : base(Aspect.All(typeof(AnimatedSprite), typeof(Direction)))
+        public DirectionToAnimationSystem() : base(Aspect.All(typeof(RenderingObject), typeof(Direction)))
         {
         }
 
         public override void Initialize(IComponentMapperService mapperService)
         {
             _directionMapper = mapperService.Get<Direction>();
-            _spriteMapper = mapperService.Get<AnimatedSprite>();
+            _spriteMapper = mapperService.Get<RenderingObject>();
             _actionMapper = mapperService.Get<BaseAction>();
         }
 
         public override void Process(GameTime gameTime, int entityId)
         {
-            var animation = _spriteMapper.Get(entityId);
+            var sprite = _spriteMapper.Get(entityId);
+
             var dir = _directionMapper.Get(entityId);
             var action = _actionMapper.Get(entityId);
             var angle = dir.angle;
@@ -43,11 +44,11 @@ namespace temp1.Systems
 
             if(action == null || !(action is WalkAction)){
                 _directionMapper.Delete(entityId);
-                animation.Play("idle" + direction);
+                sprite.Play("idle" + direction);
                 return;
             }
 
-            animation.Play("walk" + direction);
+            sprite.Play("walk" + direction);
         }
     }
 }

@@ -16,9 +16,9 @@ namespace temp1.UI.Controls
     {
         public Orientation Orientation;
 
-        public override void Draw(GameTime time, SpriteBatch batch, Vector2 position)
+        public override void Draw(GameTime time, SpriteBatch batch, Vector2 position, float depth = 0)
         {
-            ComputePositions(position, (c, p) => c.Draw(time, batch, p));
+            ComputePositions(position, (c, p) => c.Draw(time, batch, p, depth));
         }
 
         public override void Update(GameTime time, MouseState mouse, Vector2 position)

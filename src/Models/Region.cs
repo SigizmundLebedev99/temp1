@@ -3,20 +3,6 @@ using temp1.Components;
 
 namespace temp1.Data
 {
-    enum GameObjectType
-    {
-        None,
-        Storage,
-        Enemy,
-        Item
-    }
-
-    class Origin
-    {
-        public int X;
-        public int Y;
-    }
-
     class Region
     {
         public int X;
@@ -24,9 +10,10 @@ namespace temp1.Data
         public int Width;
         public int Height;
 
-        public Region(){}
+        public Region() { }
 
-        public Region(int x, int y, int width, int height){
+        public Region(int x, int y, int width, int height)
+        {
             this.X = x;
             this.Y = y;
             this.Height = height;
@@ -43,17 +30,4 @@ namespace temp1.Data
             return new Region(r.X, r.Y, r.Width, r.Height);
         }
     }
-
-    class GameObjectTypeInfo
-    {
-        public string TypeName;
-        public GameObjectType Type;
-        public string Path;
-        public Origin Origin;
-        public Region Region;
-        public string Handler;
-        public int StackSize;
-        public ItemTypeFlags Flags;
-    }
 }
-

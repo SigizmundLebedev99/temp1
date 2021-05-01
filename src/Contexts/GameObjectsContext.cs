@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Entities;
 using MonoGame.Extended.Serialization;
+using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
 using temp1.AI;
 using temp1.Components;
@@ -50,19 +51,19 @@ namespace temp1
 
             if (position.HasValue)
                 entity.Attach(new MapObject(position.Value, GameObjectType.None));
-
+                
+            Sprite sprite;
             if (objType.Path.EndsWith(".sf"))
             {
-                var sprite = _content.GetAnimatedSprite(objType.Path);
+                sprite = _content.GetAnimatedSprite(objType.Path);
                 if (objType.Origin != null)
                     sprite.Origin = new Vector2(objType.Origin.X, objType.Origin.Y);
-                entity.Attach(sprite);
             }
             else
-            {
-                var sprite = _content.GetSprite(objType);
-                entity.Attach(sprite);
-            }
+                sprite = _content.GetSprite(objType);    
+            
+            
+            entity.Attach(new RenderingObject(sprite));
 
             if (objType.Handler == null || !Handlers.TryGetValue(objType.Handler, out var handler))
                 return entity.Id;
@@ -79,11 +80,12 @@ namespace temp1
             {
                 e.Attach(new Storage());
                 GameContext.PlayerId = e.Id;
+                mapObj.Type = GameObjectType.Blocking;
                 e.Attach<BaseAI>(new PlayerControll(e.Id));
             }
             if (type.TypeName == "enemy")
             {
-                mapObj.Type = GameObjectType.Enemy;
+                mapObj.Type = GameObjectType.Enemy | GameObjectType.Blocking;
                 e.Attach(new Cursor("sword"));
                 e.Attach<BaseAI>(new RandomMovement(e.Id));
             }
@@ -98,7 +100,7 @@ namespace temp1
         void ChestHandler(Entity e, GameObjectTypeInfo obj, TiledMapObject mapObject)
         {
             var mapObj = e.Get<MapObject>();
-            mapObj.Type = GameObjectType.Storage;
+            mapObj.Type = GameObjectType.Storage | GameObjectType.Blocking;
             var storage = new Storage();
 
             foreach (var prop in mapObject.Properties)
@@ -130,7 +132,7 @@ namespace temp1
                     }
                 }
             }
-            //context.MovementGrid.SetValueAt(mapObj.MapPosition.X, mapObj.MapPosition.Y, 3);
+            GameContext.Map.MovementGrid.SetValueAt(mapObj.MapPosition.X, mapObj.MapPosition.Y, 3);
             e.Attach(storage);
             e.Attach(new Cursor("hand"));
         }

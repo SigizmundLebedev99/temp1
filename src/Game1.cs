@@ -46,18 +46,5 @@ namespace temp1
         protected override void LoadContent()
         {
         }
-
-        protected override void Update(GameTime gameTime)
-        {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-            base.Update(gameTime);
-        }
-
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            base.Draw(gameTime);
-        }
     }
 }

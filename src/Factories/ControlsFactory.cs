@@ -76,18 +76,27 @@ namespace temp1.Factories
             return button;
         }
 
-        public Label CreateLabel(int resourceSet)
+        public Label CreateLabel(int resourceSet = -1, string fontName = null)
         {
-            var font = LoadFnt(resourceSet, 0);
+            BitmapFont font;
+            if(resourceSet != -1)
+                font = LoadFnt(resourceSet, 0);
+            else
+                font = _content.Load<BitmapFont>(fontName);
             var label = new Label();
             label.Font = font;
             return label;
         }
 
-        public Panel CreatePanel(int resourceSet)
+        public Panel CreatePanel(int resourceSet = 0, string textureName = null)
         {
             var panel = new Panel();
-            var texture = LoadTxr(resourceSet, 0);
+            Texture2D texture;
+            if(textureName == null)
+                texture = LoadTxr(resourceSet, 0);
+            else
+                texture = _content.Load<Texture2D>(textureName);
+                
             if (texture == null)
                 throw new InvalidOperationException("Border texture not found, resource set - " + resourceSet);
             panel.Texture = texture;

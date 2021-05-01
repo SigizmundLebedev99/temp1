@@ -26,8 +26,8 @@ namespace temp1.Util
                 return false;
             var node = first = new WalkAction(
                 path[0],
-                path[1], 
-                actor, 
+                path[1],
+                actor,
                 1f/16f
             );
             for (var i = 2; i < path.Count; i++)

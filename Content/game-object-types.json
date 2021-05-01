@@ -7,7 +7,7 @@
             "x": 26,
             "y": 65
         },
-        "handler":"ActorHandler"
+        "handler": "ActorHandler"
     },
     {
         "typeName": "enemy",
@@ -17,7 +17,7 @@
             "x": 26,
             "y": 65
         },
-        "handler":"ActorHandler"
+        "handler": "ActorHandler"
     },
     {
         "typeName": "tree",
@@ -35,7 +35,7 @@
             "x": 16,
             "y": 20
         },
-        "handler":"ChestHandler"
+        "handler": "ChestHandler"
     },
     {
         "typeName": "house",
@@ -45,42 +45,54 @@
             "x": 0,
             "y": 464
         },
-        "handler":"HullHandler"
+        "handler": "HullHandler"
     },
     {
         "typeName": "blue_potion1",
-        "stackSize":10,
-        "flags":4,
-        "path":"images/dragons_blade",
-        "region":{
-            "x":224,
-            "y":0,
-            "width":32,
-            "height":32
+        "stackSize": 10,
+        "flags": 1,
+        "path": "images/dragons_blade",
+        "region": {
+            "x": 224,
+            "y": 0,
+            "width": 32,
+            "height": 32
         }
     },
     {
         "typeName": "red_potion1",
-        "stackSize":10,
-        "flags":4,
-        "path":"images/dragons_blade",
-        "region":{
-            "x":192,
-            "y":0,
-            "width":32,
-            "height":32
+        "stackSize": 10,
+        "flags": 1,
+        "path": "images/dragons_blade",
+        "region": {
+            "x": 192,
+            "y": 0,
+            "width": 32,
+            "height": 32
         }
     },
     {
         "typeName": "gladius1",
-        "stackSize":1,
-        "path":"images/dragons_blade_2",
-        "flags":4,
-        "region":{
-            "x":96,
-            "y":0,
-            "width":32,
-            "height":32
+        "stackSize": 1,
+        "path": "images/dragons_blade_2",
+        "flags": 20,
+        "region": {
+            "x": 96,
+            "y": 0,
+            "width": 32,
+            "height": 32
+        }
+    },
+    {
+        "typeName": "helmet1",
+        "stackSize": 1,
+        "path": "images/dragons_blade_2",
+        "flags": 10,
+        "region": {
+            "x": 64,
+            "y": 64,
+            "width": 32,
+            "height": 32
         }
     }
 ]

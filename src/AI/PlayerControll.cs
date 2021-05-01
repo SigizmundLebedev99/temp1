@@ -1,4 +1,3 @@
-using FluentBehaviourTree;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Entities;
@@ -33,41 +32,49 @@ namespace temp1.AI
         public override void Update(GameTime time)
         {
             var newState = MouseExtended.GetState();
-            if (mouseState.LeftButton == ButtonState.Pressed && newState.LeftButton == ButtonState.Released
-            && _hud.State == HUDState.Default
-            && !_hud.IsMouseOnHud)
+            if (!CanHandleInput(newState))
             {
                 mouseState = newState;
-                var mapObj = _moMapper.Get(EntityId);
-                var pointed = GameContext.PointedId >= 0 ? _moMapper.Get(GameContext.PointedId) : null;
-                BaseAction after = null;
-
-                if (pointed != null)
-                {
-                    after = GetAfterAction(pointed, GameContext.PointedId);
-                }
-
-                if (after != null && mapObj.MapPosition == pointed.MapPosition)
-                {
-                    _baseActionMap.Put(EntityId, after);
-                    return;
-                }
-
-                if (_map.PathFinder.FindPath(mapObj, mouseState.MapPosition(GameContext.Camera), out var first, out var last))
-                {
-                    (last??first).After = after;
-                    _walkMapper.Put(EntityId, first);
-                }
+                return;
             }
+
+            var mapObj = _moMapper.Get(EntityId);
+            var pointed = GameContext.PointedId >= 0 ? _moMapper.Get(GameContext.PointedId) : null;
+            BaseAction after = null;
+
+            if (pointed != null)
+                after = GetAfterAction(pointed, GameContext.PointedId);
+
+            var mapPosition = mouseState.MapPosition(GameContext.Camera);
+            if (_map.PathFinder.FindPath(mapObj, mapPosition, out var first, out var last))
+            {
+                if (after != null)
+                {
+                    var action = last ?? first;
+                    action.Alternative = after;
+                    action.Abort();
+                }
+
+                _walkMapper.Put(EntityId, first);
+            }
+
             mouseState = newState;
+        }
+
+        private bool CanHandleInput(MouseStateExtended newState)
+        {
+            return mouseState.LeftButton == ButtonState.Pressed && newState.LeftButton == ButtonState.Released
+            && _hud.State == HUDState.Default
+            && !_hud.IsMouseOnHud;
         }
 
         private BaseAction GetAfterAction(MapObject pointed, int id)
         {
-            if (pointed.Type == GameObjectType.Item)
-            {
+            if ((pointed.Type & GameObjectType.Item) != 0)
                 return new PeakItemAction(EntityId, id);
-            }
+            if ((pointed.Type &  GameObjectType.Storage) != 0)
+                return new OpenStorageAction(GameContext.PointedId);
+
             return null;
         }
     }

@@ -8,24 +8,45 @@ namespace temp1.UI
 {
     class InventoryArea : DragArea
     {
-        InventoryOpen _inventoryOpen;
+        Storage _storage;
+        ContentControll _content;
+        ControlsFactory _factory;
         
-        public InventoryArea(InventoryOpen inventoryOpen)
+        public InventoryArea(ContentControll content, ControlsFactory factory)
         {
-            _inventoryOpen = inventoryOpen;
+            _content = content;
+            _factory = factory;
         }
 
-        public override void Draw(GameTime time, SpriteBatch batch, Vector2 position)
+        public override void Draw(GameTime time, SpriteBatch batch, Vector2 position, float depth)
         {}
 
-        protected override void AddItem()
+        public override void AddItem(InventoryItem item)
         {
-            _inventoryOpen.AddItem(DraggingItem);
+            if(_content.Children.Contains(item))
+                return;
+            _content.Children.Add(item);
+            _storage.Content.Add(item.Item);
+            item.SetContainer(this);
         }
 
         public override void RemoveItem(InventoryItem item)
         {
-            _inventoryOpen.AddItem(item);
+            _content.Children.Remove(item);
+            _storage.Content.Remove(item.Item);
+        }
+
+        public void BuildItems(Storage storage)
+        {
+            _storage = storage;
+            _content.Children.Clear();
+            for (var i = 0; i < storage.Content.Count; i++)
+            {
+                var item = _factory.CreateButton<InventoryItem>(7);
+                item.Build(storage.Content[i]);
+                item.SetContainer(this);
+                _content.Children.Add(item);
+            }
         }
     }
 }

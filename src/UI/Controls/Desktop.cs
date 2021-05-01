@@ -13,7 +13,7 @@ namespace temp1.UI.Controls
 
         public Vector2 Size;
 
-        public Control Root;
+        public ContentControll Root;
 
         public Desktop(SpriteBatch batch, SpriteSortMode sortMode = SpriteSortMode.Deferred)
         {
@@ -21,16 +21,18 @@ namespace temp1.UI.Controls
             SortMode = sortMode;
             _batch = batch;
             Size = new Vector2(_device.Viewport.Width, _device.Viewport.Height);
+            Root = new ContentControll();
+            Root.Size = Size;
         }
 
-        public void Draw(GameTime time)
+        public virtual void Draw(GameTime time)
         {
             _batch.Begin(sortMode: SortMode);
             Root.Draw(time, _batch, Root.ComputePosition(Vector2.Zero, Size));
             _batch.End();
         }
 
-        public void Update(GameTime time)
+        public virtual void Update(GameTime time)
         {
             Root.Update(time, Mouse.GetState(), Root.ComputePosition(Vector2.Zero, Size));
         }

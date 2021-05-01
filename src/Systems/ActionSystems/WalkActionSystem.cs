@@ -16,12 +16,10 @@ namespace temp1.Systems
         Mapper<Direction> _dirMap;
 
         WorldContext _context;
-        HudContext _hud;
 
-        public WalkActionSystem(WorldContext context, HudContext hud) : base(Aspect.All(typeof(WalkAction)))
+        public WalkActionSystem(WorldContext context) : base(Aspect.All(typeof(WalkAction)))
         {
             _context = context;
-            _hud = hud;
         }
 
         public override void Initialize(IComponentMapperService mapperService)
@@ -38,20 +36,20 @@ namespace temp1.Systems
             var action = _actionMapper.Get(entityId);
             _actionMapper.Delete(entityId);
             var mapObjects = _context.MapObjects;
+            
             for (var i = 0; i < mapObjects.Count; i++)
             {
                 var mapObj = _moMap.Get(mapObjects[i]);
-                if (mapObj.MapPosition != action.to)
+                if (mapObj.MapPosition != action.To)
                     continue;
-                switch (mapObj.Type)
+                else if((mapObj.Type & GameObjectType.Blocking) != 0)
                 {
-                    case GameObjectType.Storage : 
-                        _storageActionMap.Put(entityId, new OpenStorageAction(mapObjects[i], _hud));
-                        return;
+                    action.Abort();
+                    break;
                 }
             }
             _baseActionMapper.Put(entityId, action);
-            _dirMap.Put(entityId, new Direction(action.to, action.from));
+            _dirMap.Put(entityId, new Direction(action.To, action.From));
         }
     }
 }

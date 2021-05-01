@@ -22,9 +22,10 @@ namespace temp1
         public static int PointedId;
 
         public static WorldContext World;
-        public static GameObjectsContext GameObjectsContext;
+        public static GameObjectsContext GameObjects;
         public static HudContext Hud;
         public static MapContext Map;
+        public static CombatContext Combat;
         public static Game1 Game;
 
         public static ContentManager Content => Game.Content;
@@ -38,13 +39,20 @@ namespace temp1
             _sb = game.Batch;
 
             World = new WorldContext();
-            GameObjectsContext = new GameObjectsContext(Content);
-            Hud = new HudContext(game);
-            Map = new MapContext(Content, GameObjectsContext);
+            
+            GameObjects = new GameObjectsContext(Content);
+            
+            Map = new MapContext(Content, GameObjects);
 
-            World.ConfigureWorld(Map, Hud, _sb, GameObjectsContext, Content);
-            GameObjectsContext.Initialize(World);
+            World.ConfigureWorld(Map, _sb, GameObjects, Content);
+            
+            GameObjects.Initialize(World);
+            
+            Hud = new HudContext(game, World);
             Hud.Default();
+
+            Combat = new CombatContext(World);
+            
             Map.LoadMap("tiled/map");
 
             _tiledMapRenderer = Map.GetRenderer(game.GraphicsDevice);

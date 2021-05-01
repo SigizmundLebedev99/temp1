@@ -13,7 +13,7 @@ namespace temp1.UI.Controls
         Pressed
     }
 
-    public abstract class MouseControl : Control
+    public class MouseControl : Control
     {
         public event Action<MouseControl, MouseState> MouseDown;
         public event Action<MouseControl, MouseState> MouseUp;
@@ -58,5 +58,8 @@ namespace temp1.UI.Controls
             }
             previousState = State;
         }
+
+        public override void Draw(GameTime time, SpriteBatch batch, Vector2 position, float depth = 0)
+        {}
     }
 }

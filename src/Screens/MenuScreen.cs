@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
@@ -14,13 +15,13 @@ namespace temp1.Screens
         public MenuScreen(Game1 game) : base(game)
         {
             _factory = game.Services.GetService<ControlsFactory>();
-            CreateMenu(game, game.Services.GetService<ScreenManager>());
+            CreateMenu(game);
         }
 
         public override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.SlateGray);
-            
+
             _desktop.Draw(gameTime);
         }
 
@@ -29,17 +30,17 @@ namespace temp1.Screens
             _desktop.Update(gameTime);
         }
 
-        public void CreateMenu(Game1 game, ScreenManager screenManager)
+        public void CreateMenu(Game1 game)
         {
             _desktop = new Desktop(game.Batch);
 
-            var root = new ContentControll();
-            root.Size = _desktop.Size;
+            var root = _desktop.Root;
 
             var label = _factory.CreateLabel(1);
             label.OffsetFrom = Anchors.TopCenter;
-            label.Offset = new Vector2(0, 20);
+            label.Offset = new Vector2(0, 40);
             label.Text = "My cool game";
+            label.ComputeSize(Vector2.Zero, Autosize.Content);
 
             var content = new ContentControll();
             content.OffsetFrom = Anchors.Center;
@@ -50,7 +51,7 @@ namespace temp1.Screens
             start.Text = "New game";
             start.MouseUp += (s, e) =>
             {
-                screenManager.LoadScreen(new PlayScreen(game));
+                LoadGame();
             };
 
             var options = _factory.CreateTextButton(0);
@@ -81,8 +82,15 @@ namespace temp1.Screens
             root.Children.Add(border);
             root.Children.Add(label);
             root.Children.Add(content);
+        }
 
-            _desktop.Root = root;
+        void LoadGame()
+        {
+            ScreenManager.LoadScreen(new LoadingScreen((Game1)Game));
+            Task.Run(() => {
+                GameContext.Init((Game1)Game, Content);
+            })
+            .ContinueWith(t => ScreenManager.LoadScreen(new PlayScreen(Game)));
         }
     }
 }
