@@ -60,7 +60,7 @@ namespace temp1.Systems
             bool ContainsPoint(Vector2 v)
             {
                 var point = (v - new Vector2(hullRect.Left, hullRect.Top)).ToPoint();
-                var i = point.X + point.Y * textureWidth;
+                var i = point.X + point.Y * textureWidth - 1;
                 if (point.X > textureWidth || point.Y > textureHeight || i < 0 || i >= pixels.Length)
                     return false;
                 var a = pixels[i].A;
