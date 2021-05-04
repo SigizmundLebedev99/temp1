@@ -37,8 +37,7 @@ namespace temp1
             Handlers = new Dictionary<string, Action<Entity, GameObjectTypeInfo, TiledMapObject>>
             {
                 {"ActorHandler", ActorHandler},
-                {"ChestHandler", ChestHandler},
-                {"HullHandler", HullHandler},
+                {"ChestHandler", ChestHandler}
             };
         }
 
@@ -135,11 +134,6 @@ namespace temp1
             GameContext.Map.MovementGrid.SetValueAt(mapObj.MapPosition.X, mapObj.MapPosition.Y, 3);
             e.Attach(storage);
             e.Attach(new Cursor("hand"));
-        }
-
-        void HullHandler(Entity e, GameObjectTypeInfo type, TiledMapObject mapObject)
-        {
-            e.Attach(new Hull());
         }
     }
 }

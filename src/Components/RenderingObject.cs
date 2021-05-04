@@ -10,6 +10,7 @@ namespace temp1.Components
         public RenderingObject(Sprite sprite)
         {
             Sprite = sprite;
+            Depth = sprite.Depth;
         }
 
         public bool Visible = true;
@@ -18,7 +19,7 @@ namespace temp1.Components
         public Rectangle Bounds => Sprite.TextureRegion.Bounds;
         public Texture2D Texture => Sprite.TextureRegion.Texture;
         public Vector2 Origin => Sprite.Origin;
-        public float Depth => Sprite.Depth;
+        public float Depth;
 
         public void Play(string animationName, Action OnCompleted = null)
         {

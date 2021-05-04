@@ -13,7 +13,7 @@ namespace temp1.Systems
         private Mapper<MapObject> _mapObjectMapper;
         private SpriteBatch _spriteBatch;
 
-        public SpriteRenderSystem(SpriteBatch sb) : base(Aspect.All(typeof(RenderingObject), typeof(MapObject)))
+        public SpriteRenderSystem(SpriteBatch sb) : base(Aspect.All(typeof(RenderingObject)))
         {
             _spriteBatch = sb;
         }
@@ -27,9 +27,10 @@ namespace temp1.Systems
         public void Update(GameTime gameTime)
         {
             var entities = this.ActiveEntities;
-            for(var i = 0; i < entities.Count; i ++){
+            for (var i = 0; i < entities.Count; i++)
+            {
                 var sprite = _spriteMapper.Get(entities[i]);
-                if(sprite.Sprite is AnimatedSprite animated)
+                if (sprite.Sprite is AnimatedSprite animated)
                     animated.Update(gameTime);
             }
         }
@@ -37,21 +38,25 @@ namespace temp1.Systems
         public void Draw(GameTime gameTime)
         {
             var entities = this.ActiveEntities;
-            for(var i = 0; i < entities.Count; i ++){
+            for (var i = 0; i < entities.Count; i++)
+            {
                 var sprite = _spriteMapper.Get(entities[i]);
-                if(!sprite.Visible)
+                if (!sprite.Visible)
                     continue;
                 var box = _mapObjectMapper.Get(entities[i]);
+                var position = box?.Position ?? Vector2.Zero;
+                
+                var depth = box != null ? 0.1f / box.MapPosition.Y : sprite.Depth;
                 _spriteBatch.Draw(
                     sprite.Texture,
-                    box.Position,
+                    position,
                     sprite.Bounds,
                     Color.White,
-                    0, 
+                    0,
                     sprite.Origin,
                     1,
                     SpriteEffects.None,
-                    sprite.Depth + 0.1f / box.Position.Y
+                    depth
                 );
             }
         }

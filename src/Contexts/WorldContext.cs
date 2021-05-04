@@ -29,7 +29,7 @@ namespace temp1
             .AddSystem(new PossibleMovementBuildSystem(map))
             .AddSystem(new CursorSystem(batch, map, content))
             .AddSystem(new AISystem())
-            .AddSystem(new TransparensySystem())
+            .AddSystem(new CoverSystem())
             .AddSystem(new ExpirationSystem())
             .AddSystem(new DirectionToAnimationSystem())
             .AddSystem(new SpriteRenderSystem(batch))

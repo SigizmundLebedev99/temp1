@@ -87,10 +87,10 @@ namespace temp1.Screens
         void LoadGame()
         {
             ScreenManager.LoadScreen(new LoadingScreen((Game1)Game));
-            Task.Run(() => {
-                GameContext.Init((Game1)Game, Content);
-            })
-            .ContinueWith(t => ScreenManager.LoadScreen(new PlayScreen(Game)));
+            
+            GameContext.Init((Game1)Game, Content);
+            
+            ScreenManager.LoadScreen(new PlayScreen(Game));
         }
     }
 }

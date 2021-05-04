@@ -30,4 +30,10 @@ namespace temp1.Data
             return new Region(r.X, r.Y, r.Width, r.Height);
         }
     }
+    
+    class Origin
+    {
+        public int X;
+        public int Y;
+    }
 }

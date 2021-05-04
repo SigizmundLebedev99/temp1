@@ -1,6 +1,4 @@
 using System;
-using Microsoft.Xna.Framework;
-using temp1.Components;
 
 namespace temp1.Data
 {
@@ -12,12 +10,6 @@ namespace temp1.Data
         Enemy = 2,
         Item = 4,
         Blocking = 8
-    }
-
-    class Origin
-    {
-        public int X;
-        public int Y;
     }
 
     class GameObjectTypeInfo

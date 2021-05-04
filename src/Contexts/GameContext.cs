@@ -29,70 +29,68 @@ namespace temp1
         public static Game1 Game;
 
         public static ContentManager Content => Game.Content;
-        
+
         static SpriteBatch _sb;
-        static TiledMapRenderer _tiledMapRenderer;
 
         public static void Init(Game1 game, ContentManager Content)
         {
             Game = game;
+
+            Camera = new OrthographicCamera(game.GraphicsDevice);
+            
             _sb = game.Batch;
 
             World = new WorldContext();
-            
+
             GameObjects = new GameObjectsContext(Content);
-            
-            Map = new MapContext(Content, GameObjects);
+
+            Map = new MapContext(Content, GameObjects, game.GraphicsDevice);
 
             World.ConfigureWorld(Map, _sb, GameObjects, Content);
-            
+
             GameObjects.Initialize(World);
-            
+
             Hud = new HudContext(game, World);
             Hud.Default();
 
             Combat = new CombatContext(World);
-            
+
             Map.LoadMap("tiled/map");
-
-            _tiledMapRenderer = Map.GetRenderer(game.GraphicsDevice);
-
-            Camera = new OrthographicCamera(game.GraphicsDevice);
         }
 
         public static void Update(GameTime gameTime)
         {
-            if(!Game.IsActive)
+            if (!Game.IsActive)
                 return;
             World.World.Update(gameTime);
-            _tiledMapRenderer.Update(gameTime);
+            Map.Update(gameTime);
             Hud.Update(gameTime);
-            if(Hud.State != HUDState.Default)
+            if (Hud.State != HUDState.Default)
                 return;
             var state = Mouse.GetState();
             var v = Game.GraphicsDevice.Viewport;
             var map = Map.Map;
 
             var camera = GameContext.Camera;
-            
+
             if (state.X <= 0 && camera.Position.X > 0)
                 camera.Move(new Vector2(-5, 0));
             if (state.Y <= 0 && camera.Position.Y > 0)
                 camera.Move(new Vector2(0, -5));
             if (state.X > v.Width && camera.Position.X < map.WidthInPixels - v.Width)
                 camera.Move(new Vector2(5, 0));
-            if (state.Y > v.Height&& camera.Position.Y < map.HeightInPixels - v.Height)
+            if (state.Y > v.Height && camera.Position.Y < map.HeightInPixels - v.Height)
                 camera.Move(new Vector2(0, 5));
         }
 
         public static void Draw(GameTime gameTime)
         {
+            Game.GraphicsDevice.Clear(Color.Black);
             var matrix = GameContext.Camera.GetViewMatrix();
             _sb.Begin(SpriteSortMode.BackToFront, transformMatrix: matrix);
-            _tiledMapRenderer.Draw(matrix);
+            Map.Draw(matrix);
             World.World.Draw(gameTime);
             _sb.End();
-
             Hud.Draw(gameTime);
         }
     }
