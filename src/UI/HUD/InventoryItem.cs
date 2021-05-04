@@ -44,7 +44,7 @@ namespace temp1.UI
             var factory = GameContext.Game.Services.GetService<ControlsFactory>();
 
             Item = stack;
-            sprite = GameContext.Content.GetSprite(stack.ItemType.Path, stack.ItemType.Region);
+            sprite = GameContext.Content.GetSprite(stack.ItemType.Sprite.Path, stack.ItemType.Sprite.Region);
             if((stack.ItemType.Flags & ItemTypeFlags.Consumable) == 0)
                 return;
             label = factory.CreateLabel(6);

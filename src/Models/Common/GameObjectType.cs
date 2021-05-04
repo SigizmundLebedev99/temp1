@@ -1,4 +1,5 @@
 using System;
+using temp1.Models;
 
 namespace temp1.Data
 {
@@ -16,9 +17,7 @@ namespace temp1.Data
     {
         public string TypeName;
         public GameObjectType Type;
-        public string Path;
-        public Origin Origin;
-        public Region Region;
+        public RenderObjectInfo Sprite;
         public string Handler;
         public int StackSize;
         public ItemTypeFlags Flags;

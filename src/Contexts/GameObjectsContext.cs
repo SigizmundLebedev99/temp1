@@ -50,19 +50,24 @@ namespace temp1
 
             if (position.HasValue)
                 entity.Attach(new MapObject(position.Value, GameObjectType.None));
-                
+
             Sprite sprite;
-            if (objType.Path.EndsWith(".sf"))
+
+            if (objType.Sprite != null)
             {
-                sprite = _content.GetAnimatedSprite(objType.Path);
-                if (objType.Origin != null)
-                    sprite.Origin = new Vector2(objType.Origin.X, objType.Origin.Y);
+                var spriteInfo = objType.Sprite;
+                if (spriteInfo.Path.EndsWith(".sf"))
+                {
+                    sprite = _content.GetAnimatedSprite(spriteInfo.Path);
+                    if (spriteInfo.Origin != null)
+                        sprite.Origin = new Vector2(spriteInfo.Origin.X, spriteInfo.Origin.Y);
+                }
+                else
+                    sprite = _content.GetSprite(objType);
+
+
+                entity.Attach(new RenderingObject(sprite));
             }
-            else
-                sprite = _content.GetSprite(objType);    
-            
-            
-            entity.Attach(new RenderingObject(sprite));
 
             if (objType.Handler == null || !Handlers.TryGetValue(objType.Handler, out var handler))
                 return entity.Id;

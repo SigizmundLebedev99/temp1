@@ -15,7 +15,7 @@ namespace temp1.Data
     class ItemStack
     {
         public GameObjectTypeInfo ItemType;
-        public int Count;
+        public int Count; 
     }
 }
 

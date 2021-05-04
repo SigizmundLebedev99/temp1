@@ -35,13 +35,16 @@ static class Extensions
 
     public static Sprite GetSprite(this ContentManager content, GameObjectTypeInfo type)
     {
-        var texture = content.Load<Texture2D>(type.Path);
+        if(type.Sprite == null)
+            return null;
+
+        var texture = content.Load<Texture2D>(type.Sprite.Path);
         var sprite =
-            type.Region == null ?
+            type.Sprite.Region == null ?
                 new Sprite(texture)
-                : new Sprite(new TextureRegion2D(texture, type.Region));
-        if (type.Origin != null)
-            sprite.Origin = new Vector2(type.Origin.X, type.Origin.Y);
+                : new Sprite(new TextureRegion2D(texture, type.Sprite.Region));
+        if (type.Sprite.Origin != null)
+            sprite.Origin = new Vector2(type.Sprite.Origin.X, type.Sprite.Origin.Y);
         return sprite;
     }
 

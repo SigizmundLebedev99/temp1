@@ -40,7 +40,7 @@ namespace temp1.Systems
             for (var i = 0; i < mapObjects.Count; i++)
             {
                 var mapObj = _moMap.Get(mapObjects[i]);
-                if (mapObj.MapPosition != action.To)
+                if (mapObj.Position != action.To)
                     continue;
                 else if((mapObj.Type & GameObjectType.Blocking) != 0)
                 {

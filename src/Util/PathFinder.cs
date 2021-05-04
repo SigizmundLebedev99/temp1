@@ -15,28 +15,28 @@ namespace temp1.Util
             _param = new AStarParam(context.MovementGrid, DiagonalMovement.Never);
         }
 
-        public bool FindPath(MapObject actor, Point to, out WalkAction first, out WalkAction last)
+        public bool TryGetPath(MapObject actor, Point to, out WalkAction first, out WalkAction last, float speed)
         {
             first = null;
             last = null;
-            var from = actor.MapPosition;
-            _param.Reset(from, to, _context.MovementGrid);
+            var from = actor.Position;
+            _param.Reset(actor.MapPosition, to, _context.MovementGrid);
             var path = AStarFinder.FindPath(_param);
             if (path.Count < 2)
                 return false;
             var node = first = new WalkAction(
-                path[0],
-                path[1],
+                from,
+                path[1].ToVector2() * 32 + new Vector2(16),
                 actor,
-                1f/16f
+                speed
             );
             for (var i = 2; i < path.Count; i++)
             {
                 var move = new WalkAction(
-                    path[i - 1], 
-                    path[i], 
+                    path[i - 1].ToVector2() * 32 + new Vector2(16), 
+                    path[i].ToVector2() * 32 + new Vector2(16), 
                     actor,
-                    1f/16f
+                    speed
                 );
                 node.After = move;
                 last = node = move;

@@ -5,11 +5,11 @@ namespace temp1.Components
 {
     class Direction
     {
-        private Point from;
-        private Point to;
+        private Vector2 from;
+        private Vector2 to;
         public float angle;
         
-        public Direction(Point from, Point to)
+        public Direction(Vector2 from, Vector2 to)
         {
             this.from = from;
             this.to = to;

@@ -46,7 +46,7 @@ namespace temp1.AI
                 after = GetAfterAction(pointed, GameContext.PointedId);
 
             var mapPosition = mouseState.MapPosition(GameContext.Camera);
-            if (_map.PathFinder.FindPath(mapObj, mapPosition, out var first, out var last))
+            if (_map.PathFinder.TryGetPath(mapObj, mapPosition, out var first, out var last, 2f))
             {
                 if (after != null)
                 {
