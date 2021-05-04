@@ -20,14 +20,6 @@
         "handler": "ActorHandler"
     },
     {
-        "typeName": "tree",
-        "path": "images/tree",
-        "origin": {
-            "x": 65,
-            "y": 160
-        }
-    },
-    {
         "typeName": "chest1",
         "animated": true,
         "path": "images/chest1.sf",
@@ -36,16 +28,6 @@
             "y": 20
         },
         "handler": "ChestHandler"
-    },
-    {
-        "typeName": "house",
-        "animated": false,
-        "path": "images/house",
-        "origin": {
-            "x": 0,
-            "y": 464
-        },
-        "handler": "HullHandler"
     },
     {
         "typeName": "blue_potion1",

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -77,13 +78,13 @@ namespace temp1
         void ConfigureCovers()
         {
             var covers = _map.Layers.Where(e => e.Name.StartsWith("_b_"));
+            var tilesFieldInfo = typeof(TiledMapTileLayer).GetRuntimeFields().Last();
             foreach (var c in covers)
             {
                 var tiled = (TiledMapTileLayer)c;
                 c.IsVisible = true;
                 var rect = TrimBlankTiles(tiled);
                 var cover = GameContext.World.CreateEntity();
-                cover.Attach(new Hull(tiled));
 
                 var renderTarget = new RenderTarget2D(_device, rect.Width, rect.Height);
                 _device.SetRenderTarget(renderTarget);
@@ -92,9 +93,16 @@ namespace temp1
                 var sprite = new Sprite(renderTarget);
                 sprite.Origin = new Vector2(-rect.X, -rect.Y);
 
-                if (c.Properties.TryGetValue("y", out var y))
+                sprite.Depth = 0.1f / ((rect.Y / 32) + (rect.Height / 32)  -1);
+                
+
+                if (c.Properties.TryGetValue("Persistent", out var persistent) && bool.Parse(persistent))
                 {
-                    sprite.Depth = 0.1f / int.Parse(y);
+                    tilesFieldInfo.SetValue(c, null);
+                }
+                else
+                {
+                    cover.Attach(new Hull(tiled));
                 }
 
                 cover.Attach(new RenderingObject(sprite));
@@ -121,8 +129,8 @@ namespace temp1
             {
                 for (ushort j = 0; j < _map.Height; j++)
                 {
-                    var tile = layer.GetTile(i,j);
-                    if(tile.IsBlank)
+                    var tile = layer.GetTile(i, j);
+                    if (tile.IsBlank)
                         continue;
                     maxX = i > maxX ? i : maxX;
                     maxY = j > maxY ? j : maxY;
