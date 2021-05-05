@@ -47,8 +47,8 @@ namespace temp1.PathFinding
 
         public StaticGrid SearchGrid => m_searchGrid;
 
-        public Node StartNode =>  m_startNode;
-    
+        public Node StartNode => m_startNode;
+
         public Node EndNode => m_endNode;
 
 
@@ -86,11 +86,16 @@ namespace temp1.PathFinding
                     return Node.Backtrace(endNode);
                 }
 
-                var neighbors = grid.GetNeighbors(node, diagonalMovement);
+                var neighbors = grid.GetNeighbors(node);
 
-                foreach(var neighbor in neighbors)
+                foreach (var neighbor in neighbors)
                 {
-                    if (neighbor.isClosed) continue;
+                    if (neighbor == endNode)
+                    {
+                        neighbor.parent = node;
+                        return Node.Backtrace(neighbor);
+                    }
+                    if (neighbor.isClosed || neighbor.value < 0) continue;
                     var X = neighbor.x;
                     var Y = neighbor.y;
                     float ng = node.startToCurNodeLen + (float)((X - node.x == 0 || Y - node.y == 0) ? 1 : Math.Sqrt(2));

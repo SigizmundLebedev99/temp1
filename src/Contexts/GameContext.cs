@@ -87,10 +87,12 @@ namespace temp1
         {
             Game.GraphicsDevice.Clear(Color.Black);
             var matrix = GameContext.Camera.GetViewMatrix();
-            _sb.Begin(SpriteSortMode.BackToFront, transformMatrix: matrix);
             Map.Draw(matrix);
+
+            _sb.Begin(SpriteSortMode.BackToFront, transformMatrix: matrix);
             World.World.Draw(gameTime);
             _sb.End();
+            
             Hud.Draw(gameTime);
         }
     }

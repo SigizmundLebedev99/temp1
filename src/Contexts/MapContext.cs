@@ -93,16 +93,16 @@ namespace temp1
                 var sprite = new Sprite(renderTarget);
                 sprite.Origin = new Vector2(-rect.X, -rect.Y);
 
-                sprite.Depth = 0.1f / ((rect.Y / 32) + (rect.Height / 32)  -1);
-                
+                sprite.Depth = 0.1f / ((rect.Y / 32) + (rect.Height / 32) - 1);
 
                 if (c.Properties.TryGetValue("Persistent", out var persistent) && bool.Parse(persistent))
-                {
                     tilesFieldInfo.SetValue(c, null);
-                }
                 else
                 {
-                    cover.Attach(new Hull(tiled));
+                    var canopy = new Canopy(tiled);
+                    if (c.Properties.TryGetValue("Interier", out var interier))
+                        canopy.IsInterier = bool.Parse(interier);
+                    cover.Attach(canopy);
                 }
 
                 cover.Attach(new RenderingObject(sprite));

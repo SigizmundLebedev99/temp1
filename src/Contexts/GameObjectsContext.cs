@@ -136,7 +136,7 @@ namespace temp1
                     }
                 }
             }
-            GameContext.Map.MovementGrid.SetValueAt(mapObj.MapPosition.X, mapObj.MapPosition.Y, 3);
+
             e.Attach(storage);
             e.Attach(new Cursor("hand"));
         }

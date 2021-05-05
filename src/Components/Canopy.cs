@@ -3,13 +3,15 @@ using MonoGame.Extended.Tiled;
 
 namespace temp1.Components
 {
-    class Hull
+    class Canopy
     {
         public TiledMapTileLayer Layer;
         
-        public Hull(TiledMapTileLayer layer)
+        public Canopy(TiledMapTileLayer layer)
         {
             Layer = layer;
         }
+
+        public bool IsInterier { get; internal set; }
     }
 }

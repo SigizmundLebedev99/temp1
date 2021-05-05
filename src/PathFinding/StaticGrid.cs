@@ -47,79 +47,88 @@ namespace temp1.PathFinding
             return m_nodes[widthTrav, heightTrav].value;
         }
 
-        public List<Node> GetNeighbors(Node iNode, DiagonalMovement diagonalMovement)
+        public List<Node> GetNeighbors(Node iNode)
         {
             int tX = iNode.x;
             int tY = iNode.y;
             List<Node> neighbors = new List<Node>();
-            bool tS0 = false, tD0 = false,
-                tS1 = false, tD1 = false,
-                tS2 = false, tD2 = false,
-                tS3 = false, tD3 = false;
-
-            if (this.IsWalkableAt(tX, tY - 1))
-            {
+            if (isInside(tX, tY - 1))
                 neighbors.Add(GetNodeAt(tX, tY - 1));
-                tS0 = true;
-            }
-            if (this.IsWalkableAt(tX + 1, tY))
-            {
+            if (isInside(tX + 1, tY))
                 neighbors.Add(GetNodeAt(tX + 1, tY));
-                tS1 = true;
-            }
-            if (this.IsWalkableAt(tX, tY + 1))
-            {
+            if (isInside(tX, tY + 1))
                 neighbors.Add(GetNodeAt(tX, tY + 1));
-                tS2 = true;
-            }
-            if (this.IsWalkableAt(tX - 1, tY))
-            {
+            if (isInside(tX - 1, tY))
                 neighbors.Add(GetNodeAt(tX - 1, tY));
-                tS3 = true;
-            }
 
-            switch (diagonalMovement)
-            {
-                case DiagonalMovement.Always:
-                    tD0 = true;
-                    tD1 = true;
-                    tD2 = true;
-                    tD3 = true;
-                    break;
-                case DiagonalMovement.Never:
-                    break;
-                case DiagonalMovement.IfAtLeastOneWalkable:
-                    tD0 = tS3 || tS0;
-                    tD1 = tS0 || tS1;
-                    tD2 = tS1 || tS2;
-                    tD3 = tS2 || tS3;
-                    break;
-                case DiagonalMovement.OnlyWhenNoObstacles:
-                    tD0 = tS3 && tS0;
-                    tD1 = tS0 && tS1;
-                    tD2 = tS1 && tS2;
-                    tD3 = tS2 && tS3;
-                    break;
-                default:
-                    break;
-            }
+            // bool tS0 = false, tD0 = false,
+            //     tS1 = false, tD1 = false,
+            //     tS2 = false, tD2 = false,
+            //     tS3 = false, tD3 = false;
 
-            if (tD0 && this.IsWalkableAt(tX - 1, tY - 1))
-            {
-                neighbors.Add(GetNodeAt(tX - 1, tY - 1));
-            }
-            if (tD1 && this.IsWalkableAt(tX + 1, tY - 1))
-            {
-                neighbors.Add(GetNodeAt(tX + 1, tY - 1));
-            }
-            if (tD2 && this.IsWalkableAt(tX + 1, tY + 1))
-            {
-                neighbors.Add(GetNodeAt(tX + 1, tY + 1));
-            }
-            if (tD3 && this.IsWalkableAt(tX - 1, tY + 1))
-            {
-                neighbors.Add(GetNodeAt(tX - 1, tY + 1));
-            }
+            // if (this.IsWalkableAt(tX, tY - 1))
+            // {
+            //     neighbors.Add(GetNodeAt(tX, tY - 1));
+            //     tS0 = true;
+            // }
+            // if (this.IsWalkableAt(tX + 1, tY))
+            // {
+            //     neighbors.Add(GetNodeAt(tX + 1, tY));
+            //     tS1 = true;
+            // }
+            // if (this.IsWalkableAt(tX, tY + 1))
+            // {
+            //     neighbors.Add(GetNodeAt(tX, tY + 1));
+            //     tS2 = true;
+            // }
+            // if (this.IsWalkableAt(tX - 1, tY))
+            // {
+            //     neighbors.Add(GetNodeAt(tX - 1, tY));
+            //     tS3 = true;
+            // }
+
+            // switch (diagonalMovement)
+            // {
+            //     case DiagonalMovement.Always:
+            //         tD0 = true;
+            //         tD1 = true;
+            //         tD2 = true;
+            //         tD3 = true;
+            //         break;
+            //     case DiagonalMovement.Never:
+            //         break;
+            //     case DiagonalMovement.IfAtLeastOneWalkable:
+            //         tD0 = tS3 || tS0;
+            //         tD1 = tS0 || tS1;
+            //         tD2 = tS1 || tS2;
+            //         tD3 = tS2 || tS3;
+            //         break;
+            //     case DiagonalMovement.OnlyWhenNoObstacles:
+            //         tD0 = tS3 && tS0;
+            //         tD1 = tS0 && tS1;
+            //         tD2 = tS1 && tS2;
+            //         tD3 = tS2 && tS3;
+            //         break;
+            //     default:
+            //         break;
+            // }
+
+            // if (tD0 && this.IsWalkableAt(tX - 1, tY - 1))
+            // {
+            //     neighbors.Add(GetNodeAt(tX - 1, tY - 1));
+            // }
+            // if (tD1 && this.IsWalkableAt(tX + 1, tY - 1))
+            // {
+            //     neighbors.Add(GetNodeAt(tX + 1, tY - 1));
+            // }
+            // if (tD2 && this.IsWalkableAt(tX + 1, tY + 1))
+            // {
+            //     neighbors.Add(GetNodeAt(tX + 1, tY + 1));
+            // }
+            // if (tD3 && this.IsWalkableAt(tX - 1, tY + 1))
+            // {
+            //     neighbors.Add(GetNodeAt(tX - 1, tY + 1));
+            // }
             return neighbors;
         }
 
@@ -130,7 +139,7 @@ namespace temp1.PathFinding
             {
                 for (int heightTrav = 0; heightTrav < iHeight; heightTrav++)
                 {
-                    tNodes[widthTrav,heightTrav] = new Node(widthTrav, heightTrav, null);
+                    tNodes[widthTrav, heightTrav] = new Node(widthTrav, heightTrav, null);
                 }
             }
 
@@ -139,14 +148,14 @@ namespace temp1.PathFinding
                 return tNodes;
             }
 
-            if(iWidth != iMatrix.GetLength(0) || iHeight != iMatrix.GetLength(1))
+            if (iWidth != iMatrix.GetLength(0) || iHeight != iMatrix.GetLength(1))
                 throw new ArgumentException("width or height is to match matrix width or height");
 
             for (int widthTrav = 0; widthTrav < iWidth; widthTrav++)
             {
                 for (int heightTrav = 0; heightTrav < iHeight; heightTrav++)
                 {
-                    tNodes[widthTrav,heightTrav].value = iMatrix[widthTrav,heightTrav];
+                    tNodes[widthTrav, heightTrav].value = iMatrix[widthTrav, heightTrav];
                 }
             }
             return tNodes;
@@ -154,17 +163,17 @@ namespace temp1.PathFinding
 
         public Node GetNodeAt(int iX, int iY)
         {
-            return this.m_nodes[iX,iY];
+            return this.m_nodes[iX, iY];
         }
 
         public bool IsZeroAt(int iX, int iY)
         {
-            return isInside(iX, iY) && this.m_nodes[iX,iY].value == 0;
+            return isInside(iX, iY) && this.m_nodes[iX, iY].value == 0;
         }
 
         public bool IsWalkableAt(int iX, int iY)
         {
-            return isInside(iX, iY) && this.m_nodes[iX,iY].value >= 0;
+            return isInside(iX, iY) && this.m_nodes[iX, iY].value >= 0;
         }
 
         protected bool isInside(int iX, int iY)
@@ -174,7 +183,7 @@ namespace temp1.PathFinding
 
         public bool SetValueAt(int iX, int iY, sbyte value)
         {
-            this.m_nodes[iX,iY].value = value;
+            this.m_nodes[iX, iY].value = value;
             return true;
         }
 
@@ -209,7 +218,7 @@ namespace temp1.PathFinding
             {
                 for (int heightTrav = 0; heightTrav < height; heightTrav++)
                 {
-                    m_nodes[widthTrav,heightTrav].Reset();
+                    m_nodes[widthTrav, heightTrav].Reset();
                 }
             }
 
@@ -225,8 +234,8 @@ namespace temp1.PathFinding
             for (int widthTrav = 0; widthTrav < width; widthTrav++)
             {
                 for (int heightTrav = 0; heightTrav < height; heightTrav++)
-                {      
-                    m_nodes[widthTrav,heightTrav].value = iMatrix[widthTrav][heightTrav];
+                {
+                    m_nodes[widthTrav, heightTrav].value = iMatrix[widthTrav][heightTrav];
                 }
             }
         }
