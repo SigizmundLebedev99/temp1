@@ -107,9 +107,9 @@ namespace temp1
             mapObj.Type = GameObjectType.Storage | GameObjectType.Blocking;
             var storage = new Storage();
 
-            foreach (var prop in mapObject.Properties)
+            foreach (var prop in mapObject.Properties.Where(e => e.Key.StartsWith('~')))
             {
-                var type = GameObjectTypes[prop.Key];
+                var type = GameObjectTypes[prop.Key.Substring(1)];
                 var countInStack = int.Parse(prop.Value);
                 if (countInStack == 0)
                     continue;

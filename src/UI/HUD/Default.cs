@@ -20,9 +20,9 @@ namespace temp1.UI
             
             inventory.MouseUp += (s,e) => GameContext.Hud.OpenInventory();
 
-            var toBattle = factory.CreateButton<Button>(2);
+            var toBattle = factory.CreateButton<Button>(8);
             toBattle.OffsetFrom = Anchors.BottomRight;
-            toBattle.Offset = new Vector2(-70, -30);
+            toBattle.Offset = new Vector2(-80, -30);
 
             toBattle.MouseUp += (s,e) => GameContext.Combat.StartBattle();
 

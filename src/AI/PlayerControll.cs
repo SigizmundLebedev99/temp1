@@ -41,11 +41,15 @@ namespace temp1.AI
             var mapObj = _moMapper.Get(EntityId);
             var pointed = GameContext.PointedId >= 0 ? _moMapper.Get(GameContext.PointedId) : null;
             BaseAction after = null;
-
+            var mapPosition = mouseState.MapPosition(GameContext.Camera);
+            
             if (pointed != null)
                 after = GetAfterAction(pointed, GameContext.PointedId);
+            else if (!GameContext.Map.MovementGrid.IsWalkableAt(mapPosition.X, mapPosition.Y))
+            {
+                return;
+            }
 
-            var mapPosition = mouseState.MapPosition(GameContext.Camera);
             if (_map.PathFinder.TryGetPath(mapObj, mapPosition, out var first, out var last, 2f))
             {
                 if (after != null)
@@ -72,7 +76,7 @@ namespace temp1.AI
         {
             if ((pointed.Type & GameObjectType.Item) != 0)
                 return new PeakItemAction(EntityId, id);
-            if ((pointed.Type &  GameObjectType.Storage) != 0)
+            if ((pointed.Type & GameObjectType.Storage) != 0)
                 return new OpenStorageAction(GameContext.PointedId);
 
             return null;

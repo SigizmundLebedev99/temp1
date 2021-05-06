@@ -43,6 +43,9 @@ namespace temp1.Factories
             new string[]{   //7 - texture for inventory item
                 "ui/cell",
                 "ui/cell-hot"
+            },
+            new string[]{   //8 - textures for 
+                "ui/battle-hot",
             }
         };
 
