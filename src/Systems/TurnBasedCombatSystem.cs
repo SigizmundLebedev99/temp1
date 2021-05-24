@@ -1,48 +1,44 @@
+using DefaultEcs;
+using DefaultEcs.System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities;
-using MonoGame.Extended.Entities.Systems;
+using temp1.AI;
 using temp1.Components;
 
 namespace temp1.Systems
 {
     // система переключения права хода между акторами
-    class TurnBasedCombatSystem : EntityProcessingSystem
+    [With(typeof(AllowedToAct))]
+    [With(typeof(TurnOccured))]
+    [Without(typeof(BaseAction))]
+    class TurnBasedCombatSystem : AEntitySetSystem<GameTime>
     {
-        Mapper<AllowedToAct> _allowanceMapper;
-        Mapper<TurnOccured> _endOfTurnMapper;
-        WorldContext _context;
-
-        public TurnBasedCombatSystem(WorldContext context) : base(Aspect.All(typeof(AllowedToAct), typeof(TurnOccured)).Exclude(typeof(BaseAction)))
+        EntitySet actorsSet;
+        public TurnBasedCombatSystem(World world) : base(world)
         {
-            _context = context;
+            actorsSet = GameContext.EntitySets.Actors;
         }
 
-        public override void Initialize(IComponentMapperService mapperService)
+        protected override void Update(GameTime state, in Entity entity) 
         {
-            _allowanceMapper = mapperService.Get<AllowedToAct>();
-            _endOfTurnMapper = mapperService.Get<TurnOccured>();
-        }
-
-        public override void Process(GameTime gameTime, int entityId)
-        {
-            for (var i = 0; i < _context.Actors.Count; i++)
+            var actors = actorsSet.GetEntities();
+            for (var i = 0; i < actors.Length; i++)
             {
-                var id = _context.Actors[i];
-                if (!_endOfTurnMapper.Has(id))
+                var actor = actors[i];
+                if (!actor.Has<TurnOccured>())
                 {
-                    _allowanceMapper.Delete(entityId);
+                    entity.Remove<AllowedToAct>();
                     // ход переходит к следующему актору
-                    _allowanceMapper.Put(id, new AllowedToAct());
+                    actor.Set(new AllowedToAct());
                     return;
                 }
             }
 
             // если все сходили, очищаем флаги окончания хода
-            for (var i = 0; i < _context.Actors.Count; i++)
+            for (var i = 0; i < actors.Length; i++)
             {
-                var id = _context.Actors[i];
-                if (id != entityId)
-                    _endOfTurnMapper.Delete(id);
+                var actor = actors[i];
+                if (actor != entity)
+                    actor.Remove<TurnOccured>();
             }
         }
     }

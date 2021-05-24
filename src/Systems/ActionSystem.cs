@@ -6,9 +6,9 @@ using temp1.Components;
 namespace temp1.Systems
 {
     [With(typeof(BaseAction))]
-    class BaseActionSystem : AEntitySetSystem<GameTime>
+    class ActionSystem : AEntitySetSystem<GameTime>
     {
-        public BaseActionSystem(World world) : base(world)
+        public ActionSystem(World world) : base(world)
         {
         }
 
@@ -16,19 +16,24 @@ namespace temp1.Systems
         {
             var action = entity.Get<BaseAction>();
 
-            if (GameContext.GameState == GameState.Combat)
+            if (!action.IsChecked)
             {
-                if (!action.IsChecked)
+                action.IsChecked = true;
+                if (GameContext.GameState != GameState.Combat)
                 {
-                    var actionPoints = entity.Get<ActionPoints>();
-                    action.IsChecked = true;
-                    if (actionPoints.Remain < action.PointsTaken)
-                    {
-                        entity.Remove<BaseAction>();
-                        return;
-                    }
+                    action.Start(entity);
+                    goto CheckStatus;
                 }
+
+                var actionPoints = entity.Get<ActionPoints>();
+                if (actionPoints.Remain < action.PointsTaken)
+                {
+                    entity.Remove<BaseAction>();
+                    return;
+                }
+                action.Start(entity);
             }
+        CheckStatus:
             if (action.Status != ActionStatus.Running)
                 Complete(action, entity);
             else

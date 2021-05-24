@@ -1,35 +1,24 @@
 using System;
+using DefaultEcs;
+using DefaultEcs.System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities;
-using MonoGame.Extended.Entities.Systems;
-using MonoGame.Extended.Sprites;
 using temp1.Components;
 
 namespace temp1.Systems
 {
-    class DirectionToAnimationSystem : EntityProcessingSystem
+    [With(typeof(RenderingObject))]
+    [WhenAdded(typeof(Direction))]
+    class DirectionToAnimationSystem : AEntitySetSystem<GameTime>
     {
-        Mapper<RenderingObject> _spriteMapper;
-        Mapper<Direction> _directionMapper;
-        Mapper<BaseAction> _actionMapper;
-
-        public DirectionToAnimationSystem() : base(Aspect.All(typeof(RenderingObject), typeof(Direction)))
+        public DirectionToAnimationSystem(World world) : base(world)
         {
         }
 
-        public override void Initialize(IComponentMapperService mapperService)
+        protected override void Update(GameTime gameTime, in Entity entity)
         {
-            _directionMapper = mapperService.Get<Direction>();
-            _spriteMapper = mapperService.Get<RenderingObject>();
-            _actionMapper = mapperService.Get<BaseAction>();
-        }
-
-        public override void Process(GameTime gameTime, int entityId)
-        {
-            var sprite = _spriteMapper.Get(entityId);
-
-            var dir = _directionMapper.Get(entityId);
-            var action = _actionMapper.Get(entityId);
+            var sprite = entity.Get<RenderingObject>();
+            var dir = entity.Get<Direction>();
+            var action = entity.Get<BaseAction>();
             var angle = dir.angle;
             string direction;
 
@@ -42,8 +31,9 @@ namespace temp1.Systems
             else
                 direction = "South";
 
+            entity.Remove<Direction>();
+
             if(action == null || !(action is WalkAction)){
-                _directionMapper.Delete(entityId);
                 sprite.Play("idle" + direction);
                 return;
             }

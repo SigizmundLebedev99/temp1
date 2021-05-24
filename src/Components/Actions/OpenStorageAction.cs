@@ -10,6 +10,22 @@ namespace temp1.Components
 
         public Entity Storage;
 
+        public override void Start(Entity entity)
+        {
+            if (!Storage.Has<Storage>() || !entity.Has<Storage>()){
+                Abort();
+                return;
+            }
+
+            var right = Storage.Get<Storage>();
+            var left = entity.Get<Storage>();
+
+            var sprite = Storage.Get<RenderingObject>();
+            sprite.Play("open");
+            
+            GameContext.Hud.OpenChest(left, right);
+        }
+
         public OpenStorageAction(Entity storage)
         {
             Storage = storage;
@@ -22,8 +38,8 @@ namespace temp1.Components
         }
 
         public override void Update(GameTime time)
-        { 
-            if(GameContext.Hud.State == HUDState.Default)
+        {
+            if (GameContext.Hud.State == HUDState.Default)
                 Status = ActionStatus.Success;
         }
     }

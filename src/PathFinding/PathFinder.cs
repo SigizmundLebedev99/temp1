@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using temp1.Components;
 using temp1.PathFinding;
 
-namespace temp1.Util
+namespace temp1.PathFinding
 {
     class PathFinder
     {

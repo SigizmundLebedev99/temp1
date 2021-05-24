@@ -14,9 +14,9 @@ namespace temp1.Systems
         public AISystem(World world) : base(world)
         {}
 
-        protected override void Update(GameTime state, in Entity entity)
+        protected override void Update(GameTime gameTime, in Entity entity)
         {
-            base.Update(state, entity);
+            entity.Get<IBaseAI>().Update(gameTime, entity);
         }
     }
 }

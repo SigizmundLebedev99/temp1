@@ -32,12 +32,12 @@ namespace temp1.AI
             }
 
             var mapObj = entity.Get<MapObject>();
-            var pointed = GameContext.PointedEntity != null ? GameContext.PointedEntity.Get<MapObject>() : null;
+            var pointed = GameContext.PointedEntity != null ? GameContext.PointedEntity.Value.Get<MapObject>() : null;
             BaseAction after = null;
             var mapPosition = mouseState.MapPosition(GameContext.Camera);
             
             if (pointed != null)
-                after = GetAfterAction(entity, pointed, GameContext.PointedEntity);
+                after = GetAfterAction(entity, pointed, GameContext.PointedEntity.Value);
             else if (!GameContext.Map.MovementGrid.IsWalkableAt(mapPosition.X, mapPosition.Y))
             {
                 return;

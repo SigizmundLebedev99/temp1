@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using temp1.Factories;
 using temp1.UI.Controls;
 
@@ -18,7 +17,7 @@ namespace temp1.UI
             inventory.OffsetFrom = Anchors.BottomRight;
             inventory.Offset = new Vector2(-20, -30);
             
-            inventory.MouseUp += (s,e) => GameContext.Hud.OpenInventory();
+            inventory.MouseUp += (s,e) => GameContext.Hud.OpenInventory(GameContext.Player);
 
             var toBattle = factory.CreateButton<Button>(8);
             toBattle.OffsetFrom = Anchors.BottomRight;

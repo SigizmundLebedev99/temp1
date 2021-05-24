@@ -1,51 +1,38 @@
 using System;
 using System.Collections.Generic;
+using DefaultEcs;
+using DefaultEcs.System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities;
-using MonoGame.Extended.Entities.Systems;
 using temp1.Components;
 
 namespace temp1.Systems
 {
-    class PossibleMovementBuildSystem : EntityProcessingSystem
+    [With(typeof(AllowedToAct))]
+    [Without(typeof(BaseAction))]
+    class PossibleMovementBuildSystem : AEntitySetSystem<GameTime>
     {
-        Mapper<PossibleMoves> _moveMap;
-        Mapper<MapObject> _moMap;
-        Mapper<ActionPoints> _pointsMap;
-
-        MapContext _context;
-
         HashSet<Point> searched = new HashSet<Point>();
 
-        public PossibleMovementBuildSystem(MapContext context) : base(Aspect.All(typeof(AllowedToAct)).Exclude(typeof(BaseAction)))
-        {
-            _context = context;
-        }
+        public PossibleMovementBuildSystem(World world) : base(world)
+        { }
 
-        public override void Initialize(IComponentMapperService mapperService)
+        protected override void Update(GameTime gameTime, in Entity entity)
         {
-            _moveMap = mapperService.Get<PossibleMoves>();
-            _moMap = mapperService.Get<MapObject>();
-            _pointsMap = mapperService.Get<ActionPoints>();
-        }
-
-        public override void Process(GameTime gameTime, int entityId)
-        {
-            if(GameContext.GameState == GameState.Peace)
+            if (GameContext.GameState == GameState.Peace)
                 return;
-            var position = _moMap.Get(entityId).MapPosition;
-            var possibleMoves = BuildMoves(position, entityId);
-            if (possibleMoves.Moves.Count > 0)
+            var position = entity.Get<MapObject>().MapPosition;
+            var possibleMoves = BuildMoves(position, entity);
+            if (possibleMoves.Value.Count > 0)
             {
-                _moveMap.Put(entityId, possibleMoves);
+                entity.Set(possibleMoves);
             }
         }
 
-        private PossibleMoves BuildMoves(Point mapPosition, int entityId)
+        private PossibleMoves BuildMoves(Point mapPosition, Entity entity)
         {
             searched.Clear();
-            var limit = _pointsMap.Get(entityId).Remain + 1;
-            var grid = _context.MovementGrid;
+            var limit = entity.Get<ActionPoints>().Remain + 1;
+            var grid = GameContext.Map.MovementGrid;
             var frontier = new Queue<Cell>(limit * limit);
             var result = new List<Cell>(limit * limit);
 
@@ -83,7 +70,7 @@ namespace temp1.Systems
 
             return new PossibleMoves
             {
-                Moves = result
+                Value = result
             };
         }
     }

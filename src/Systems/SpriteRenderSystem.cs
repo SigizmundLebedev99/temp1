@@ -1,52 +1,38 @@
+using DefaultEcs;
+using DefaultEcs.System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Entities;
-using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Sprites;
 using temp1.Components;
 
 namespace temp1.Systems
 {
-    class SpriteRenderSystem : EntitySystem, IDrawSystem, IUpdateSystem
+    [With(typeof(RenderingObject))]
+    class SpriteRenderSystem : AEntitySetSystem<GameTime>
     {
-        private Mapper<RenderingObject> _spriteMapper;
-        private Mapper<MapObject> _mapObjectMapper;
         private SpriteBatch _spriteBatch;
 
-        public SpriteRenderSystem(SpriteBatch sb) : base(Aspect.All(typeof(RenderingObject)))
+        public SpriteRenderSystem(World world, SpriteBatch sb) : base(world)
         {
             _spriteBatch = sb;
         }
 
-        public override void Initialize(IComponentMapperService mapperService)
+        protected override void Update(GameTime gameTime, System.ReadOnlySpan<Entity> entities)
         {
-            _spriteMapper = mapperService.Get<RenderingObject>();
-            _mapObjectMapper = mapperService.Get<MapObject>();
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            var entities = this.ActiveEntities;
-            for (var i = 0; i < entities.Count; i++)
+            for (var i = 0; i < entities.Length; i++)
             {
-                var sprite = _spriteMapper.Get(entities[i]);
-                if (sprite.Sprite is AnimatedSprite animated)
-                    animated.Update(gameTime);
-            }
-        }
-
-        public void Draw(GameTime gameTime)
-        {
-            var entities = this.ActiveEntities;
-            for (var i = 0; i < entities.Count; i++)
-            {
-                var sprite = _spriteMapper.Get(entities[i]);
+                var entity = entities[i];
+                var sprite = entity.Get<RenderingObject>();
+                sprite.Update(gameTime);
                 if (!sprite.Visible)
                     continue;
-                var box = _mapObjectMapper.Get(entities[i]);
-                var position = box?.Position ?? Vector2.Zero;
-                
-                var depth = box != null ? 0.1f / box.MapPosition.Y : sprite.Depth;
+
+                bool hasMO = entity.Has<MapObject>();
+                MapObject mo = null;
+                if (hasMO) mo = entity.Get<MapObject>();
+                var position = hasMO ? mo.Position : Vector2.Zero;
+
+                var depth = hasMO ? 0.1f / mo.MapPosition.Y : sprite.Depth;
                 _spriteBatch.Draw(
                     sprite.Texture,
                     position,

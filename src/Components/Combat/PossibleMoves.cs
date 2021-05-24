@@ -5,13 +5,13 @@ namespace temp1.Components
 {
     class PossibleMoves
     {
-        public List<Cell> Moves;
+        public List<Cell> Value;
 
         public bool Contains(Point p)
         {
-            for (var i = 0; i < Moves.Count; i++)
+            for (var i = 0; i < Value.Count; i++)
             {
-                if (p == Moves[i].point)
+                if (p == Value[i].point)
                     return true;
             }
             return false;

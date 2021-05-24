@@ -23,9 +23,14 @@ namespace temp1.Components
 
         public void Play(string animationName, Action OnCompleted = null)
         {
-            if(!(Sprite is AnimatedSprite animation))
-                return;
-            animation.Play(animationName, OnCompleted);
+            if(Sprite is AnimatedSprite animation)
+                animation.Play(animationName, OnCompleted);
+        }
+
+        internal void Update(GameTime gameTime)
+        {
+            if(Sprite is AnimatedSprite animation)
+                animation.Update(gameTime);
         }
     }
 }

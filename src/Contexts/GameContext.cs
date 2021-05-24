@@ -1,10 +1,12 @@
 using DefaultEcs;
+using DefaultEcs.System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Tiled.Renderers;
+using temp1.Systems;
 using temp1.UI;
 
 namespace temp1
@@ -20,41 +22,37 @@ namespace temp1
         public static GameState GameState = GameState.Peace;
         public static OrthographicCamera Camera;
         public static Entity Player;
-        public static Entity PointedEntity;
+        public static Entity? PointedEntity;
 
         public static World World;
-        public static GameObjectsContext GameObjects;
+        public static GameObjectsFactory GameObjects;
         public static HudContext Hud;
         public static MapContext Map;
         public static CombatContext Combat;
         public static Game1 Game;
+        public static EntitySets EntitySets;
 
         public static ContentManager Content => Game.Content;
 
-        static SpriteBatch _sb;
+        private static ISystem<GameTime> SystemsSet;
 
         public static void Init(Game1 game, ContentManager Content)
         {
             Game = game;
 
             Camera = new OrthographicCamera(game.GraphicsDevice);
-            
-            _sb = game.Batch;
-
             World = new World();
-
-            GameObjects = new GameObjectsContext(Content);
-
+            EntitySets = new EntitySets(World);
+            GameObjects = new GameObjectsFactory(Content);
             Map = new MapContext(Content, GameObjects, game.GraphicsDevice);
+            Combat = new CombatContext(World);
 
-            //World.ConfigureWorld(Map, _sb, GameObjects, Content);
+            SystemsSet = ConfigureSystems();
 
             GameObjects.Initialize(World);
 
             Hud = new HudContext(game);
             Hud.Default();
-
-            Combat = new CombatContext(World);
 
             Map.LoadMap("tiled/map");
         }
@@ -63,7 +61,6 @@ namespace temp1
         {
             if (!Game.IsActive)
                 return;
-            World.Update(gameTime);
             Map.Update(gameTime);
             Hud.Update(gameTime);
             if (Hud.State != HUDState.Default)
@@ -90,11 +87,27 @@ namespace temp1
             var matrix = GameContext.Camera.GetViewMatrix();
             Map.Draw(matrix);
 
-            _sb.Begin(SpriteSortMode.BackToFront, transformMatrix: matrix);
-            World.World.Draw(gameTime);
-            _sb.End();
-            
+            Game.Batch.Begin(SpriteSortMode.BackToFront, transformMatrix: matrix);
+            SystemsSet.Update(gameTime);
+            Game.Batch.End();
+
             Hud.Draw(gameTime);
+        }
+
+        private static ISystem<GameTime> ConfigureSystems()
+        {
+            return new SequentialSystem<GameTime>(
+                new TurnBasedCombatSystem(World),
+                new ActionSystem(World),
+                new PossibleMovementBuildSystem(World),
+                new CursorSystem(Game.Batch, World),
+                new AISystem(World),
+                new CanopySystem(World),
+                new ExpirationSystem(World),
+                new DirectionToAnimationSystem(World),
+                new SpriteRenderSystem(World, Game.Batch),
+                new PossibleMovementDrawSystem(World, Game.Batch)
+            );
         }
     }
 }

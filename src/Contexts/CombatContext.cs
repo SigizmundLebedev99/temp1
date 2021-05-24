@@ -14,7 +14,7 @@ namespace temp1
         public CombatContext(World world)
         {
             _world = world;
-            actorsSet = _world.GetEntities().With<IBaseAI>().AsSet();
+            actorsSet = GameContext.EntitySets.Actors;
         }
 
         public void StartBattle()
@@ -22,11 +22,6 @@ namespace temp1
             GameContext.GameState = GameState.Combat;
             
             var actors = actorsSet.GetEntities();
-            
-            foreach (var actor in actors)
-            {
-
-            }
 
             for (var i = 0; i < actors.Length; i++)
             {

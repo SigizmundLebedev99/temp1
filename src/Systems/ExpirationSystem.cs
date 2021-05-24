@@ -1,32 +1,26 @@
+using DefaultEcs;
+using DefaultEcs.System;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities;
-using MonoGame.Extended.Entities.Systems;
 using temp1.Components;
 
 namespace temp1.Systems
 {
-    class ExpirationSystem : EntityProcessingSystem
+    [With(typeof(Expired))]
+    class ExpirationSystem : AEntitySetSystem<GameTime>
     {
-        Mapper<Expired> _expireMapper;
-
-        public ExpirationSystem() : base(Aspect.All(typeof(Expired)))
+        public ExpirationSystem(World world) : base(world)
         {
         }
 
-        public override void Initialize(IComponentMapperService mapperService)
+        protected override void Update(GameTime gameTime, in Entity entity)
         {
-            _expireMapper = mapperService.Get<Expired>();
-        }
-
-        public override void Process(GameTime gameTime, int entityId)
-        {
-            var expire = _expireMapper.Get(entityId);
+            var expire = entity.Get<Expired>();
             if(expire.Update(gameTime)){
                 expire.OnCompleted?.Invoke();
                 if(expire.ShouldDestroyEntity)
-                    DestroyEntity(entityId);
+                    entity.Dispose();
                 else
-                    _expireMapper.Delete(entityId);
+                    entity.Remove<Expired>();
             }
         }
     }

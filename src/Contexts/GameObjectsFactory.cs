@@ -14,7 +14,7 @@ using temp1.Data;
 
 namespace temp1
 {
-    class GameObjectsContext
+    class GameObjectsFactory
     {
         private JsonContentLoader loader = new JsonContentLoader();
         private ContentManager _content;
@@ -23,7 +23,7 @@ namespace temp1
         private Dictionary<string, GameObjectTypeInfo> GameObjectTypes;
         private Dictionary<string, Action<Entity, GameObjectTypeInfo, TiledMapObject>> Handlers;
 
-        public GameObjectsContext(ContentManager content)
+        public GameObjectsFactory(ContentManager content)
         {
             _content = content;
             GameObjectTypes = new Dictionary<string, GameObjectTypeInfo>();

@@ -1,8 +1,9 @@
+using System;
+using DefaultEcs;
+using DefaultEcs.System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Entities;
-using MonoGame.Extended.Entities.Systems;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Sprites;
 using temp1.Components;
@@ -10,59 +11,39 @@ using temp1.UI;
 
 namespace temp1.Systems
 {
-    class CursorSystem : EntitySystem, IDrawSystem, IUpdateSystem
+    [With(typeof(Cursor))]
+    class CursorSystem : AEntitySetSystem<GameTime>
     {
         Vector2 position;
-        bool shouldShow = false;
         AnimatedSprite mark;
-
-        Mapper<MapObject> _moMapper;
-        Mapper<RenderingObject> _spriteMapper;
-        Mapper<PossibleMoves> _possibleMovesMap;
-        Mapper<AllowedToAct> _allowedMap;
-        Mapper<Cursor> _pointableMapper;
-
         SpriteBatch _spriteBatch;
 
         MapContext _map;
 
-        public CursorSystem(SpriteBatch sb, MapContext map, ContentManager content) : base(Aspect.All(typeof(Cursor), typeof(RenderingObject)))
+        public CursorSystem(SpriteBatch batch, World world) : base(world)
         {
-            _map = map;
-            _spriteBatch = sb;
-            mark = content.GetAnimatedSprite("images/mark.sf");
+            _map = GameContext.Map;
+            _spriteBatch = batch;
+            mark = GameContext.Content.GetAnimatedSprite("images/mark.sf");
         }
 
-        public override void Initialize(IComponentMapperService mapperService)
+        protected override void Update(GameTime gameTime, ReadOnlySpan<Entity> entities)
         {
-            _moMapper = mapperService.Get<MapObject>();
-            _spriteMapper = mapperService.Get<RenderingObject>();
-            _possibleMovesMap = mapperService.Get<PossibleMoves>();
-            _allowedMap = mapperService.Get<AllowedToAct>();
-            _pointableMapper = mapperService.Get<Cursor>();
-        }
-
-        public void Update(GameTime gameTime)
-        {
-            if (GameContext.Hud.State != HUDState.Default || GameContext.Hud.IsMouseOnHud || !_allowedMap.Has(GameContext.PlayerId))
-            {
-                shouldShow = false;
+            if (GameContext.Hud.State != HUDState.Default || GameContext.Hud.IsMouseOnHud || !GameContext.Player.Has<AllowedToAct>())
                 return;
-            }
+
             var state = MouseExtended.GetState();
             var worldPos = GameContext.Camera.ScreenToWorld(state.Position.X, state.Position.Y);
             var point = (worldPos / 32).ToPoint();
             position = point.ToVector2() * 32 + new Vector2(16);
-            GameContext.PointedEntity = -1;
+            GameContext.PointedEntity = null;
             if (GameContext.GameState == GameState.Peace)
             {
                 if (!_map.MovementGrid.Contains(point))
-                {
-                    shouldShow = false;
                     return;
-                }
+                
 
-                if (!HandlePoint(worldPos))
+                if (!HandlePoint(worldPos, entities))
                 {
                     if (_map.MovementGrid.IsWalkableAt(point.X, point.Y))
                         mark.Play("idle");
@@ -72,10 +53,10 @@ namespace temp1.Systems
             }
             else
             {
-                var possibleMoves = _possibleMovesMap.Get(GameContext.PlayerId);
+                var possibleMoves = GameContext.Player.Get<PossibleMoves>();
                 if (possibleMoves.Contains(point))
                 {
-                    if (!HandlePoint(worldPos))
+                    if (!HandlePoint(worldPos, entities))
                         mark.Play("idle");
                 }
                 else
@@ -83,34 +64,32 @@ namespace temp1.Systems
                     mark.Play("no");
                 }
             }
-            shouldShow = true;
+            Draw();
             mark.Update(gameTime.ElapsedGameTime.Milliseconds);
         }
 
-        private bool HandlePoint(Vector2 pos)
+        private bool HandlePoint(Vector2 pos, ReadOnlySpan<Entity> entities)
         {
-            for (var i = 0; i < ActiveEntities.Count; i++)
+            for (var i = 0; i < entities.Length; i++)
             {
-                var id = ActiveEntities[i];
-                var sprite = _spriteMapper.Get(id);
-                var mo = _moMapper.Get(id);
+                var cursor = entities[i];
+                var sprite = cursor.Get<RenderingObject>();
+                var mo = cursor.Get<MapObject>();
                 var bounds = new Rectangle(0, 0, sprite.Bounds.Width, sprite.Bounds.Height);
-                var pointable = _pointableMapper.Get(id);
+                var pointable = cursor.Get<Cursor>();
                 if (bounds.Contains(pos - mo.Position + sprite.Origin))
                 {
                     mark.Play(pointable.SpriteName);
                     position = pos;
-                    GameContext.PointedEntity = id;
+                    GameContext.PointedEntity = cursor;
                     return true;
                 }
             }
             return false;
         }
 
-        public void Draw(GameTime gameTime)
+        void Draw()
         {
-            if (!shouldShow)
-                return;
             _spriteBatch.Draw(
                 mark.TextureRegion.Texture,
                 position,

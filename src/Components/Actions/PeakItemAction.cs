@@ -1,5 +1,6 @@
 using DefaultEcs;
 using Microsoft.Xna.Framework;
+using temp1.Data;
 
 namespace temp1.Components
 {
@@ -7,13 +8,19 @@ namespace temp1.Components
     {
         public override int PointsTaken => 1;
 
-        public Entity Left;
-        public Entity Right;
+        public Entity Storage;
+        public Entity Target;
 
-        public PeakItemAction(Entity left, Entity right)
+        public PeakItemAction(Entity storage, Entity target)
         {
-            Left = left;
-            Right = right;
+            Storage = storage;
+            Target = target;
+        }
+
+        public override void Start(Entity entity)
+        {
+            Storage.Get<Storage>().Add(Target.Get<ItemStack>());
+            Target.Dispose();
         }
 
         public override void Update(GameTime time)

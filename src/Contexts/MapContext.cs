@@ -9,7 +9,6 @@ using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Renderers;
 using temp1.Components;
 using temp1.PathFinding;
-using temp1.Util;
 
 namespace temp1
 {
@@ -17,7 +16,7 @@ namespace temp1
     {
         private TiledMap _map;
         private ContentManager _content;
-        private GameObjectsContext _goContext;
+        private GameObjectsFactory _goContext;
         private GraphicsDevice _device;
         private TiledMapRenderer _mapRenderer;
 
@@ -26,7 +25,7 @@ namespace temp1
 
         public TiledMap Map { get => _map; }
 
-        public MapContext(ContentManager content, GameObjectsContext goContext, GraphicsDevice device)
+        public MapContext(ContentManager content, GameObjectsFactory goContext, GraphicsDevice device)
         {
             _content = content;
             _goContext = goContext;

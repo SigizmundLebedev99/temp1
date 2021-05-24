@@ -1,3 +1,4 @@
+using DefaultEcs;
 using Microsoft.Xna.Framework;
 
 namespace temp1.Components
@@ -16,6 +17,8 @@ namespace temp1.Components
         public abstract int PointsTaken { get; }
 
         public virtual ActionStatus Status { get; set; }
+
+        public virtual void Start(Entity entity) { }
 
         public virtual void Update(GameTime time) { }
 
