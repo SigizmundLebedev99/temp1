@@ -77,7 +77,7 @@ namespace temp1
                 camera.Move(new Vector2(0, -5));
             if (state.X > v.Width && camera.Position.X < map.WidthInPixels - v.Width)
                 camera.Move(new Vector2(5, 0));
-            if (state.Y > v.Height && camera.Position.Y < map.HeightInPixels - v.Height)
+            if (state.Y > v.Height && camera.Position.Y < map.HeightInPixels - v.Height + 100)
                 camera.Move(new Vector2(0, 5));
         }
 

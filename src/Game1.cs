@@ -23,9 +23,6 @@ namespace temp1
             Components.Add(_screenManager);
             
             var controlsFactory = new ControlsFactory(Content);
-
-            Services.AddService(Content);
-            Services.AddService(_screenManager);
             Services.AddService(controlsFactory);
         }
 

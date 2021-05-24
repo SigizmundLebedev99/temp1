@@ -166,6 +166,11 @@
 /processorParam:TextureFormat=Color
 /build:images/possible_move.png
 
+#begin tiled/cave.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:tiled/cave.tmx
+
 #begin tiled/map.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
