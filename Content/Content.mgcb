@@ -166,10 +166,27 @@
 /processorParam:TextureFormat=Color
 /build:images/possible_move.png
 
+#begin tiled/cave.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:tiled/cave.tmx
+
 #begin tiled/map.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
 /build:tiled/map.tmx
+
+#begin ui/battle-hot.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ui/battle-hot.png
 
 #begin ui/border.png
 /importer:TextureImporter
