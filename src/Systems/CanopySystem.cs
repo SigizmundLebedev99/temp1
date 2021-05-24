@@ -26,7 +26,7 @@ namespace temp1.Systems
         {
             var hull = _hullMapper.Get(entityId);
             var mapObjects = GameContext.World.MapObjects;
-            var playerMO = _moMapper.Get(GameContext.PlayerId);
+            var playerMO = _moMapper.Get(GameContext.Player);
             var position = playerMO.MapPosition;
             var layer = hull.Layer;
             var tile = layer.GetTile((ushort)position.X, (ushort)position.Y);
@@ -41,7 +41,7 @@ namespace temp1.Systems
             for (var i = 0; i < mapObjects.Count; i++)
             {
                 var id = mapObjects[i];
-                if(id == GameContext.PlayerId)
+                if(id == GameContext.Player)
                     continue;
                 var mapObject = _moMapper.Get(id);
                 renderingObject = _spriteMapper.Get(id);

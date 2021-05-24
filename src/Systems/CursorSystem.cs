@@ -53,7 +53,7 @@ namespace temp1.Systems
             var worldPos = GameContext.Camera.ScreenToWorld(state.Position.X, state.Position.Y);
             var point = (worldPos / 32).ToPoint();
             position = point.ToVector2() * 32 + new Vector2(16);
-            GameContext.PointedId = -1;
+            GameContext.PointedEntity = -1;
             if (GameContext.GameState == GameState.Peace)
             {
                 if (!_map.MovementGrid.Contains(point))
@@ -100,7 +100,7 @@ namespace temp1.Systems
                 {
                     mark.Play(pointable.SpriteName);
                     position = pos;
-                    GameContext.PointedId = id;
+                    GameContext.PointedEntity = id;
                     return true;
                 }
             }

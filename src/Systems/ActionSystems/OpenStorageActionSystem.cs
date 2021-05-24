@@ -1,7 +1,4 @@
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities;
-using MonoGame.Extended.Entities.Systems;
-using MonoGame.Extended.Sprites;
 using temp1.Components;
 using temp1.UI;
 
@@ -40,7 +37,7 @@ namespace temp1.Systems
                 return false;
             var sprite = _spriteMap.Get(storageId);
             sprite.Play("open");
-            if(GameContext.PlayerId == actorId)
+            if(GameContext.Player == actorId)
                 GameContext.Hud.OpenChest(storage, actor);
             return true;
         }

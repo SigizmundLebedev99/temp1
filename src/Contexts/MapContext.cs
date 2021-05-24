@@ -102,10 +102,10 @@ namespace temp1
                     var canopy = new Canopy(tiled);
                     if (c.Properties.TryGetValue("Interier", out var interier))
                         canopy.IsInterier = bool.Parse(interier);
-                    cover.Attach(canopy);
+                    cover.Set(canopy);
                 }
 
-                cover.Attach(new RenderingObject(sprite));
+                cover.Set(new RenderingObject(sprite));
                 c.IsVisible = false;
             }
             _device.SetRenderTarget(null);

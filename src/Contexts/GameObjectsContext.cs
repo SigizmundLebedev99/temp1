@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DefaultEcs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Content;
-using MonoGame.Extended.Entities;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
@@ -18,7 +18,7 @@ namespace temp1
     {
         private JsonContentLoader loader = new JsonContentLoader();
         private ContentManager _content;
-        private WorldContext _world;
+        private World _world;
 
         private Dictionary<string, GameObjectTypeInfo> GameObjectTypes;
         private Dictionary<string, Action<Entity, GameObjectTypeInfo, TiledMapObject>> Handlers;
@@ -29,7 +29,7 @@ namespace temp1
             GameObjectTypes = new Dictionary<string, GameObjectTypeInfo>();
         }
 
-        public void Initialize(WorldContext world, string gameObjectTypesPath = "game-object-types.json")
+        public void Initialize(World world, string gameObjectTypesPath = "game-object-types.json")
         {
             _world = world;
             var mapTypes = _content.Load<GameObjectTypeInfo[]>(gameObjectTypesPath, loader);
@@ -41,7 +41,7 @@ namespace temp1
             };
         }
 
-        public int CreateMapObject(string type, Vector2? position = null, TiledMapObject tiledMapObj = null)
+        public Entity CreateMapObject(string type, Vector2? position = null, TiledMapObject tiledMapObj = null)
         {
             if (!GameObjectTypes.TryGetValue(type, out var objType))
                 throw new ArgumentException("Invalid type: " + type);
@@ -49,7 +49,7 @@ namespace temp1
             var entity = _world.CreateEntity();
 
             if (position.HasValue)
-                entity.Attach(new MapObject(position.Value, GameObjectType.None));
+                entity.Set(new MapObject(position.Value, GameObjectType.None));
 
             Sprite sprite;
 
@@ -66,15 +66,15 @@ namespace temp1
                     sprite = _content.GetSprite(objType);
 
 
-                entity.Attach(new RenderingObject(sprite));
+                entity.Set(new RenderingObject(sprite));
             }
 
             if (objType.Handler == null || !Handlers.TryGetValue(objType.Handler, out var handler))
-                return entity.Id;
+                return entity;
 
             handler(entity, objType, tiledMapObj);
 
-            return entity.Id;
+            return entity;
         }
 
         void ActorHandler(Entity e, GameObjectTypeInfo type, TiledMapObject tiledMapObj)
@@ -82,23 +82,25 @@ namespace temp1
             var mapObj = e.Get<MapObject>();
             if (type.TypeName == "player")
             {
-                e.Attach(new Storage());
-                GameContext.PlayerId = e.Id;
+                e.Set(new Storage());
+                GameContext.Player = e;
                 mapObj.Type = GameObjectType.Blocking;
-                e.Attach<BaseAI>(new PlayerControll(e.Id));
+                e.Set<IBaseAI>(new PlayerControll());
             }
             if (type.TypeName == "enemy")
             {
                 mapObj.Type = GameObjectType.Enemy | GameObjectType.Blocking;
-                e.Attach(new Cursor("sword"));
-                e.Attach<BaseAI>(new RandomMovement(e.Id));
+                e.Set(new Cursor("sword"));
+                e.Set<IBaseAI>(new RandomMovement());
             }
-            e.Attach(new ActionPoints
+
+            e.Set(new ActionPoints
             {
                 Max = 10,
                 Remain = 10
             });
-            e.Attach(new AllowedToAct());
+            
+            e.Set(new AllowedToAct());
         }
 
         void ChestHandler(Entity e, GameObjectTypeInfo obj, TiledMapObject mapObject)
@@ -137,8 +139,8 @@ namespace temp1
                 }
             }
 
-            e.Attach(storage);
-            e.Attach(new Cursor("hand"));
+            e.Set(storage);
+            e.Set(new Cursor("hand"));
         }
     }
 }

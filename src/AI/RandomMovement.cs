@@ -1,32 +1,28 @@
 using System;
+using DefaultEcs;
 using FluentBehaviourTree;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities;
 using temp1.Components;
 
 namespace temp1.AI
 {
-    class RandomMovement : BaseAI
+    class RandomMovement : IBaseAI
     {
-        Mapper<BaseAction> _actionMap;
-        Mapper<WalkAction> _walkMap;
         MapObject _mo;
         IBehaviourTreeNode _tree;
         float _time = 0;
+        Entity entity;
         
-        public RandomMovement(int entityId) : base(entityId)
+        public RandomMovement()
         {
             var world = GameContext.World;
             var mapContext = GameContext.Map;
-            _mo = world.GetEntity(entityId).Get<MapObject>();
-            _actionMap = world.GetMapper<BaseAction>();
-            _walkMap = world.GetMapper<WalkAction>();
 
             _tree = new BehaviourTreeBuilder()
                 .Sequence("start")
                     .Do("check activity", t =>
                     {
-                        if (_actionMap.Has(entityId))
+                        if (entity.Has<BaseAction>())
                             return BehaviourTreeStatus.Running;
                         return BehaviourTreeStatus.Success;
                     })
@@ -46,7 +42,7 @@ namespace temp1.AI
                             if (!TryGetPoint(out var point, mapContext))
                                 return BehaviourTreeStatus.Success;
                             if (mapContext.PathFinder.TryGetPath(_mo, point, out var first, out var last, 1f))
-                                _walkMap.Put(EntityId, first);
+                                entity.Set<BaseAction>(first);
                             
                             return BehaviourTreeStatus.Success;
                         })
@@ -64,8 +60,9 @@ namespace temp1.AI
             return true;
         }
 
-        public override void Update(GameTime time)
+        public void Update(GameTime time, Entity entity)
         {
+            this.entity = entity;
             _tree.Tick(new TimeData());
         }
     }

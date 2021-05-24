@@ -1,35 +1,40 @@
 
-using MonoGame.Extended.Entities;
+
+using DefaultEcs;
+using temp1.AI;
 using temp1.Components;
 
 namespace temp1
 {
     class CombatContext
     {
-        private WorldContext _world;
+        private World _world;
+        private EntitySet actorsSet;
 
-        private Mapper<TurnOccured> _turnMapper;
-        private Mapper<AllowedToAct> _allowMapper;
-        private Mapper<BaseAction> _actionMapper;
-
-        public CombatContext(WorldContext world){
+        public CombatContext(World world)
+        {
             _world = world;
-            _turnMapper = world.GetMapper<TurnOccured>();
-            _actionMapper = world.GetMapper<BaseAction>();
-            _allowMapper = world.GetMapper<AllowedToAct>();
+            actorsSet = _world.GetEntities().With<IBaseAI>().AsSet();
         }
 
         public void StartBattle()
         {
             GameContext.GameState = GameState.Combat;
-            var actors = _world.Actors;
-            for (var i = 0; i < actors.Count; i++)
+            
+            var actors = actorsSet.GetEntities();
+            
+            foreach (var actor in actors)
             {
-                _allowMapper.Delete(actors[i]);
-                _turnMapper.Delete(actors[i]);
-                _actionMapper.Delete(actors[i]);
+
             }
-            _allowMapper.Put(GameContext.PlayerId, new AllowedToAct());
+
+            for (var i = 0; i < actors.Length; i++)
+            {
+                actors[i].Remove<AllowedToAct>();
+                actors[i].Remove<TurnOccured>();
+                actors[i].Remove<BaseAction>();
+            }
+            GameContext.Player.Set(new AllowedToAct());
         }
     }
 }

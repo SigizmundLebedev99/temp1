@@ -1,16 +1,10 @@
+using DefaultEcs;
 using Microsoft.Xna.Framework;
 
 namespace temp1.AI
 {
-    abstract class BaseAI
+    interface IBaseAI
     {
-        public readonly int EntityId;
-
-        public BaseAI(int entityId)
-        {
-            EntityId = entityId;
-        }
-
-        public abstract void Update(GameTime time);
+        void Update(GameTime time, Entity entity);
     }
 }

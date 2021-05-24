@@ -1,6 +1,6 @@
 using System.Diagnostics;
+using DefaultEcs;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities;
 using temp1.Components;
 using temp1.UI.Controls;
 
@@ -23,12 +23,9 @@ namespace temp1.UI
         private Desktop _ui;
         private Game1 _game;
 
-        private Mapper<Storage> _storageMap;
-
-        public HudContext(Game1 game, WorldContext context)
+        public HudContext(Game1 game)
         {
             _game = game;
-            _storageMap = context.GetMapper<Storage>();
         }
         
         public void Default()
@@ -37,17 +34,17 @@ namespace temp1.UI
             _state = HUDState.Default;
         }
 
-        public void OpenInventory(int id = -1)
+        public void OpenInventory(Entity entity)
         {
             IsMouseOnHud = false;
-            if(id == -1)
-                id = GameContext.PlayerId;
             var inventory = new InventoryOpen(_game);
-            var storage = _storageMap.Get(id);
+            var storage = entity.Get<Storage>();
+            
             if(storage == null){
                 Debug.WriteLine("_warn_ HUDContext.cs 47");
                 return;
             }
+
             inventory.BuildItems(storage);
             _ui = inventory;
             _state = HUDState.Inventory1;

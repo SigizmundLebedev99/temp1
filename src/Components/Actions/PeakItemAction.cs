@@ -1,6 +1,5 @@
+using DefaultEcs;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Entities;
-using temp1.Data;
 
 namespace temp1.Components
 {
@@ -8,13 +7,13 @@ namespace temp1.Components
     {
         public override int PointsTaken => 1;
 
-        public int StorageId;
-        public int TargetId;
+        public Entity Left;
+        public Entity Right;
 
-        public PeakItemAction(int storageId, int itemId)
+        public PeakItemAction(Entity left, Entity right)
         {
-            StorageId = storageId;
-            TargetId = itemId;
+            Left = left;
+            Right = right;
         }
 
         public override void Update(GameTime time)

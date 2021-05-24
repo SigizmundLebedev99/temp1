@@ -1,3 +1,4 @@
+using DefaultEcs;
 using Microsoft.Xna.Framework;
 using temp1.UI;
 
@@ -7,11 +8,11 @@ namespace temp1.Components
     {
         public override int PointsTaken => 1;
 
-        public int StorageId;
+        public Entity Storage;
 
-        public OpenStorageAction(int storageId)
+        public OpenStorageAction(Entity storage)
         {
-            StorageId = storageId;
+            Storage = storage;
         }
 
         public override void Abort()

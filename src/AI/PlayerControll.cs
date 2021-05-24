@@ -1,6 +1,6 @@
+using DefaultEcs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Entities;
 using MonoGame.Extended.Input;
 using temp1.Components;
 using temp1.Data;
@@ -8,28 +8,21 @@ using temp1.UI;
 
 namespace temp1.AI
 {
-    class PlayerControll : BaseAI
+    class PlayerControll : IBaseAI
     {
-        Mapper<WalkAction> _walkMapper;
-        Mapper<BaseAction> _baseActionMap;
-        Mapper<MapObject> _moMapper;
-
         MouseStateExtended mouseState;
 
         HudContext _hud;
         MapContext _map;
 
-        public PlayerControll(int entityId) : base(entityId)
+        public PlayerControll() : base()
         {
             var worldContext = GameContext.World;
-            _walkMapper = worldContext.GetMapper<WalkAction>();
-            _moMapper = worldContext.GetMapper<MapObject>();
-            _baseActionMap = worldContext.GetMapper<BaseAction>();
             _hud = GameContext.Hud;
             _map = GameContext.Map;
         }
 
-        public override void Update(GameTime time)
+        public void Update(GameTime time, Entity entity)
         {
             var newState = MouseExtended.GetState();
             if (!CanHandleInput(newState))
@@ -38,13 +31,13 @@ namespace temp1.AI
                 return;
             }
 
-            var mapObj = _moMapper.Get(EntityId);
-            var pointed = GameContext.PointedId >= 0 ? _moMapper.Get(GameContext.PointedId) : null;
+            var mapObj = entity.Get<MapObject>();
+            var pointed = GameContext.PointedEntity != null ? GameContext.PointedEntity.Get<MapObject>() : null;
             BaseAction after = null;
             var mapPosition = mouseState.MapPosition(GameContext.Camera);
             
             if (pointed != null)
-                after = GetAfterAction(pointed, GameContext.PointedId);
+                after = GetAfterAction(entity, pointed, GameContext.PointedEntity);
             else if (!GameContext.Map.MovementGrid.IsWalkableAt(mapPosition.X, mapPosition.Y))
             {
                 return;
@@ -59,7 +52,7 @@ namespace temp1.AI
                     action.Abort();
                 }
 
-                _walkMapper.Put(EntityId, first);
+                entity.Set<BaseAction>(first);
             }
 
             mouseState = newState;
@@ -72,12 +65,12 @@ namespace temp1.AI
             && !_hud.IsMouseOnHud;
         }
 
-        private BaseAction GetAfterAction(MapObject pointed, int id)
+        private BaseAction GetAfterAction(Entity entity, MapObject pointed, Entity pointedEntity)
         {
             if ((pointed.Type & GameObjectType.Item) != 0)
-                return new PeakItemAction(EntityId, id);
+                return new PeakItemAction(entity, pointedEntity);
             if ((pointed.Type & GameObjectType.Storage) != 0)
-                return new OpenStorageAction(GameContext.PointedId);
+                return new OpenStorageAction(pointedEntity);
 
             return null;
         }

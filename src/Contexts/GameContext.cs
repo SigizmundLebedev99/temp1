@@ -1,3 +1,4 @@
+using DefaultEcs;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,10 +19,10 @@ namespace temp1
     {
         public static GameState GameState = GameState.Peace;
         public static OrthographicCamera Camera;
-        public static int PlayerId;
-        public static int PointedId;
+        public static Entity Player;
+        public static Entity PointedEntity;
 
-        public static WorldContext World;
+        public static World World;
         public static GameObjectsContext GameObjects;
         public static HudContext Hud;
         public static MapContext Map;
@@ -40,17 +41,17 @@ namespace temp1
             
             _sb = game.Batch;
 
-            World = new WorldContext();
+            World = new World();
 
             GameObjects = new GameObjectsContext(Content);
 
             Map = new MapContext(Content, GameObjects, game.GraphicsDevice);
 
-            World.ConfigureWorld(Map, _sb, GameObjects, Content);
+            //World.ConfigureWorld(Map, _sb, GameObjects, Content);
 
             GameObjects.Initialize(World);
 
-            Hud = new HudContext(game, World);
+            Hud = new HudContext(game);
             Hud.Default();
 
             Combat = new CombatContext(World);
@@ -62,7 +63,7 @@ namespace temp1
         {
             if (!Game.IsActive)
                 return;
-            World.World.Update(gameTime);
+            World.Update(gameTime);
             Map.Update(gameTime);
             Hud.Update(gameTime);
             if (Hud.State != HUDState.Default)
