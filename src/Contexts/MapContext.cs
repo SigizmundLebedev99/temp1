@@ -113,7 +113,7 @@ namespace temp1
                     cover.Set(canopy);
                 }
 
-                cover.Set(new RenderingObject(sprite));
+                cover.Set(new RenderingObject(sprite, ""));
                 c.IsVisible = false;
             }
             _device.SetRenderTarget(null);

@@ -60,7 +60,7 @@ namespace temp1
 
             if (objType.Sprite != null)
             {
-                entity.Set(new RenderingObject(_content.GetSprite(objType.Sprite)));
+                entity.Set(new RenderingObject(_content.GetSprite(objType.Sprite), objType.Sprite.Path));
             }
 
             if (objType.Handler == null || !Handlers.TryGetValue(objType.Handler, out var handler))
@@ -77,15 +77,14 @@ namespace temp1
             {
                 e.Set(new Storage());
                 GameContext.Player = e;
-                e.Set<IBaseAI>(new PlayerControll());
+                e.Set<IGameAI>(new PlayerControl());
             }
             if (type.TypeName == "enemy")
             {
                 var sprite = e.Get<RenderingObject>();
                 e.Set(new Cursor("sword", new Rectangle((int)sprite.Origin.X, (int)sprite.Origin.Y, sprite.Bounds.Width, sprite.Bounds.Height)));
                 e.Set(GameObjectType.Enemy);
-                e.Set<IBaseAI>(new RandomMovement());
-                
+                e.Set<IGameAI>(new RandomMovement());
             }
 
             e.Set(new ActionPoints

@@ -3,16 +3,22 @@ using DefaultEcs;
 using FluentBehaviourTree;
 using Microsoft.Xna.Framework;
 using temp1.Components;
+using temp1.Models;
 
 namespace temp1.AI
 {
-    class RandomMovement : IBaseAI
+    class RandomMovement : IGameAI
     {
         Position _objectToMove;
         IBehaviourTreeNode _tree;
         float _time = 0;
         Entity entity;
-        
+
+        public AIFactory GetFactory()
+        {
+            return new RandomMovementAIFactory();
+        }
+
         public RandomMovement()
         {
             var world = GameContext.World;
@@ -43,7 +49,7 @@ namespace temp1.AI
                                 return BehaviourTreeStatus.Success;
                             if (mapContext.PathFinder.TryGetPath(_objectToMove, point, out var first, out var last, 1f))
                                 entity.Set<BaseAction>(first);
-                            
+
                             return BehaviourTreeStatus.Success;
                         })
                     .End()
@@ -58,6 +64,14 @@ namespace temp1.AI
             if (!grid.IsZeroAt(point.X, point.Y))
                 return false;
             return true;
+        }
+
+        public void Clear()
+        {
+            _objectToMove = null;
+            _tree = null;
+            _time = 0;
+            entity = default;
         }
 
         public void Update(GameTime time, Entity entity)

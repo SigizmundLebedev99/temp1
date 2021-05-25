@@ -24,10 +24,10 @@ static class Extensions
         return (worldPos / 32).ToPoint();
     }
 
-    public static Sprite GetSprite(this ContentManager content, string textureName)
+    public static Sprite GetSprite(this ContentManager content, string textureName, Region region = null)
     {
         var texture = content.Load<Texture2D>(textureName);
-        return new Sprite(texture);
+        return region == null ? new Sprite(texture) : new Sprite(new TextureRegion2D(texture, region));
     }
 
     public static AnimatedSprite GetAnimatedSprite(this ContentManager content, string name)
@@ -41,17 +41,16 @@ static class Extensions
     public static Sprite GetSprite(this ContentManager content, RenderObjectInfo spriteInfo)
     {
         Sprite sprite;
-        
-        if(spriteInfo == null)
+
+        if (spriteInfo == null)
             return null;
 
         if (spriteInfo.Path.EndsWith(".sf"))
             sprite = content.GetAnimatedSprite(spriteInfo.Path);
         else
-            sprite = content.GetSprite(spriteInfo.Path);
+            sprite = content.GetSprite(spriteInfo.Path, spriteInfo.Region);
 
-        if (spriteInfo.Origin != null)
-            sprite.Origin = new Vector2(spriteInfo.Origin.X, spriteInfo.Origin.Y);
+        sprite.Origin = spriteInfo.Origin != null ? spriteInfo.Origin.ToVector2() : Vector2.Zero;
 
         return sprite;
     }

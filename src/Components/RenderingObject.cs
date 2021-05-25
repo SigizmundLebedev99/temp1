@@ -7,14 +7,16 @@ namespace temp1.Components
 {
     class RenderingObject
     {
-        public RenderingObject(Sprite sprite)
+        public RenderingObject(Sprite sprite, string resourceName)
         {
             Sprite = sprite;
             Depth = sprite.Depth;
+            ResourceName = resourceName;
         }
 
         public bool Visible = true;
         public Sprite Sprite;
+        public string ResourceName;
 
         public Rectangle Bounds => Sprite.TextureRegion.Bounds;
         public Texture2D Texture => Sprite.TextureRegion.Texture;

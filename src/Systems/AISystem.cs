@@ -7,7 +7,7 @@ using temp1.PathFinding;
 
 namespace temp1.Systems
 {
-    [With(typeof(IBaseAI))]
+    [With(typeof(IGameAI))]
     [With(typeof(AllowedToAct))]
     class AISystem : AEntitySetSystem<GameTime>
     {   
@@ -16,7 +16,7 @@ namespace temp1.Systems
 
         protected override void Update(GameTime gameTime, in Entity entity)
         {
-            entity.Get<IBaseAI>().Update(gameTime, entity);
+            entity.Get<IGameAI>().Update(gameTime, entity);
         }
     }
 }

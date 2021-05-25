@@ -1,0 +1,192 @@
+
+Entity 1
+ComponentType Position temp1.Components.Position, temp1
+Component Position {
+	Value {
+		X 240
+		Y 560
+	}
+}
+ComponentType RenderObjectInfo temp1.Models.RenderObjectInfo, temp1
+Component RenderObjectInfo {
+	Path "images/chest1.sf"
+	Origin {
+		X 16
+		Y 20
+	}
+	Region {
+		X 192
+		Y 384
+		Width 32
+		Height 32
+	}
+}
+ComponentType GameObjectType temp1.Data.GameObjectType, temp1
+Component GameObjectType Storage
+ComponentType Blocking temp1.Components.Blocking, temp1
+Component Blocking {
+}
+ComponentType Storage temp1.Components.Storage, temp1
+Component Storage {
+	Content [
+		{
+			ItemType {
+				TypeName "blue_potion1"
+				Type None
+				Sprite {
+					Path "images/dragons_blade"
+					Region {
+						X 224
+						Y 0
+						Width 32
+						Height 32
+					}
+				}
+				StackSize 10
+				Flags Consumable
+			}
+			Count 10
+		}
+		{
+			ItemType {
+				TypeName "blue_potion1"
+				Type None
+				Sprite {
+					Path "images/dragons_blade"
+					Region {
+						X 224
+						Y 0
+						Width 32
+						Height 32
+					}
+				}
+				StackSize 10
+				Flags Consumable
+			}
+			Count 10
+		}
+		{
+			ItemType {
+				TypeName "gladius1"
+				Type None
+				Sprite {
+					Path "images/dragons_blade_2"
+					Region {
+						X 96
+						Y 0
+						Width 32
+						Height 32
+					}
+				}
+				StackSize 1
+				Flags Weapon, OneHanded
+			}
+			Count 1
+		}
+		{
+			ItemType {
+				TypeName "helmet1"
+				Type None
+				Sprite {
+					Path "images/dragons_blade_2"
+					Region {
+						X 64
+						Y 64
+						Width 32
+						Height 32
+					}
+				}
+				StackSize 1
+				Flags Armor, Helmet
+			}
+			Count 1
+		}
+		{
+			ItemType {
+				TypeName "red_potion1"
+				Type None
+				Sprite {
+					Path "images/dragons_blade"
+					Region {
+						X 192
+						Y 0
+						Width 32
+						Height 32
+					}
+				}
+				StackSize 10
+				Flags Consumable
+			}
+			Count 10
+		}
+		{
+			ItemType {
+				TypeName "red_potion1"
+				Type None
+				Sprite {
+					Path "images/dragons_blade"
+					Region {
+						X 192
+						Y 0
+						Width 32
+						Height 32
+					}
+				}
+				StackSize 10
+				Flags Consumable
+			}
+			Count 10
+		}
+	]
+}
+ComponentType Serializable temp1.Components.Serializable, temp1
+Component Serializable {
+}
+ComponentType Cursor temp1.Components.Cursor, temp1
+Component Cursor {
+	Bounds {
+		X -16
+		Y -16
+		Width 32
+		Height 32
+	}
+	SpriteName "hand"
+}
+
+Entity 2
+Component Position {
+	Value {
+		X 848
+		Y 560
+	}
+}
+Component RenderObjectInfo {
+	Path "images/player.sf"
+	Origin {
+		X 26
+		Y 65
+	}
+	Region {
+		X 52
+		Y 73
+		Width 52
+		Height 73
+	}
+}
+Component Storage {
+	Content [
+	]
+}
+ComponentSameAs Serializable 1
+ComponentType AIFactory temp1.Models.AIFactory, temp1
+Component AIFactory $type temp1.Models.PlayerControlAIFactory, temp1
+{
+}
+ComponentType ActionPoints temp1.Components.ActionPoints, temp1
+Component ActionPoints {
+	Remain 10
+	Max 10
+}
+ComponentType AllowedToAct temp1.Components.AllowedToAct, temp1
+Component AllowedToAct {
+}

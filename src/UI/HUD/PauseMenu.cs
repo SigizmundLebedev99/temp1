@@ -30,6 +30,9 @@ namespace temp1.UI
             var save = _factory.CreateTextButton(0);
             save.OffsetFrom = Anchors.Center;
             save.Text = "Save";
+            save.MouseUp += (s, e) => {
+                new SaveContext().Save();
+            };
 
             var exit = _factory.CreateTextButton(0);
             exit.OffsetFrom = Anchors.Center;
@@ -54,7 +57,8 @@ namespace temp1.UI
         public override void Update(GameTime time)
         {
             var keyState = KeyboardExtended.GetState();
-            if(keyState.WasKeyJustDown(Keys.Escape)){
+            if (keyState.WasKeyJustDown(Keys.Escape))
+            {
                 GameContext.Hud.Default();
                 return;
             }

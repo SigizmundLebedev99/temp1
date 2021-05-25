@@ -15,7 +15,7 @@ namespace temp1
         public EntitySets(World world)
         {
             MapObjects = world.GetEntities().With<Position>().AsSet();
-            Actors = world.GetEntities().With<IBaseAI>().With<ActionPoints>().AsSet();
+            Actors = world.GetEntities().With<IGameAI>().With<ActionPoints>().AsSet();
             Triggers = world.GetEntities().With<Trigger>().AsSet();
             Cursors = world.GetEntities().With<Cursor>().AsSet();
             Serializable = world.GetEntities().With<Serializable>().AsSet();

@@ -4,22 +4,18 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
 using temp1.Components;
 using temp1.Data;
+using temp1.Models;
 using temp1.UI;
 
 namespace temp1.AI
 {
-    class PlayerControll : IBaseAI
+    class PlayerControl : IGameAI
     {
         MouseStateExtended mouseState;
 
-        HudContext _hud;
-        MapContext _map;
-
-        public PlayerControll() : base()
+        public AIFactory GetFactory()
         {
-            var worldContext = GameContext.World;
-            _hud = GameContext.Hud;
-            _map = GameContext.Map;
+            return new PlayerControlAIFactory();
         }
 
         public void Update(GameTime time, Entity entity)
@@ -43,7 +39,7 @@ namespace temp1.AI
                 return;
             }
 
-            if (_map.PathFinder.TryGetPath(position, mapPosition, out var first, out var last, 2f))
+            if (GameContext.Map.PathFinder.TryGetPath(position, mapPosition, out var first, out var last, 2f))
             {
                 if (after != null)
                 {
@@ -61,8 +57,8 @@ namespace temp1.AI
         private bool CanHandleInput(MouseStateExtended newState)
         {
             return mouseState.LeftButton == ButtonState.Pressed && newState.LeftButton == ButtonState.Released
-            && _hud.State == HUDState.Default
-            && !_hud.IsMouseOnHud;
+            && GameContext.Hud.State == HUDState.Default
+            && !GameContext.Hud.IsMouseOnHud;
         }
 
         private BaseAction GetAfterAction(Entity entity, Entity pointedEntity)

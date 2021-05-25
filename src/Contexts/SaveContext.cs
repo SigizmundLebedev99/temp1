@@ -1,5 +1,6 @@
 using System.IO;
 using DefaultEcs.Serialization;
+using temp1.AI;
 using temp1.Components;
 using temp1.Models;
 
@@ -12,17 +13,21 @@ namespace temp1
             using var context = new TextSerializationContext()
             .Marshal<RenderingObject, RenderObjectInfo>(from => new RenderObjectInfo()
             {
-                Path = from.Texture.Name,
+                Path = from.ResourceName,
                 Region = from.Bounds,
-                Origin = from.Origin
+                Origin = new Origin { X = from.Origin.X, Y = from.Origin.Y }
             })
-            .Unmarshal<RenderObjectInfo, RenderingObject>(from => new RenderingObject(GameContext.Content.GetSprite(from)));
-            
+            .Marshal<BaseAction, string>(_ => null)
+            .Marshal<IGameAI, AIFactory>(ai => ai.GetFactory())
+            .Unmarshal<AIFactory, IGameAI>(factory => factory.Get())
+            .Unmarshal<RenderObjectInfo, RenderingObject>(from => new RenderingObject(GameContext.Content.GetSprite(from), from.Path));
+
             var textSerializer = new TextSerializer(context);
 
             using (Stream stream = File.Create("save.txt"))
             {
-                textSerializer.Serialize(stream, GameContext.EntitySets.Serializable.GetEntities().ToArray());
+                var entities = GameContext.EntitySets.Serializable.GetEntities().ToArray();
+                textSerializer.Serialize(stream, entities);
             }
         }
     }
