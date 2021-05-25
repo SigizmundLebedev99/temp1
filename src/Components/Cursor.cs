@@ -1,13 +1,17 @@
 
+using Microsoft.Xna.Framework;
+
 namespace temp1.Components
 {
     class Cursor
     {
-        public Cursor(string spriteName)
+        public Rectangle Bounds; // offset + bounds size;
+        public string SpriteName;
+
+        public Cursor(string spriteName, Rectangle bounds)
         {
+            Bounds = bounds;
             SpriteName = spriteName;
         }
-
-        public string SpriteName;
     }
 }

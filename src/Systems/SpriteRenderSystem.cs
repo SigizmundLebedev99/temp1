@@ -27,15 +27,16 @@ namespace temp1.Systems
                 if (!sprite.Visible)
                     continue;
 
-                bool hasMO = entity.Has<MapObject>();
-                MapObject mo = null;
-                if (hasMO) mo = entity.Get<MapObject>();
-                var position = hasMO ? mo.Position : Vector2.Zero;
+                bool hasPosition = entity.Has<Position>();
+                Position position = null;
+                if (hasPosition) position = entity.Get<Position>();
+                var pointToDraw = hasPosition ? position.Value : Vector2.Zero;
 
-                var depth = hasMO ? 0.1f / mo.MapPosition.Y : sprite.Depth;
+                var depth = hasPosition ? 0.1f / position.GridCell.Y : sprite.Depth;
+                
                 _spriteBatch.Draw(
                     sprite.Texture,
-                    position,
+                    pointToDraw,
                     sprite.Bounds,
                     Color.White,
                     0,

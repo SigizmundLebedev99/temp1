@@ -86,11 +86,13 @@ namespace temp1.Screens
 
         void LoadGame()
         {
-            ScreenManager.LoadScreen(new LoadingScreen((Game1)Game));
-            
-            GameContext.Init((Game1)Game, Content);
-            
-            ScreenManager.LoadScreen(new PlayScreen(Game));
+            ScreenManager.LoadScreen(new LoadingScreen((Game1)Game, () =>
+            {
+                GameContext.Init((Game1)Game, Content);
+                GameContext.LoadMap("tiled/map");
+
+                ScreenManager.LoadScreen(new PlayScreen(Game));
+            }));
         }
     }
 }

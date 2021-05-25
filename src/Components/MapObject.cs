@@ -1,19 +1,19 @@
-using Microsoft.Xna.Framework;
-using temp1.Data;
+// using Microsoft.Xna.Framework;
+// using temp1.Data;
 
-namespace temp1.Components
-{
-    class MapObject
-    {
-        public GameObjectType Type;
-        public Vector2 Position;
-        public Point MapPosition => (Position / 32).ToPoint();
+// namespace temp1.Components
+// {
+//     class MapObject
+//     {
+//         public GameObjectType Type;
+//         public Vector2 Position;
+//         public Point MapPosition => (Position / 32).ToPoint();
         
-        public MapObject(){}
+//         public MapObject(){}
 
-        public MapObject(Vector2 position, GameObjectType flag){
-            Position = position;
-            Type = flag;
-        }
-    }
-}
+//         public MapObject(Vector2 position, GameObjectType flag){
+//             Position = position;
+//             Type = flag;
+//         }
+//     }
+// }

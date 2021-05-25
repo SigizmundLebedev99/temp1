@@ -1,12 +1,12 @@
+using System.Collections.Generic;
 using System.Linq;
-using MonoGame.Extended.Collections;
 using temp1.Data;
 
 namespace temp1.Components
 {
     class Storage
     {
-        public Bag<ItemStack> Content = new Bag<ItemStack>();
+        public List<ItemStack> Content = new List<ItemStack>();
 
         public void Add(ItemStack slot)
         {

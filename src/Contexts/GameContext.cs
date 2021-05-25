@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using MonoGame.Extended.Tiled.Renderers;
+using temp1.Components;
 using temp1.Systems;
 using temp1.UI;
 
@@ -35,32 +36,61 @@ namespace temp1
         public static ContentManager Content => Game.Content;
 
         private static ISystem<GameTime> SystemsSet;
+        private static bool LoadNewMap = true;
+        private static string mapName;
 
         public static void Init(Game1 game, ContentManager Content)
         {
             Game = game;
-
             Camera = new OrthographicCamera(game.GraphicsDevice);
-            World = new World();
-            EntitySets = new EntitySets(World);
             GameObjects = new GameObjectsFactory(Content);
-            Map = new MapContext(Content, GameObjects, game.GraphicsDevice);
-            Combat = new CombatContext(World);
+            Combat = new CombatContext();
 
-            SystemsSet = ConfigureSystems();
-
-            GameObjects.Initialize(World);
-
+            GameObjects.Initialize();
             Hud = new HudContext(game);
             Hud.Default();
+        }
 
-            Map.LoadMap("tiled/map");
+        public static void LoadMap(string map)
+        {
+            mapName = map;
+            LoadNewMap = true;
+        }
+
+        private static void ConfigureNewMap()
+        {
+            World?.Dispose();
+            World = new World(64);
+            EntitySets = new EntitySets(World);
+            Map?.Dispose();
+            Map = new MapContext(Content, GameObjects, Game.GraphicsDevice);
+            SystemsSet?.Dispose();
+            SystemsSet = ConfigureSystems();
+            GameObjects.World = World;
+            Map.LoadMap(mapName);
+
+            World.Subscribe<(WalkAction, Entity)>((in (WalkAction, Entity) payload) =>
+            {
+                var (action, entity) = payload;
+                var triggers = EntitySets.Triggers.GetEntities();
+                for (var i = 0; i < triggers.Length; i++)
+                {
+                    triggers[i].Get<Trigger>().Check(triggers[i], action, entity);
+                }
+            });
+
+            Camera.LookAt(GameContext.Player.Get<Position>().Value);
+
+            LoadNewMap = false;
         }
 
         public static void Update(GameTime gameTime)
         {
             if (!Game.IsActive)
                 return;
+            if (LoadNewMap)
+                ConfigureNewMap();
+
             Map.Update(gameTime);
             Hud.Update(gameTime);
             if (Hud.State != HUDState.Default)
@@ -83,9 +113,14 @@ namespace temp1
 
         public static void Draw(GameTime gameTime)
         {
+            if (!Game.IsActive)
+                return;
+            if (LoadNewMap)
+                ConfigureNewMap();
+
             Game.GraphicsDevice.Clear(Color.Black);
             var matrix = GameContext.Camera.GetViewMatrix();
-            Map.Draw(matrix);
+            Map?.Draw(matrix);
 
             Game.Batch.Begin(SpriteSortMode.BackToFront, transformMatrix: matrix);
             SystemsSet.Update(gameTime);

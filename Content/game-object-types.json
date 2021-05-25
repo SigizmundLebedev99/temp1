@@ -1,7 +1,6 @@
 [
     {
         "typeName": "player",
-        "animated": true,
         "sprite": {
             "path": "images/player.sf",
             "origin": {
@@ -13,7 +12,6 @@
     },
     {
         "typeName": "enemy",
-        "animated": true,
         "sprite": {
             "path": "images/enemy.sf",
             "origin": {
@@ -25,7 +23,6 @@
     },
     {
         "typeName": "chest1",
-        "animated": true,
         "sprite": {
             "path": "images/chest1.sf",
             "origin": {
@@ -90,5 +87,9 @@
                 "height": 32
             }
         }
+    },
+    {
+        "typeName": "portal",
+        "handler": "PortalHandler"
     }
 ]

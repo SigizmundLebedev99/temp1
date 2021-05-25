@@ -2,7 +2,6 @@ using System;
 using DefaultEcs;
 using DefaultEcs.System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Sprites;
@@ -11,27 +10,23 @@ using temp1.UI;
 
 namespace temp1.Systems
 {
-    [With(typeof(Cursor))]
     class CursorSystem : AEntitySetSystem<GameTime>
     {
         Vector2 position;
         AnimatedSprite mark;
         SpriteBatch _spriteBatch;
 
-        MapContext _map;
-
         public CursorSystem(SpriteBatch batch, World world) : base(world)
         {
-            _map = GameContext.Map;
             _spriteBatch = batch;
             mark = GameContext.Content.GetAnimatedSprite("images/mark.sf");
         }
 
-        protected override void Update(GameTime gameTime, ReadOnlySpan<Entity> entities)
+        protected override void Update(GameTime gameTime, ReadOnlySpan<Entity> _)
         {
             if (GameContext.Hud.State != HUDState.Default || GameContext.Hud.IsMouseOnHud || !GameContext.Player.Has<AllowedToAct>())
                 return;
-
+            var map = GameContext.Map;
             var state = MouseExtended.GetState();
             var worldPos = GameContext.Camera.ScreenToWorld(state.Position.X, state.Position.Y);
             var point = (worldPos / 32).ToPoint();
@@ -39,13 +34,13 @@ namespace temp1.Systems
             GameContext.PointedEntity = null;
             if (GameContext.GameState == GameState.Peace)
             {
-                if (!_map.MovementGrid.Contains(point))
+                if (!map.MovementGrid.Contains(point))
                     return;
-                
 
-                if (!HandlePoint(worldPos, entities))
+
+                if (!HandlePoint(worldPos))
                 {
-                    if (_map.MovementGrid.IsWalkableAt(point.X, point.Y))
+                    if (map.MovementGrid.IsWalkableAt(point.X, point.Y))
                         mark.Play("idle");
                     else
                         mark.Play("no");
@@ -56,7 +51,7 @@ namespace temp1.Systems
                 var possibleMoves = GameContext.Player.Get<PossibleMoves>();
                 if (possibleMoves.Contains(point))
                 {
-                    if (!HandlePoint(worldPos, entities))
+                    if (!HandlePoint(worldPos))
                         mark.Play("idle");
                 }
                 else
@@ -68,19 +63,19 @@ namespace temp1.Systems
             mark.Update(gameTime.ElapsedGameTime.Milliseconds);
         }
 
-        private bool HandlePoint(Vector2 pos, ReadOnlySpan<Entity> entities)
+        private bool HandlePoint(Vector2 pos)
         {
+            var entities = GameContext.EntitySets.Cursors.GetEntities();
             for (var i = 0; i < entities.Length; i++)
             {
                 var cursor = entities[i];
-                var sprite = cursor.Get<RenderingObject>();
-                var mo = cursor.Get<MapObject>();
-                var bounds = new Rectangle(0, 0, sprite.Bounds.Width, sprite.Bounds.Height);
+
+                var position = cursor.Get<Position>();
                 var pointable = cursor.Get<Cursor>();
-                if (bounds.Contains(pos - mo.Position + sprite.Origin))
+                if (pointable.Bounds.Contains(pos - position.Value))
                 {
                     mark.Play(pointable.SpriteName);
-                    position = pos;
+                    this.position = pos;
                     GameContext.PointedEntity = cursor;
                     return true;
                 }

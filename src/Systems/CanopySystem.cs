@@ -9,21 +9,18 @@ namespace temp1.Systems
     [With(typeof(RenderingObject))]
     class CanopySystem : AEntitySetSystem<GameTime>
     {
-        EntitySet MapObjectsSet;
-
         public CanopySystem(World world) : base(world)
         {
-            MapObjectsSet = GameContext.EntitySets.MapObjects;
         }
 
         protected override void Update(GameTime gameTime, in Entity entity)
         {
             var hull = entity.Get<Canopy>();
-            var mapObjects = MapObjectsSet.GetEntities();
-            var playerMO = GameContext.Player.Get<MapObject>();
-            var position = playerMO.MapPosition;
+            var mapObjects = GameContext.EntitySets.MapObjects.GetEntities();
+            var playerPosition = GameContext.Player.Get<Position>();
+            var gridCell = playerPosition.GridCell;
             var layer = hull.Layer;
-            var tile = layer.GetTile((ushort)position.X, (ushort)position.Y);
+            var tile = layer.GetTile((ushort)gridCell.X, (ushort)gridCell.Y);
             var sprite = entity.Get<RenderingObject>();
             sprite.Visible = tile.IsBlank;
             
@@ -37,15 +34,15 @@ namespace temp1.Systems
                 var mapObject = mapObjects[i];
                 if(mapObject == GameContext.Player)
                     continue;
-                var mo = mapObject.Get<MapObject>();
+                var mapObjectPosition = mapObject.Get<Position>();
 
                 if(!mapObject.Has<RenderingObject>())
                     continue;
                 
                 renderingObject = mapObject.Get<RenderingObject>();
-                position = mo.MapPosition;
+                gridCell = mapObjectPosition.GridCell;
                 layer = hull.Layer;
-                tile = layer.GetTile((ushort)position.X, (ushort)position.Y);
+                tile = layer.GetTile((ushort)gridCell.X, (ushort)gridCell.Y);
                 renderingObject.Visible = !sprite.Visible || tile.IsBlank;
             }
         }

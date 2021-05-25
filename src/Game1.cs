@@ -13,6 +13,7 @@ namespace temp1
         private ScreenManager _screenManager;
 
         public SpriteBatch Batch => _spriteBatch;
+        public GraphicsDeviceManager GDManager => _graphics;
 
         public Game1()
         {

@@ -11,6 +11,7 @@ namespace temp1.UI
         Default,
         Inventory1,
         Inventory2,
+        Pause,
     }
 
     class HudContext
@@ -56,6 +57,12 @@ namespace temp1.UI
             inventory.BuildItems(left, right);
             _ui = inventory;
             _state = HUDState.Inventory2;
+        }
+
+        public void Pause()
+        {
+            _ui = new PauseMenu(_game);
+            _state = HUDState.Pause;
         }
 
         public void Draw(GameTime time)

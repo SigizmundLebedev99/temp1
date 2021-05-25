@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.Input;
 using temp1.Components;
 using temp1.Data;
 using temp1.Factories;
@@ -68,8 +69,8 @@ namespace temp1.UI
 
         public override void Update(GameTime time)
         {
-            var keyState = Keyboard.GetState();
-            if(keyState.IsKeyDown(Keys.Escape)){
+            var keyState = KeyboardExtended.GetState();
+            if(keyState.WasKeyJustDown(Keys.Escape)){
                 GameContext.Hud.Default();
                 return;
             }

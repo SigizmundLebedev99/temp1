@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
@@ -24,6 +25,8 @@ namespace temp1
         public StaticGrid MovementGrid { get; private set; }
 
         public TiledMap Map { get => _map; }
+
+        private List<Texture2D> Images { get; set; }
 
         public MapContext(ContentManager content, GameObjectsFactory goContext, GraphicsDevice device)
         {
@@ -52,6 +55,16 @@ namespace temp1
             return renderer;
         }
 
+        public void Update(GameTime gameTime)
+        {
+            _mapRenderer.Update(gameTime);
+        }
+
+        public void Draw(Matrix matrix)
+        {
+            _mapRenderer.Draw(matrix);
+        }
+
         void ConfigureObstacles()
         {
             var searchGrid = new StaticGrid(_map.Width, _map.Height);
@@ -69,15 +82,10 @@ namespace temp1
             MovementGrid = searchGrid;
         }
 
-        public void Update(GameTime gameTime)
-        {
-            _mapRenderer.Update(gameTime);
-        }
-
         void ConfigureCovers()
         {
+            Images = new List<Texture2D>(32);
             var covers = _map.Layers.Where(e => e.Name.StartsWith("_b_"));
-            var tilesFieldInfo = typeof(TiledMapTileLayer).GetRuntimeFields().Last();
             foreach (var c in covers)
             {
                 var tiled = (TiledMapTileLayer)c;
@@ -89,14 +97,15 @@ namespace temp1
                 _device.SetRenderTarget(renderTarget);
                 _device.Clear(Color.Transparent);
                 _mapRenderer.Draw(c, Matrix.CreateTranslation(-rect.X, -rect.Y, 0));
+
+                Images.Add(renderTarget);
+
                 var sprite = new Sprite(renderTarget);
                 sprite.Origin = new Vector2(-rect.X, -rect.Y);
 
                 sprite.Depth = 0.1f / ((rect.Y / 32) + (rect.Height / 32) - 1);
 
-                if (c.Properties.TryGetValue("Persistent", out var persistent) && bool.Parse(persistent))
-                    tilesFieldInfo.SetValue(c, null);
-                else
+                if (!c.Properties.TryGetValue("Persistent", out var persistent) || !bool.Parse(persistent))
                 {
                     var canopy = new Canopy(tiled);
                     if (c.Properties.TryGetValue("Interier", out var interier))
@@ -141,9 +150,13 @@ namespace temp1
             return new Rectangle(minX * _map.TileWidth, minY * _map.TileHeight, (maxX - minX + 1) * _map.TileWidth, (maxY - minY + 1) * _map.TileHeight);
         }
 
-        public void Draw(Matrix matrix)
+        public void Dispose()
         {
-            _mapRenderer.Draw(matrix);
+            _mapRenderer.Dispose();
+            foreach (var image in Images)
+            {
+                image.Dispose();
+            }
         }
     }
 }

@@ -13,9 +13,9 @@ namespace temp1.Components
 
         private ActionStatus status = ActionStatus.Running;
 
-        private MapObject _objToMove;
+        private Position _objToMove;
 
-        public WalkAction(Vector2 from, Vector2 to, MapObject objToMove, float speed)
+        public WalkAction(Vector2 from, Vector2 to, Position objToMove, float speed)
         {
             this._speed = speed / (to - from).Length();
             this.From = from;
@@ -29,23 +29,26 @@ namespace temp1.Components
 
             for (var i = 0; i < mapObjects.Length; i++)
             {
-                var mapObj = mapObjects[i].Get<MapObject>();
-                if (mapObj.Position != To)
+                var mapObj = mapObjects[i].Get<Position>();
+                if (mapObj.Value != To)
                     continue;
-                else if ((mapObj.Type & GameObjectType.Blocking) != 0)
+                else if (mapObjects[i].Has<Blocking>())
                 {
                     Abort();
                     break;
                 }
             }
             entity.Set(new Direction(To, From));
+            GameContext.World.Publish((this, entity));
         }
 
         public override void Update(GameTime time)
         {
-            _objToMove.Position = Move();
+            _objToMove.Value = Move();
             if (k >= 1f)
+            {
                 status = ActionStatus.Success;
+            }
         }
 
         public override void Abort()

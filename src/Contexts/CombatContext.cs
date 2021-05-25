@@ -8,20 +8,15 @@ namespace temp1
 {
     class CombatContext
     {
-        private World _world;
-        private EntitySet actorsSet;
-
-        public CombatContext(World world)
+        public CombatContext()
         {
-            _world = world;
-            actorsSet = GameContext.EntitySets.Actors;
         }
 
         public void StartBattle()
         {
             GameContext.GameState = GameState.Combat;
             
-            var actors = actorsSet.GetEntities();
+            var actors = GameContext.EntitySets.Actors.GetEntities();
 
             for (var i = 0; i < actors.Length; i++)
             {

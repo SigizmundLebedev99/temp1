@@ -13,10 +13,7 @@ namespace temp1.Services
             var grid = GameContext.Map.MovementGrid;
             if (!grid.IsWalkableAt(x, y))
                 return;
-            portal.Set(new MapObject
-            {
-                Position = new Vector2(x, y) * 32 + new Vector2(16)
-            });
+            portal.Set(new Position(new Vector2(x, y) * 32 + new Vector2(16)));
             portal.Set(new RenderingObject(GameContext.Content.GetAnimatedSprite("images/portal.sf")));
             portal.Set<Expired>(new Timer(1.5f, () =>
             {

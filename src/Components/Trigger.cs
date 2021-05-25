@@ -1,10 +1,20 @@
+using System;
+using DefaultEcs;
+
 namespace temp1.Components
 {
 
-    abstract class Trigger
+    struct Trigger
     {
         public bool ForPlayerOnly;
 
-        public abstract void OnTrigger(WalkAction action);
+        public Action<WalkAction, Entity> Invoke;
+
+        public void Check(Entity self, WalkAction action, Entity actionEntity)
+        {
+            var selfPosition = self.Get<Position>();
+            if((action.To / 32).ToPoint() == selfPosition.GridCell)
+                Invoke?.Invoke(action, actionEntity);
+        }
     }
 }

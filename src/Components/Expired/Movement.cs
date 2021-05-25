@@ -4,9 +4,9 @@ namespace temp1.Components
 {
     class Movement : Expired
     {
-        private MapObject _objToMove;
+        private Position _objToMove;
 
-        public Movement(Vector2 from, Vector2 to, MapObject objToMove, float speed)
+        public Movement(Vector2 from, Vector2 to, Position objToMove, float speed)
         {
             this._from = from;
             this._to = to;
@@ -16,7 +16,7 @@ namespace temp1.Components
 
         public override bool Update(GameTime time)
         {
-            _objToMove.Position = Move();
+            _objToMove.Value = Move();
             if (k >= 1f)
                 return true;
             return false;

@@ -31,19 +31,19 @@ namespace temp1.AI
                 return;
             }
 
-            var mapObj = entity.Get<MapObject>();
-            var pointed = GameContext.PointedEntity != null ? GameContext.PointedEntity.Value.Get<MapObject>() : null;
+            var position = entity.Get<Position>();
+            var pointed = GameContext.PointedEntity != null ? GameContext.PointedEntity.Value.Get<Position>() : null;
             BaseAction after = null;
             var mapPosition = mouseState.MapPosition(GameContext.Camera);
             
             if (pointed != null)
-                after = GetAfterAction(entity, pointed, GameContext.PointedEntity.Value);
+                after = GetAfterAction(entity, GameContext.PointedEntity.Value);
             else if (!GameContext.Map.MovementGrid.IsWalkableAt(mapPosition.X, mapPosition.Y))
             {
                 return;
             }
 
-            if (_map.PathFinder.TryGetPath(mapObj, mapPosition, out var first, out var last, 2f))
+            if (_map.PathFinder.TryGetPath(position, mapPosition, out var first, out var last, 2f))
             {
                 if (after != null)
                 {
@@ -65,11 +65,14 @@ namespace temp1.AI
             && !_hud.IsMouseOnHud;
         }
 
-        private BaseAction GetAfterAction(Entity entity, MapObject pointed, Entity pointedEntity)
+        private BaseAction GetAfterAction(Entity entity, Entity pointedEntity)
         {
-            if ((pointed.Type & GameObjectType.Item) != 0)
+            if(!pointedEntity.Has<GameObjectType>())
+                return null;
+            var type = pointedEntity.Get<GameObjectType>();
+            if ((type & GameObjectType.Item) != 0)
                 return new PeakItemAction(entity, pointedEntity);
-            if ((pointed.Type & GameObjectType.Storage) != 0)
+            if ((type & GameObjectType.Storage) != 0)
                 return new OpenStorageAction(pointedEntity);
 
             return null;

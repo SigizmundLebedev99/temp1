@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Screens;
 using temp1.Factories;
@@ -9,8 +10,9 @@ namespace temp1.Screens
     {
         private Desktop _desktop;
         private ControlsFactory _factory;
+        Action afterAction;
 
-        public LoadingScreen(Game1 game) : base(game)
+        public LoadingScreen(Game1 game, Action action) : base(game)
         {
             _factory = game.Services.GetService<ControlsFactory>();
             _desktop = new Desktop(game.Batch);
@@ -19,6 +21,7 @@ namespace temp1.Screens
             label.Text = "Loading...";
             label.ComputeSize(Vector2.Zero, Autosize.Content);
             _desktop.Root.Children.Add(label);
+            afterAction = action;
         }
 
         public override void Draw(GameTime gameTime)
@@ -28,9 +31,14 @@ namespace temp1.Screens
             _desktop.Draw(gameTime);
         }
 
+        private int Delay = 2;
+
         public override void Update(GameTime gameTime)
         {
             _desktop.Update(gameTime);
+            Delay --;
+            if(Delay == 0)
+                afterAction();
         }
     }
 }

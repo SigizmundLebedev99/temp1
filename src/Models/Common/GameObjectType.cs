@@ -3,14 +3,12 @@ using temp1.Models;
 
 namespace temp1.Data
 {
-    [Flags]
     enum GameObjectType
     {
         None = 0,
         Storage = 1,
         Enemy = 2,
-        Item = 4,
-        Blocking = 8
+        Item = 4
     }
 
     class GameObjectTypeInfo

@@ -11,6 +11,7 @@ using MonoGame.Extended.Tiled;
 using temp1.AI;
 using temp1.Components;
 using temp1.Data;
+using temp1.Models;
 
 namespace temp1
 {
@@ -23,21 +24,23 @@ namespace temp1
         private Dictionary<string, GameObjectTypeInfo> GameObjectTypes;
         private Dictionary<string, Action<Entity, GameObjectTypeInfo, TiledMapObject>> Handlers;
 
+        public World World { set { if (value != null) _world = value; } }
+
         public GameObjectsFactory(ContentManager content)
         {
             _content = content;
             GameObjectTypes = new Dictionary<string, GameObjectTypeInfo>();
         }
 
-        public void Initialize(World world, string gameObjectTypesPath = "game-object-types.json")
+        public void Initialize(string gameObjectTypesPath = "game-object-types.json")
         {
-            _world = world;
             var mapTypes = _content.Load<GameObjectTypeInfo[]>(gameObjectTypesPath, loader);
             GameObjectTypes = mapTypes.ToDictionary(e => e.TypeName);
             Handlers = new Dictionary<string, Action<Entity, GameObjectTypeInfo, TiledMapObject>>
             {
                 {"ActorHandler", ActorHandler},
-                {"ChestHandler", ChestHandler}
+                {"ChestHandler", ChestHandler},
+                {"PortalHandler",PortalHandler}
             };
         }
 
@@ -49,24 +52,15 @@ namespace temp1
             var entity = _world.CreateEntity();
 
             if (position.HasValue)
-                entity.Set(new MapObject(position.Value, GameObjectType.None));
-
-            Sprite sprite;
+            {
+                var x = position.Value.X - (position.Value.X % 32) + 16;
+                var y = position.Value.Y - (position.Value.Y % 32) + 16;
+                entity.Set(new Position(new Vector2(x, y)));
+            }
 
             if (objType.Sprite != null)
             {
-                var spriteInfo = objType.Sprite;
-                if (spriteInfo.Path.EndsWith(".sf"))
-                {
-                    sprite = _content.GetAnimatedSprite(spriteInfo.Path);
-                    if (spriteInfo.Origin != null)
-                        sprite.Origin = new Vector2(spriteInfo.Origin.X, spriteInfo.Origin.Y);
-                }
-                else
-                    sprite = _content.GetSprite(objType);
-
-
-                entity.Set(new RenderingObject(sprite));
+                entity.Set(new RenderingObject(_content.GetSprite(objType.Sprite)));
             }
 
             if (objType.Handler == null || !Handlers.TryGetValue(objType.Handler, out var handler))
@@ -79,19 +73,19 @@ namespace temp1
 
         void ActorHandler(Entity e, GameObjectTypeInfo type, TiledMapObject tiledMapObj)
         {
-            var mapObj = e.Get<MapObject>();
             if (type.TypeName == "player")
             {
                 e.Set(new Storage());
                 GameContext.Player = e;
-                mapObj.Type = GameObjectType.Blocking;
                 e.Set<IBaseAI>(new PlayerControll());
             }
             if (type.TypeName == "enemy")
             {
-                mapObj.Type = GameObjectType.Enemy | GameObjectType.Blocking;
-                e.Set(new Cursor("sword"));
+                var sprite = e.Get<RenderingObject>();
+                e.Set(new Cursor("sword", new Rectangle((int)sprite.Origin.X, (int)sprite.Origin.Y, sprite.Bounds.Width, sprite.Bounds.Height)));
+                e.Set(GameObjectType.Enemy);
                 e.Set<IBaseAI>(new RandomMovement());
+                
             }
 
             e.Set(new ActionPoints
@@ -99,17 +93,17 @@ namespace temp1
                 Max = 10,
                 Remain = 10
             });
-            
+            e.Set(new Serializable());
             e.Set(new AllowedToAct());
         }
 
-        void ChestHandler(Entity e, GameObjectTypeInfo obj, TiledMapObject mapObject)
+        void ChestHandler(Entity e, GameObjectTypeInfo obj, TiledMapObject tiled)
         {
-            var mapObj = e.Get<MapObject>();
-            mapObj.Type = GameObjectType.Storage | GameObjectType.Blocking;
+            e.Set(GameObjectType.Storage);
+            e.Set(new Blocking());
             var storage = new Storage();
 
-            foreach (var prop in mapObject.Properties.Where(e => e.Key.StartsWith('~')))
+            foreach (var prop in tiled.Properties.Where(e => e.Key.StartsWith('~')))
             {
                 var type = GameObjectTypes[prop.Key.Substring(1)];
                 var countInStack = int.Parse(prop.Value);
@@ -140,7 +134,21 @@ namespace temp1
             }
 
             e.Set(storage);
-            e.Set(new Cursor("hand"));
+            e.Set(new Serializable());
+            e.Set(new Cursor("hand", new Rectangle(-16, -16, 32, 32)));
+        }
+
+        void PortalHandler(Entity e, GameObjectTypeInfo obj, TiledMapObject tiled)
+        {
+            e.Set(new Trigger
+            {
+                Invoke = (action, entity) =>
+                {
+                    var destination = tiled.Properties["destination"];
+                    GameContext.LoadMap(destination);
+                }
+            });
+            e.Set(new Cursor("hand", new Rectangle(-16, -16, 32, 32)));
         }
     }
 }

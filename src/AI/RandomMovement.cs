@@ -8,7 +8,7 @@ namespace temp1.AI
 {
     class RandomMovement : IBaseAI
     {
-        MapObject _mo;
+        Position _objectToMove;
         IBehaviourTreeNode _tree;
         float _time = 0;
         Entity entity;
@@ -41,7 +41,7 @@ namespace temp1.AI
                         {
                             if (!TryGetPoint(out var point, mapContext))
                                 return BehaviourTreeStatus.Success;
-                            if (mapContext.PathFinder.TryGetPath(_mo, point, out var first, out var last, 1f))
+                            if (mapContext.PathFinder.TryGetPath(_objectToMove, point, out var first, out var last, 1f))
                                 entity.Set<BaseAction>(first);
                             
                             return BehaviourTreeStatus.Success;

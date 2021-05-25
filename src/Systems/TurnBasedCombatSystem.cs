@@ -12,15 +12,13 @@ namespace temp1.Systems
     [Without(typeof(BaseAction))]
     class TurnBasedCombatSystem : AEntitySetSystem<GameTime>
     {
-        EntitySet actorsSet;
         public TurnBasedCombatSystem(World world) : base(world)
         {
-            actorsSet = GameContext.EntitySets.Actors;
         }
 
         protected override void Update(GameTime state, in Entity entity) 
         {
-            var actors = actorsSet.GetEntities();
+            var actors = GameContext.EntitySets.Actors.GetEntities();
             for (var i = 0; i < actors.Length; i++)
             {
                 var actor = actors[i];

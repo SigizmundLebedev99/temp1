@@ -8,6 +8,7 @@ using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using temp1.Data;
+using temp1.Models;
 using temp1.PathFinding;
 
 static class Extensions
@@ -23,29 +24,10 @@ static class Extensions
         return (worldPos / 32).ToPoint();
     }
 
-    public static Sprite GetSprite(this ContentManager content, string textureName, Region region = null)
+    public static Sprite GetSprite(this ContentManager content, string textureName)
     {
         var texture = content.Load<Texture2D>(textureName);
-        var sprite =
-            region == null ?
-                new Sprite(texture)
-                : new Sprite(new TextureRegion2D(texture, region));
-        return sprite;
-    }
-
-    public static Sprite GetSprite(this ContentManager content, GameObjectTypeInfo type)
-    {
-        if(type.Sprite == null)
-            return null;
-
-        var texture = content.Load<Texture2D>(type.Sprite.Path);
-        var sprite =
-            type.Sprite.Region == null ?
-                new Sprite(texture)
-                : new Sprite(new TextureRegion2D(texture, type.Sprite.Region));
-        if (type.Sprite.Origin != null)
-            sprite.Origin = new Vector2(type.Sprite.Origin.X, type.Sprite.Origin.Y);
-        return sprite;
+        return new Sprite(texture);
     }
 
     public static AnimatedSprite GetAnimatedSprite(this ContentManager content, string name)
@@ -53,6 +35,24 @@ static class Extensions
         var ss = content.Load<SpriteSheet>(name, new JsonContentLoader());
         var sprite = new AnimatedSprite(ss);
         sprite.Play("idle");
+        return sprite;
+    }
+
+    public static Sprite GetSprite(this ContentManager content, RenderObjectInfo spriteInfo)
+    {
+        Sprite sprite;
+        
+        if(spriteInfo == null)
+            return null;
+
+        if (spriteInfo.Path.EndsWith(".sf"))
+            sprite = content.GetAnimatedSprite(spriteInfo.Path);
+        else
+            sprite = content.GetSprite(spriteInfo.Path);
+
+        if (spriteInfo.Origin != null)
+            sprite.Origin = new Vector2(spriteInfo.Origin.X, spriteInfo.Origin.Y);
+
         return sprite;
     }
 }

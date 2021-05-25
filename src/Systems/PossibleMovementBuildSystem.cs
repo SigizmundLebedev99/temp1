@@ -20,7 +20,7 @@ namespace temp1.Systems
         {
             if (GameContext.GameState == GameState.Peace)
                 return;
-            var position = entity.Get<MapObject>().MapPosition;
+            var position = entity.Get<Position>().GridCell;
             var possibleMoves = BuildMoves(position, entity);
             if (possibleMoves.Value.Count > 0)
             {

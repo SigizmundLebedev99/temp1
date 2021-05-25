@@ -1,6 +1,6 @@
 namespace temp1.Components
 {
-    class ActionPoints
+    struct ActionPoints
     {
         public int Remain;
         public int Max;

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace temp1.Components
 {
-    class PossibleMoves
+    struct PossibleMoves
     {
         public List<Cell> Value;
 
@@ -18,7 +18,7 @@ namespace temp1.Components
         }
     }
 
-    class Cell
+    struct Cell
     {
         public int distance;
         public Point point;

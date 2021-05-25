@@ -1,5 +1,7 @@
 namespace temp1.Components
 {
-    class AllowedToAct{}
-    class TurnOccured{}
+    struct Blocking{}
+    struct AllowedToAct{}
+    struct TurnOccured{}
+    struct Serializable{}
 }
