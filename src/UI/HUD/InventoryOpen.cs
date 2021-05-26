@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
 using temp1.Components;
-using temp1.Data;
+using temp1.Models;
 using temp1.Factories;
 using temp1.UI.Controls;
 

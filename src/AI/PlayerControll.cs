@@ -3,8 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
 using temp1.Components;
-using temp1.Data;
 using temp1.Models;
+using temp1.Models.Serialization;
 using temp1.UI;
 
 namespace temp1.AI

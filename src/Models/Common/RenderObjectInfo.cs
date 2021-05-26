@@ -1,6 +1,5 @@
 using System;
 using Microsoft.Xna.Framework;
-using temp1.Data;
 
 namespace temp1.Models
 {

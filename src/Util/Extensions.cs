@@ -7,7 +7,6 @@ using MonoGame.Extended.Input;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
-using temp1.Data;
 using temp1.Models;
 using temp1.PathFinding;
 

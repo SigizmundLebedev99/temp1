@@ -1,3 +1,4 @@
+using System;
 using DefaultEcs;
 using DefaultEcs.System;
 using Microsoft.Xna.Framework;
@@ -36,7 +37,7 @@ namespace temp1
 
         private static ISystem<GameTime> SystemsSet;
         private static bool LoadNewMap = true;
-        private static string mapName;
+        private static Action LoadMapAction = null;
 
         public static void Init(Game1 game, ContentManager Content)
         {
@@ -50,22 +51,18 @@ namespace temp1
             Hud.Default();
         }
 
-        public static void LoadMap(string map)
+        public static void LoadMap(string mapName, World world = null)
         {
-            mapName = map;
             LoadNewMap = true;
+            LoadMapAction = () => ConfigureNewMap(mapName, world);
         }
 
-        private static void ConfigureNewMap(World world = null)
+        private static void ConfigureNewMap(string mapName, World world = null)
         {
             if (World != null && World != world)
                 World.Dispose();
 
             World = world ?? new World(64);
-
-            var mapInfo = World.CreateEntity();
-            mapInfo.Set(new MapInfo { MapName = mapName });
-            mapInfo.Set(new Serializable());
 
             EntitySets = new EntitySets(World);
             Map?.Dispose();
@@ -95,7 +92,7 @@ namespace temp1
             if (!Game.IsActive)
                 return;
             if (LoadNewMap)
-                ConfigureNewMap();
+                LoadMapAction?.Invoke();
 
             Map.Update(gameTime);
             Hud.Update(gameTime);
@@ -122,7 +119,7 @@ namespace temp1
             if (!Game.IsActive)
                 return;
             if (LoadNewMap)
-                ConfigureNewMap();
+                LoadMapAction?.Invoke();
 
             Game.GraphicsDevice.Clear(Color.Black);
             var matrix = GameContext.Camera.GetViewMatrix();

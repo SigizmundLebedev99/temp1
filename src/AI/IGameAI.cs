@@ -1,6 +1,6 @@
 using DefaultEcs;
 using Microsoft.Xna.Framework;
-using temp1.Models;
+using temp1.Models.Serialization;
 
 namespace temp1.AI
 {

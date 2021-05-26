@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using temp1.Components;
 
-namespace temp1.Data
+namespace temp1.Models
 {
     class Region
     {
@@ -29,11 +29,5 @@ namespace temp1.Data
         {
             return new Region(r.X, r.Y, r.Width, r.Height);
         }
-    }
-    
-    class Origin
-    {
-        public int X;
-        public int Y;
     }
 }

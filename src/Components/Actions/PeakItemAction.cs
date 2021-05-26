@@ -1,6 +1,6 @@
 using DefaultEcs;
 using Microsoft.Xna.Framework;
-using temp1.Data;
+using temp1.Models;
 
 namespace temp1.Components
 {

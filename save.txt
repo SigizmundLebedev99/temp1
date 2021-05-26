@@ -31,7 +31,7 @@ Component RenderObjectInfo {
 		Height 32
 	}
 }
-ComponentType GameObjectType temp1.Data.GameObjectType, temp1
+ComponentType GameObjectType temp1.Models.GameObjectType, temp1
 Component GameObjectType Storage
 ComponentType Blocking temp1.Components.Blocking, temp1
 Component Blocking {

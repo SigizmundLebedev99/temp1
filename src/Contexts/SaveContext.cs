@@ -6,6 +6,9 @@ using temp1.Components;
 using temp1.Models;
 using System.Xml;
 using System;
+using System.Threading.Tasks;
+using temp1.Models.Serialization;
+using System.Text;
 
 namespace temp1
 {
@@ -14,22 +17,45 @@ namespace temp1
         const string WorldsConfig = "worldconfig.xml";
         const string TempFile = "temp.xml";
 
-        public static void Load(string saveFile, string mapName = null)
+        public static void LoadGame(string saveFile)
         {
-            if (saveFile == null)
-                throw new ArgumentNullException();
+            File.Copy(saveFile, TempFile);
+            LoadMap();
+        }
 
-            var doc = LoadXml(saveFile);
-            var root = doc.DocumentElement;
-            mapName = mapName ?? root.GetAttribute("current_map");
+        public static void LoadMap(string mapName = null)
+        {
+            var gameDataXml = LoadXml(TempFile);
 
-            if (mapName == null)
-                throw new ArgumentNullException("Map name wasn't provided");
+            mapName = mapName ?? gameDataXml.DocumentElement.GetAttribute("current_map");
 
-            foreach (var map in root.ChildNodes)
+            var world = new World(64);
+            using var _ = world.SubscribeComponentAdded<IGameAI>((in Entity entity, in IGameAI ai) =>
             {
-                
+                if (ai is PlayerControl)
+                    GameContext.Player = entity;
+            });
+
+            foreach (XmlElement element in gameDataXml)
+            {
+                if (element.Attributes.Count == 0 || !element.HasAttribute("map_name"))
+                    continue;
+                if (element.GetAttribute("map_name") != mapName)
+                    continue;
+
+                string worldInfo = element.InnerText;
+
+                using var sContext = GetSetializationContext();
+                var serializar = new TextSerializer(sContext);
+
+                var worldInfoBytes = Encoding.UTF8.GetBytes(worldInfo);
+                using var stream = new MemoryStream();
+
+                serializar.Deserialize(stream, world);
+                return;
             }
+
+            GameContext.LoadMap(mapName);
         }
 
         public static void SaveWorld()
@@ -45,25 +71,6 @@ namespace temp1
             }
         }
 
-        public static World LoadWorld()
-        {
-            using var context = GetSetializationContext();
-
-            var textSerializer = new TextSerializer(context);
-
-            using Stream stream = File.OpenRead("save.txt");
-
-            var world = new World(64);
-            using var _ = world.SubscribeComponentAdded<IGameAI>((in Entity entity, in IGameAI ai) =>
-            {
-                if (ai is PlayerControl)
-                    GameContext.Player = entity;
-            });
-
-            textSerializer.Deserialize(stream, world);
-            return world;
-        }
-
         private static TextSerializationContext GetSetializationContext()
         {
             return new TextSerializationContext()
@@ -75,6 +82,8 @@ namespace temp1
             })
             .Marshal<BaseAction, string>(_ => null)
             .Marshal<IGameAI, AIFactory>(ai => ai.GetFactory())
+            .Marshal<GameObjectTypeInfo, GameObjectTypeName>(from => new GameObjectTypeName { Value = from.TypeName })
+            .Unmarshal<GameObjectTypeName, GameObjectTypeInfo>(from => GameContext.GameObjects.GetGameObjectTypeInfo(from.Value))
             .Unmarshal<AIFactory, IGameAI>(factory => factory.Get())
             .Unmarshal<RenderObjectInfo, RenderingObject>(from => new RenderingObject(GameContext.Content.GetSprite(from), from.Path));
         }

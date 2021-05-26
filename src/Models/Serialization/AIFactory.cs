@@ -1,6 +1,6 @@
 using temp1.AI;
 
-namespace temp1.Models
+namespace temp1.Models.Serialization
 {
     abstract class AIFactory
     {

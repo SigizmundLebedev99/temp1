@@ -1,6 +1,6 @@
 using System;
 
-namespace temp1.Data
+namespace temp1.Models
 {
     [Flags]
     enum ItemTypeFlags

@@ -3,7 +3,7 @@ using DefaultEcs;
 using FluentBehaviourTree;
 using Microsoft.Xna.Framework;
 using temp1.Components;
-using temp1.Models;
+using temp1.Models.Serialization;
 
 namespace temp1.AI
 {

@@ -10,7 +10,6 @@ using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
 using temp1.AI;
 using temp1.Components;
-using temp1.Data;
 using temp1.Models;
 
 namespace temp1
@@ -30,6 +29,11 @@ namespace temp1
         {
             _content = content;
             GameObjectTypes = new Dictionary<string, GameObjectTypeInfo>();
+        }
+
+        public GameObjectTypeInfo GetGameObjectTypeInfo(string type)
+        {
+            return GameObjectTypes[type];
         }
 
         public void Initialize(string gameObjectTypesPath = "game-object-types.json")

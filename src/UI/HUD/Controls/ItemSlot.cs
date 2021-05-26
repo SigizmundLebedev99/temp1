@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using temp1.Data;
+using temp1.Models;
 using temp1.UI.Controls;
 
 namespace temp1.UI
