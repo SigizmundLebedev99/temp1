@@ -56,10 +56,17 @@ namespace temp1
             LoadNewMap = true;
         }
 
-        private static void ConfigureNewMap()
+        private static void ConfigureNewMap(World world = null)
         {
-            World?.Dispose();
-            World = new World(64);
+            if (World != null && World != world)
+                World.Dispose();
+
+            World = world ?? new World(64);
+
+            var mapInfo = World.CreateEntity();
+            mapInfo.Set(new MapInfo { MapName = mapName });
+            mapInfo.Set(new Serializable());
+
             EntitySets = new EntitySets(World);
             Map?.Dispose();
             Map = new MapContext(Content, GameObjects, Game.GraphicsDevice);

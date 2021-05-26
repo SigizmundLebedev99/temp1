@@ -31,7 +31,8 @@ namespace temp1.UI
             save.OffsetFrom = Anchors.Center;
             save.Text = "Save";
             save.MouseUp += (s, e) => {
-                new SaveContext().Save();
+                SaveContext.SaveWorld();
+                GameContext.Hud.Default();
             };
 
             var exit = _factory.CreateTextButton(0);

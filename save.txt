@@ -1,5 +1,15 @@
 
 Entity 1
+ComponentType MapInfo temp1.Components.MapInfo, temp1
+Component MapInfo {
+	MapName "tiled/map"
+}
+ComponentType Serializable temp1.Components.Serializable, temp1
+Component Serializable {
+}
+
+Entity 2
+ComponentSameAs Serializable 1
 ComponentType Position temp1.Components.Position, temp1
 Component Position {
 	Value {
@@ -139,9 +149,6 @@ Component Storage {
 		}
 	]
 }
-ComponentType Serializable temp1.Components.Serializable, temp1
-Component Serializable {
-}
 ComponentType Cursor temp1.Components.Cursor, temp1
 Component Cursor {
 	Bounds {
@@ -153,10 +160,11 @@ Component Cursor {
 	SpriteName "hand"
 }
 
-Entity 2
+Entity 3
+ComponentSameAs Serializable 1
 Component Position {
 	Value {
-		X 848
+		X 944
 		Y 560
 	}
 }
@@ -177,7 +185,6 @@ Component Storage {
 	Content [
 	]
 }
-ComponentSameAs Serializable 1
 ComponentType AIFactory temp1.Models.AIFactory, temp1
 Component AIFactory $type temp1.Models.PlayerControlAIFactory, temp1
 {
