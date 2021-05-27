@@ -5,20 +5,20 @@ using temp1.AI;
 using temp1.Components;
 using temp1.Models;
 using System.Xml;
-using System;
-using System.Threading.Tasks;
 using temp1.Models.Serialization;
 using System.Text;
+using System.Linq;
 
 namespace temp1
 {
     static class SaveContext
     {
-        const string WorldsConfig = "worldconfig.xml";
         const string TempFile = "temp.xml";
 
         public static void LoadGame(string saveFile)
         {
+            if (File.Exists(TempFile))
+                File.Delete(TempFile);
             File.Copy(saveFile, TempFile);
             LoadMap();
         }
@@ -30,17 +30,12 @@ namespace temp1
             mapName = mapName ?? gameDataXml.DocumentElement.GetAttribute("current_map");
 
             var world = new World(64);
-            using var _ = world.SubscribeComponentAdded<IGameAI>((in Entity entity, in IGameAI ai) =>
-            {
-                if (ai is PlayerControl)
-                    GameContext.Player = entity;
-            });
 
-            foreach (XmlElement element in gameDataXml)
+            foreach (XmlElement element in gameDataXml.GetElementsByTagName("map"))
             {
-                if (element.Attributes.Count == 0 || !element.HasAttribute("map_name"))
+                if (element.Attributes.Count == 0 || !element.HasAttribute("name"))
                     continue;
-                if (element.GetAttribute("map_name") != mapName)
+                if (element.GetAttribute("name") != mapName)
                     continue;
 
                 string worldInfo = element.InnerText;
@@ -49,13 +44,19 @@ namespace temp1
                 var serializar = new TextSerializer(sContext);
 
                 var worldInfoBytes = Encoding.UTF8.GetBytes(worldInfo);
-                using var stream = new MemoryStream();
+                using var stream = new MemoryStream(worldInfoBytes);
 
                 serializar.Deserialize(stream, world);
-                return;
+                break;
             }
 
-            GameContext.LoadMap(mapName);
+            if (world != null)
+            {
+                var player = world.GetEntities().With<IGameAI>().AsEnumerable().FirstOrDefault(e => e.Get<IGameAI>() is PlayerControl);
+                GameContext.Player = player;
+            }
+
+            GameContext.LoadMap(mapName, world);
         }
 
         public static void SaveWorld()

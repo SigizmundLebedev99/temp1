@@ -18,7 +18,7 @@ namespace temp1
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
+            Content.RootDirectory = "assets";
             IsMouseVisible = true;
             _screenManager = new ScreenManager();
             Components.Add(_screenManager);

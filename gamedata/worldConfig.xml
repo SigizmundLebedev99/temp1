@@ -1,0 +1,132 @@
+<config current_map="tiled/map">
+    <map name="tiled/map">    
+Entity 1
+ComponentType Position temp1.Components.Position, temp1
+Component Position {
+	Value {
+		X 240
+		Y 560
+	}
+}
+ComponentType RenderObjectInfo temp1.Models.RenderObjectInfo, temp1
+Component RenderObjectInfo {
+	Path "images/chest1.sf"
+	Origin {
+		X 16
+		Y 20
+	}
+	Region {
+		X 192
+		Y 384
+		Width 32
+		Height 32
+	}
+}
+ComponentType GameObjectType temp1.Models.GameObjectType, temp1
+Component GameObjectType Storage
+ComponentType Blocking temp1.Components.Blocking, temp1
+Component Blocking {
+}
+ComponentType Storage temp1.Components.Storage, temp1
+Component Storage {
+	Content [
+		{
+			ItemType $type temp1.Models.Serialization.GameObjectTypeName, temp1
+			{
+				Value "blue_potion1"
+			}
+			Count 10
+		}
+		{
+			ItemType $type temp1.Models.Serialization.GameObjectTypeName, temp1
+			{
+				Value "blue_potion1"
+			}
+			Count 10
+		}
+		{
+			ItemType $type temp1.Models.Serialization.GameObjectTypeName, temp1
+			{
+				Value "gladius1"
+			}
+			Count 1
+		}
+		{
+			ItemType $type temp1.Models.Serialization.GameObjectTypeName, temp1
+			{
+				Value "helmet1"
+			}
+			Count 1
+		}
+		{
+			ItemType $type temp1.Models.Serialization.GameObjectTypeName, temp1
+			{
+				Value "red_potion1"
+			}
+			Count 10
+		}
+		{
+			ItemType $type temp1.Models.Serialization.GameObjectTypeName, temp1
+			{
+				Value "red_potion1"
+			}
+			Count 10
+		}
+	]
+}
+ComponentType Serializable temp1.Components.Serializable, temp1
+Component Serializable {
+}
+ComponentType Cursor temp1.Components.Cursor, temp1
+Component Cursor {
+	Bounds {
+		X -16
+		Y -16
+		Width 32
+		Height 32
+	}
+	SpriteName "hand"
+}
+
+Entity 2
+Component Position {
+	Value {
+		X 1040
+		Y 592
+	}
+}
+Component RenderObjectInfo {
+	Path "images/player.sf"
+	Origin {
+		X 26
+		Y 65
+	}
+	Region {
+		X 52
+		Y 146
+		Width 52
+		Height 73
+	}
+}
+Component Storage {
+	Content [
+	]
+}
+ComponentSameAs Serializable 1
+ComponentType AIFactory temp1.Models.Serialization.AIFactory, temp1
+Component AIFactory $type temp1.Models.Serialization.PlayerControlAIFactory, temp1
+{
+}
+ComponentType ActionPoints temp1.Components.ActionPoints, temp1
+Component ActionPoints {
+	Remain 10
+	Max 10
+}
+ComponentType AllowedToAct temp1.Components.AllowedToAct, temp1
+Component AllowedToAct {
+}
+    </map>
+    
+    <map name="tiled/cave">
+    </map>
+</config>

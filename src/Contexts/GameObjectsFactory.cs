@@ -147,8 +147,11 @@ namespace temp1
             {
                 Invoke = (action, entity) =>
                 {
-                    var destination = tiled.Properties["destination"];
-                    GameContext.LoadMap(destination);
+                    var toMap = tiled.Properties["destination"];
+                    Vector2 playerPosition = GameContext.Player.Get<Position>().Value;
+                    if (int.TryParse(tiled.Properties["player_transition_x"], out int x) && int.TryParse(tiled.Properties["player_transition_y"], out int y))
+                        playerPosition = playerPosition + (new Vector2(x, y) * 32);
+                    GameContext.LoadMap(toMap, playerPosition: playerPosition);
                 }
             });
             e.Set(new Cursor("hand", new Rectangle(-16, -16, 32, 32)));

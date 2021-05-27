@@ -6,15 +6,18 @@
         <TieredCompilation>false</TieredCompilation>
     </PropertyGroup>
     <ItemGroup>
-        <None Update="Content\**\*.sf">
+        <None Update="assets\**\*.sf">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="Content\**\*.json">
+        <None Update="assets\**\*.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="gamedata\**\*.*">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
     <ItemGroup>
-        <MonoGameContentReference Include="Content\Content.mgcb" />
+        <MonoGameContentReference Include="assets\Content.mgcb" />
     </ItemGroup>
     <ItemGroup>
         <TrimmerRootAssembly Include="Microsoft.Xna.Framework.Content.ContentTypeReader" Visible="false" />

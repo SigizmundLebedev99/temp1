@@ -16,7 +16,6 @@ namespace temp1
     class MapContext
     {
         private TiledMap _map;
-        private ContentManager _content;
         private GameObjectsFactory _goContext;
         private GraphicsDevice _device;
         private TiledMapRenderer _mapRenderer;
@@ -28,16 +27,15 @@ namespace temp1
 
         private List<Texture2D> Images { get; set; }
 
-        public MapContext(ContentManager content, GameObjectsFactory goContext, GraphicsDevice device)
+        public MapContext(GameObjectsFactory goContext, GraphicsDevice device)
         {
-            _content = content;
             _goContext = goContext;
             _device = device;
         }
 
         public void LoadMap(string mapName)
         {
-            _map = _content.Load<TiledMap>(mapName);
+            _map = GameContext.Content.Load<TiledMap>(mapName);
             _mapRenderer = ConfigureRenderer();
             ConfigureObstacles();
             ConfigureMapObjects();

@@ -51,7 +51,7 @@ namespace temp1.Screens
             start.Text = "New game";
             start.MouseUp += (s, e) =>
             {
-                LoadGame();
+                LoadNewGame();
             };
 
             var options = _factory.CreateTextButton(0);
@@ -84,12 +84,13 @@ namespace temp1.Screens
             root.Children.Add(content);
         }
 
-        void LoadGame()
+        void LoadNewGame()
         {
             ScreenManager.LoadScreen(new LoadingScreen((Game1)Game, () =>
             {
                 GameContext.Init((Game1)Game, Content);
-                GameContext.LoadMap("tiled/map");
+
+                SaveContext.LoadGame("gamedata/worldConfig.xml");
 
                 ScreenManager.LoadScreen(new PlayScreen(Game));
             }));

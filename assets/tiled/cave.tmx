@@ -115,9 +115,6 @@
 </data>
  </layer>
  <objectgroup id="26" name="markers">
-  <object id="18" type="player" x="81" y="178">
-   <point/>
-  </object>
   <object id="19" type="portal" x="80.5135" y="120.131">
    <properties>
     <property name="destination" value="tiled/map"/>

@@ -51,22 +51,28 @@ namespace temp1
             Hud.Default();
         }
 
-        public static void LoadMap(string mapName, World world = null)
+        public static void LoadMap(string mapName, World world = null, Vector2? playerPosition = null)
         {
             LoadNewMap = true;
-            LoadMapAction = () => ConfigureNewMap(mapName, world);
+            LoadMapAction = () => ConfigureNewMap(mapName, world, playerPosition);
         }
 
-        private static void ConfigureNewMap(string mapName, World world = null)
+        private static void ConfigureNewMap(string mapName, World world = null, Vector2? playerPosition = null)
         {
-            if (World != null && World != world)
+
+            var newWorld = world ?? new World(64);
+
+            if (Player.IsAlive)
+                Player = Player.CopyTo(newWorld);
+
+            if (World != null && World != newWorld)
                 World.Dispose();
 
-            World = world ?? new World(64);
+            World = newWorld;
 
             EntitySets = new EntitySets(World);
             Map?.Dispose();
-            Map = new MapContext(Content, GameObjects, Game.GraphicsDevice);
+            Map = new MapContext(GameObjects, Game.GraphicsDevice);
             SystemsSet?.Dispose();
             SystemsSet = ConfigureSystems();
             GameObjects.World = World;
@@ -82,7 +88,12 @@ namespace temp1
                 }
             });
 
-            Camera.LookAt(GameContext.Player.Get<Position>().Value);
+            if (GameContext.Player.IsAlive)
+            {
+                Camera.LookAt(GameContext.Player.Get<Position>().Value);
+                if (playerPosition.HasValue)
+                    GameContext.Player.Set(new Position(playerPosition.Value));
+            }
 
             LoadNewMap = false;
         }
