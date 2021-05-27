@@ -820,8 +820,8 @@
   <object id="20" type="portal" x="1293.33" y="950.667">
    <properties>
     <property name="destination" value="tiled/cave"/>
-    <property name="player_rtansition_y" type="int" value="-38"/>
     <property name="player_transition_x" type="int" value="-24"/>
+    <property name="player_transition_y" type="int" value="-38"/>
    </properties>
    <point/>
   </object>
