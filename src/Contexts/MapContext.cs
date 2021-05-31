@@ -39,7 +39,7 @@ namespace temp1
             _mapRenderer = ConfigureRenderer();
             ConfigureObstacles();
             ConfigureMapObjects();
-            ConfigureCovers();
+            ConfigureCovers(_map);
 
             PathFinder = new PathFinder(this);
         }
@@ -80,40 +80,54 @@ namespace temp1
             MovementGrid = searchGrid;
         }
 
-        void ConfigureCovers()
+        void ConfigureCovers(TiledMap map)
         {
             Images = new List<Texture2D>(32);
-            var covers = _map.Layers.Where(e => e.Name.StartsWith("_b_"));
-            foreach (var c in covers)
+
+            void ParseLayers(IEnumerable<TiledMapLayer> layers)
             {
-                var tiled = (TiledMapTileLayer)c;
-                c.IsVisible = true;
-                var rect = TrimBlankTiles(tiled);
-                var cover = GameContext.World.CreateEntity();
-
-                var renderTarget = new RenderTarget2D(_device, rect.Width, rect.Height);
-                _device.SetRenderTarget(renderTarget);
-                _device.Clear(Color.Transparent);
-                _mapRenderer.Draw(c, Matrix.CreateTranslation(-rect.X, -rect.Y, 0));
-
-                Images.Add(renderTarget);
-
-                var sprite = new Sprite(renderTarget);
-                sprite.Origin = new Vector2(-rect.X, -rect.Y);
-
-                sprite.Depth = 0.1f / ((rect.Y / 32) + (rect.Height / 32) - 1);
-
-                if (!c.Properties.TryGetValue("Persistent", out var persistent) || !bool.Parse(persistent))
+                foreach (var layer in layers)
                 {
+                    if (layer is TiledMapGroupLayer group)
+                    {
+                        group.IsVisible = false;
+                        ParseLayers(group.Layers);
+                        continue;
+                    }
+                    
+                    if(!(layer is TiledMapTileLayer) || !layer.Name.StartsWith("_b_"))
+                        continue;
+
+                    var tiled = (TiledMapTileLayer)layer;
+                    tiled.IsVisible = true;
+                    var rect = TrimBlankTiles(tiled);
+                    var cover = GameContext.World.CreateEntity();
+
+                    var renderTarget = new RenderTarget2D(_device, rect.Width, rect.Height);
+                    _device.SetRenderTarget(renderTarget);
+                    _device.Clear(Color.Transparent);
+                    _mapRenderer.Draw(tiled, Matrix.CreateTranslation(-rect.X, -rect.Y, 0));
+
+                    Images.Add(renderTarget);
+
+                    var sprite = new Sprite(renderTarget);
+                    sprite.Origin = new Vector2(-rect.X, -rect.Y);
+
+                    sprite.Depth = 0.1f / ((rect.Y / 32) + (rect.Height / 32) - 1);
+
+                    cover.Set(new RenderingObject(sprite, ""));
+                    tiled.IsVisible = false;
+
+                    if (tiled.Properties.TryGetValue("Persistent", out var persistent) && bool.Parse(persistent))
+                        continue;
+
                     var canopy = new Canopy(tiled);
-                    if (c.Properties.TryGetValue("Interier", out var interier))
+                    if (tiled.Properties.TryGetValue("Interier", out var interier))
                         canopy.IsInterier = bool.Parse(interier);
                     cover.Set(canopy);
                 }
-
-                cover.Set(new RenderingObject(sprite, ""));
-                c.IsVisible = false;
             }
+            ParseLayers(map.Layers);
             _device.SetRenderTarget(null);
         }
 

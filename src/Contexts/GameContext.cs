@@ -51,13 +51,13 @@ namespace temp1
             Hud.Default();
         }
 
-        public static void LoadMap(string mapName, World world = null, Vector2? playerPosition = null)
+        public static void LoadMap(string mapName, World world = null)
         {
             LoadNewMap = true;
-            LoadMapAction = () => ConfigureNewMap(mapName, world, playerPosition);
+            LoadMapAction = () => ConfigureNewMap(mapName, world);
         }
 
-        private static void ConfigureNewMap(string mapName, World world = null, Vector2? playerPosition = null)
+        private static void ConfigureNewMap(string mapName, World world = null)
         {
 
             var newWorld = world ?? new World(64);
@@ -91,8 +91,6 @@ namespace temp1
             if (GameContext.Player.IsAlive)
             {
                 Camera.LookAt(GameContext.Player.Get<Position>().Value);
-                if (playerPosition.HasValue)
-                    GameContext.Player.Set(new Position(playerPosition.Value));
             }
 
             LoadNewMap = false;
