@@ -10,7 +10,7 @@ namespace temp1.Components
 
         public Entity Storage;
 
-        public override void Start(Entity entity)
+        public override void Start(in Entity entity)
         {
             if (!Storage.Has<Storage>() || !entity.Has<Storage>()){
                 Abort();

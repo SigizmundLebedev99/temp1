@@ -113,8 +113,8 @@ Component Storage {
 	]
 }
 ComponentSameAs Serializable 1
-ComponentType AIFactory temp1.Models.Serialization.AIFactory, temp1
-Component AIFactory $type temp1.Models.Serialization.PlayerControlAIFactory, temp1
+ComponentType Player temp1.Components.Player, temp1
+Component Player
 {
 }
 ComponentType ActionPoints temp1.Components.ActionPoints, temp1

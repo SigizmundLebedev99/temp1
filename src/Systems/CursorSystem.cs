@@ -10,6 +10,8 @@ using temp1.UI;
 
 namespace temp1.Systems
 {
+    [With(typeof(Player))]
+    [With(typeof(AllowedToAct))]
     class CursorSystem : AEntitySetSystem<GameTime>
     {
         Vector2 position;
@@ -22,17 +24,17 @@ namespace temp1.Systems
             mark = GameContext.Content.GetAnimatedSprite("images/mark.sf");
         }
 
-        protected override void Update(GameTime gameTime, ReadOnlySpan<Entity> _)
+        protected override void Update(GameTime gameTime, in Entity entity)
         {
-            if (GameContext.Hud.State != HUDState.Default || GameContext.Hud.IsMouseOnHud || !GameContext.Player.Has<AllowedToAct>())
+            if (GameContext.Hud.State != HUDState.Default || GameContext.Hud.IsMouseOnHud)
                 return;
             var map = GameContext.Map;
             var state = MouseExtended.GetState();
             var worldPos = GameContext.Camera.ScreenToWorld(state.Position.X, state.Position.Y);
-            var point = (worldPos / 32).ToPoint();
+            var point = worldPos.GridCell();
             position = point.ToVector2() * 32 + new Vector2(16);
             GameContext.PointedEntity = null;
-            if (GameContext.GameState == GameState.Peace)
+            if (GameContext.GameState == GameState.Peace || !entity.Has<PossibleMoves>())
             {
                 if (!map.MovementGrid.Contains(point))
                     return;
@@ -48,7 +50,7 @@ namespace temp1.Systems
             }
             else
             {
-                var possibleMoves = GameContext.Player.Get<PossibleMoves>();
+                var possibleMoves = entity.Get<PossibleMoves>();
                 if (possibleMoves.Contains(point))
                 {
                     if (!HandlePoint(worldPos))

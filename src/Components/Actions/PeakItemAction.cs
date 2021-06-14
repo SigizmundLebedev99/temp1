@@ -17,7 +17,7 @@ namespace temp1.Components
             Target = target;
         }
 
-        public override void Start(Entity entity)
+        public override void Start(in Entity entity)
         {
             Storage.Get<Storage>().Add(Target.Get<ItemStack>());
             Target.Dispose();

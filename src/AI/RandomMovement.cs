@@ -77,6 +77,8 @@ namespace temp1.AI
         public void Update(GameTime time, Entity entity)
         {
             this.entity = entity;
+            if (this._objectToMove == null)
+                this._objectToMove = entity.Get<Position>();
             _tree.Tick(new TimeData());
         }
     }

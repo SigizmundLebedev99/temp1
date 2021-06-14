@@ -40,7 +40,7 @@ namespace temp1.Systems
                 action.Update(time);
         }
 
-        protected void Complete(BaseAction action, Entity entity)
+        protected void Complete(BaseAction action, in Entity entity)
         {
             if (GameContext.GameState == GameState.Combat)
             {
@@ -49,10 +49,12 @@ namespace temp1.Systems
                 if (actionPoints.Remain <= 0)
                 {
                     actionPoints.Remain = actionPoints.Max;
+                    entity.Set(actionPoints);
                     entity.Remove<BaseAction>();
                     entity.Set(new TurnOccured());
                     return;
                 }
+                entity.Set(actionPoints);
             }
             if (action.Status == ActionStatus.Canceled)
             {

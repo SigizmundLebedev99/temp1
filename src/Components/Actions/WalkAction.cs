@@ -22,7 +22,7 @@ namespace temp1.Components
             _objToMove = objToMove;
         }
 
-        public override void Start(Entity entity)
+        public override void Start(in Entity entity)
         {
             var mapObjects = GameContext.EntitySets.MapObjects.GetEntities();
 
@@ -34,11 +34,10 @@ namespace temp1.Components
                 else if (mapObjects[i].Has<Blocking>())
                 {
                     Abort();
-                    break;
+                    return;
                 }
             }
             entity.Set(new Direction(To, From));
-            GameContext.World.Publish((this, entity));
         }
 
         public override void Update(GameTime time)

@@ -1,24 +1,25 @@
 using DefaultEcs;
+using DefaultEcs.System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
 using temp1.Components;
 using temp1.Models;
-using temp1.Models.Serialization;
 using temp1.UI;
 
-namespace temp1.AI
+namespace temp1.Systems
 {
-    class PlayerControl : IGameAI
+    [With(typeof(Player))]
+    [With(typeof(AllowedToAct))]
+    class PlayerControlSystem : AEntitySetSystem<GameTime>
     {
         MouseStateExtended mouseState;
 
-        public AIFactory GetFactory()
+        public PlayerControlSystem(World world) : base(world)
         {
-            return new PlayerControlAIFactory();
         }
 
-        public void Update(GameTime time, Entity entity)
+        protected override void Update(GameTime gameTime, in Entity entity)
         {
             var newState = MouseExtended.GetState();
             if (!CanHandleInput(newState))
@@ -30,16 +31,17 @@ namespace temp1.AI
             var position = entity.Get<Position>();
             var pointed = GameContext.PointedEntity != null ? GameContext.PointedEntity.Value.Get<Position>() : null;
             BaseAction after = null;
-            var mapPosition = mouseState.MapPosition(GameContext.Camera);
+            var mapPosition = GameContext.Camera.ScreenToWorld(mouseState.Position.X, mouseState.Position.Y);
+            var gridCell = mapPosition.GridCell();
             
             if (pointed != null)
                 after = GetAfterAction(entity, GameContext.PointedEntity.Value);
-            else if (!GameContext.Map.MovementGrid.IsWalkableAt(mapPosition.X, mapPosition.Y))
+            else if (!GameContext.Map.MovementGrid.IsWalkableAt(gridCell.X, gridCell.Y))
             {
                 return;
             }
 
-            if (GameContext.Map.PathFinder.TryGetPath(position, mapPosition, out var first, out var last, 2f))
+            if (GameContext.Map.PathFinder.TryGetPath(position, gridCell, out var first, out var last, 2f))
             {
                 if (after != null)
                 {

@@ -18,7 +18,7 @@ namespace temp1.Components
 
         public virtual ActionStatus Status { get; set; }
 
-        public virtual void Start(Entity entity) { }
+        public virtual void Start(in Entity entity) { }
 
         public virtual void Update(GameTime time) { }
 

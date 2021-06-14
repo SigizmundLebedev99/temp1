@@ -32,7 +32,7 @@ namespace temp1.Systems
             for (var i = 0; i < mapObjects.Length; i++)
             {
                 var mapObject = mapObjects[i];
-                if(mapObject == GameContext.Player)
+                if(mapObject.Has<Player>())
                     continue;
                 var mapObjectPosition = mapObject.Get<Position>();
 

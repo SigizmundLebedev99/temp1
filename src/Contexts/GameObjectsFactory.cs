@@ -80,13 +80,12 @@ namespace temp1
             if (type.TypeName == "player")
             {
                 e.Set(new Storage());
-                GameContext.Player = e;
-                e.Set<IGameAI>(new PlayerControl());
+                e.Set(new Player());
             }
             if (type.TypeName == "enemy")
             {
                 var sprite = e.Get<RenderingObject>();
-                e.Set(new Cursor("sword", new Rectangle((int)sprite.Origin.X, (int)sprite.Origin.Y, sprite.Bounds.Width, sprite.Bounds.Height)));
+                e.Set(new Cursor("sword", new Rectangle(-(int)sprite.Origin.X, -(int)sprite.Origin.Y, sprite.Bounds.Width, sprite.Bounds.Height)));
                 e.Set(GameObjectType.Enemy);
                 e.Set<IGameAI>(new RandomMovement());
             }
@@ -143,18 +142,7 @@ namespace temp1
 
         void PortalHandler(Entity e, GameObjectTypeInfo obj, TiledMapObject tiled)
         {
-            e.Set(new Trigger
-            {
-                Invoke = (action, entity) =>
-                {
-                    var toMap = tiled.Properties["destination"];
-                    Vector2 playerPosition = GameContext.Player.Get<Position>().Value;
-                    if (int.TryParse(tiled.Properties["player_transition_x"], out int x) && int.TryParse(tiled.Properties["player_transition_y"], out int y))
-                        playerPosition = playerPosition + ((new Vector2(x, y) * 32));
-                    GameContext.Player.Get<Position>().Value = playerPosition;
-                    GameContext.LoadMap(toMap);
-                }
-            });
+            e.Set<ITrigger>(new Portal(tiled));
             e.Set(new Cursor("hand", new Rectangle(-16, -16, 32, 32)));
         }
     }

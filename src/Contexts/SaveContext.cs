@@ -50,12 +50,6 @@ namespace temp1
                 break;
             }
 
-            if (world != null)
-            {
-                var player = world.GetEntities().With<IGameAI>().AsEnumerable().FirstOrDefault(e => e.Get<IGameAI>() is PlayerControl);
-                GameContext.Player = player;
-            }
-
             GameContext.LoadMap(mapName, world);
         }
 

@@ -22,7 +22,6 @@ namespace temp1
     {
         public static GameState GameState = GameState.Peace;
         public static OrthographicCamera Camera;
-        public static Entity Player;
         public static Entity? PointedEntity;
 
         public static World World;
@@ -32,6 +31,8 @@ namespace temp1
         public static CombatContext Combat;
         public static Game1 Game;
         public static EntitySets EntitySets;
+
+        public static Entity Player => EntitySets.Player;
 
         public static ContentManager Content => Game.Content;
 
@@ -54,16 +55,22 @@ namespace temp1
         public static void LoadMap(string mapName, World world = null)
         {
             LoadNewMap = true;
+            if (EntitySets != null)
+            {
+                EntitySets.Player.Remove<BaseAction>();
+            }
             LoadMapAction = () => ConfigureNewMap(mapName, world);
         }
 
         private static void ConfigureNewMap(string mapName, World world = null)
         {
-
             var newWorld = world ?? new World(64);
 
-            if (Player.IsAlive)
-                Player = Player.CopyTo(newWorld);
+            if (EntitySets != null)
+            {
+                EntitySets.Player.Remove<BaseAction>();
+                EntitySets.Player.CopyTo(newWorld);
+            }
 
             if (World != null && World != newWorld)
                 World.Dispose();
@@ -77,16 +84,6 @@ namespace temp1
             SystemsSet = ConfigureSystems();
             GameObjects.World = World;
             Map.LoadMap(mapName);
-
-            World.Subscribe<(WalkAction, Entity)>((in (WalkAction, Entity) payload) =>
-            {
-                var (action, entity) = payload;
-                var triggers = EntitySets.Triggers.GetEntities();
-                for (var i = 0; i < triggers.Length; i++)
-                {
-                    triggers[i].Get<Trigger>().Check(triggers[i], action, entity);
-                }
-            });
 
             if (GameContext.Player.IsAlive)
             {
@@ -148,12 +145,14 @@ namespace temp1
                 new ActionSystem(World),
                 new PossibleMovementBuildSystem(World),
                 new CursorSystem(Game.Batch, World),
+                new PlayerControlSystem(World),
                 new AISystem(World),
                 new CanopySystem(World),
                 new ExpirationSystem(World),
                 new DirectionToAnimationSystem(World),
                 new SpriteRenderSystem(World, Game.Batch),
-                new PossibleMovementDrawSystem(World, Game.Batch)
+                new PossibleMovementDrawSystem(World, Game.Batch),
+                new TriggerSystem(World)
             );
         }
     }

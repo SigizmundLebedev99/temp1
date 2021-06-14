@@ -7,14 +7,6 @@ namespace temp1.Models.Serialization
         public abstract IGameAI Get();
     }
 
-    class PlayerControlAIFactory : AIFactory
-    {
-        public override IGameAI Get()
-        {
-            return new PlayerControl();
-        }
-    }
-
     class RandomMovementAIFactory : AIFactory
     {
         public override IGameAI Get()

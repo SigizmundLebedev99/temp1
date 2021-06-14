@@ -39,7 +39,7 @@ namespace temp1
             _mapRenderer = ConfigureRenderer();
             ConfigureObstacles();
             ConfigureMapObjects();
-            ConfigureCovers(_map);
+            ProcessLayers(_map);
 
             PathFinder = new PathFinder(this);
         }
@@ -80,7 +80,7 @@ namespace temp1
             MovementGrid = searchGrid;
         }
 
-        void ConfigureCovers(TiledMap map)
+        void ProcessLayers(TiledMap map)
         {
             Images = new List<Texture2D>(32);
 

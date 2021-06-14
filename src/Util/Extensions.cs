@@ -7,6 +7,7 @@ using MonoGame.Extended.Input;
 using MonoGame.Extended.Serialization;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
+using temp1;
 using temp1.Models;
 using temp1.PathFinding;
 
@@ -17,10 +18,14 @@ static class Extensions
         return point.X < grid.width && point.Y < grid.height && point.X >= 0 && point.Y >= 0;
     }
 
-    public static Point MapPosition(this MouseStateExtended state, OrthographicCamera camera)
+    public static Point GridCell(this Point position)
     {
-        var worldPos = camera.ScreenToWorld(state.Position.X, state.Position.Y);
-        return (worldPos / 32).ToPoint();
+        return (position.ToVector2() / 32).ToPoint();
+    }
+
+    public static Point GridCell(this Vector2 position)
+    {
+        return (position / 32).ToPoint();
     }
 
     public static Sprite GetSprite(this ContentManager content, string textureName, Region region = null)

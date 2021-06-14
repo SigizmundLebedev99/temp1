@@ -1,25 +1,28 @@
-// using Microsoft.Xna.Framework;
-// using MonoGame.Extended.Entities;
-// using MonoGame.Extended.Entities.Systems;
-// using temp1.Components;
+using DefaultEcs;
+using DefaultEcs.System;
+using Microsoft.Xna.Framework;
+using temp1.Components;
 
-// namespace temp1.Systems
-// {
-//     // система переключения права хода между акторами
-//     class TriggerSystem : EntityProcessingSystem
-//     {
-//         public TriggerSystem() : base(Aspect.All(typeof(WalkAction)))
-//         {
-//         }
+namespace temp1.Systems
+{
+    [WhenAdded(typeof(BaseAction))]
+    [WhenChanged(typeof(BaseAction))]
+    class TriggerSystem : AEntitySetSystem<GameTime>
+    {
+        public TriggerSystem(World world) : base(world)
+        { }
 
-//         public override void Initialize(IComponentMapperService mapperService)
-//         {
-//             throw new System.NotImplementedException();
-//         }
-
-//         public override void Process(GameTime gameTime, int entityId)
-//         {
-//             throw new System.NotImplementedException();
-//         }
-//     }
-// }
+        protected override void Update(GameTime gameTime, in Entity entity)
+        {
+            var baseAction = entity.Get<BaseAction>();
+            if(!(baseAction is WalkAction action))
+                return;
+            var triggers = GameContext.EntitySets.Triggers.GetEntities();
+            for (var i = 0; i < triggers.Length; i++)
+            {
+                var trigger = triggers[i].Get<ITrigger>();
+                trigger.Check(triggers[i], action, entity);
+            }
+        }
+    }
+}
