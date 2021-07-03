@@ -21,9 +21,6 @@ namespace temp1.AI
 
         public RandomMovement()
         {
-            var world = GameContext.World;
-            var mapContext = GameContext.Map;
-
             _tree = new BehaviourTreeBuilder()
                 .Sequence("start")
                     .Do("check activity", t =>
@@ -45,9 +42,9 @@ namespace temp1.AI
                         })
                         .Do("create", t =>
                         {
-                            if (!TryGetPoint(out var point, mapContext))
+                            if (!TryGetPoint(out var point))
                                 return BehaviourTreeStatus.Success;
-                            if (mapContext.PathFinder.TryGetPath(_objectToMove, point, out var first, out var last, 1f))
+                            if (GameContext.Map.PathFinder.TryGetPath(_objectToMove, point, out var first, out var last, 1f))
                                 entity.Set<BaseAction>(first);
 
                             return BehaviourTreeStatus.Success;
@@ -56,10 +53,10 @@ namespace temp1.AI
                 .End().Build();
         }
 
-        bool TryGetPoint(out Point point, MapContext map)
+        bool TryGetPoint(out Point point)
         {
             var random = new Random();
-            var grid = map.MovementGrid;
+            var grid = GameContext.Map.MovementGrid;
             point = new Point(random.Next(0, grid.width), random.Next(0, grid.height));
             if (!grid.IsZeroAt(point.X, point.Y))
                 return false;

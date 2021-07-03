@@ -60,7 +60,7 @@ namespace temp1.Components
             {
                 position.GridCell = position.GridCell + Transition;
                 if (!string.IsNullOrEmpty(DestinationMap))
-                    GameContext.LoadMap(DestinationMap);
+                    SaveContext.SwitchMap(DestinationMap);
             });
         }
     }

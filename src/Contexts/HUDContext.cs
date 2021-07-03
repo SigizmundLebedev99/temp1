@@ -16,7 +16,6 @@ namespace temp1.UI
 
     class HudContext
     {
-        
         public HUDState State => _state;
         public bool IsMouseOnHud;
 

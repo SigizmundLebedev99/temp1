@@ -44,7 +44,8 @@
                 "width": 32,
                 "height": 32
             }
-        }
+        },
+        "description":"Restore 10 mana. Best choise for rookie magisian."
     },
     {
         "typeName": "red_potion1",
@@ -58,7 +59,8 @@
                 "width": 32,
                 "height": 32
             }
-        }
+        },
+        "description":"Restore 10 health. Because vounds won't heal by themseth."
     },
     {
         "typeName": "gladius1",
@@ -72,7 +74,8 @@
                 "width": 32,
                 "height": 32
             }
-        }
+        },
+        "description":"Short sword. Not for children."
     },
     {
         "typeName": "helmet1",
@@ -86,7 +89,8 @@
                 "width": 32,
                 "height": 32
             }
-        }
+        },
+        "description":"Simple iron helmet. May be usefull on construction site."
     },
     {
         "typeName": "portal",

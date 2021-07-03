@@ -18,7 +18,7 @@ namespace temp1.Screens
             _desktop = new Desktop(game.Batch);
             var label = _factory.CreateLabel(fontName: "fonts/commodore64");
             label.OffsetFrom = Anchors.Center;
-            label.Text = "Loading...";
+            label.Text.Value = "Loading...";
             label.ComputeSize(Vector2.Zero, Autosize.Content);
             _desktop.Root.Children.Add(label);
             afterAction = action;

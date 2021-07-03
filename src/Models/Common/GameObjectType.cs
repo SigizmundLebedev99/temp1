@@ -1,6 +1,3 @@
-using System;
-using temp1.Models;
-
 namespace temp1.Models
 {
     enum GameObjectType

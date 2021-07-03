@@ -6,39 +6,43 @@ using temp1.UI.Controls;
 
 namespace temp1.UI
 {
-    class PauseMenu : Desktop
+    class SavesMenu : Desktop
     {
-        public PauseMenu(Game1 game) : base(game.Batch)
+        public SavesMenu(Game1 game) : base(game.Batch)
         {
             var _factory = game.Services.GetService<ControlsFactory>();
 
             var label = _factory.CreateLabel(fontName: "fonts/commodore64");
             label.OffsetFrom = Anchors.TopCenter;
             label.Offset = new Vector2(0, 40);
-            label.Text = "Pause";
+            label.Text.Value = "Save game";
             label.ComputeSize(Vector2.Zero, Autosize.Content);
+
+            var yOffset = -80;
+            MouseControl createButton(string text)
+            {
+                var button = _factory.CreateTextButton(0);
+                button.OffsetFrom = Anchors.Center;
+                button.Offset = new Vector2(0, yOffset);
+                //button.Text = text;
+                yOffset += 80;
+                return button;
+            }
 
             var content = new ContentControll();
             content.OffsetFrom = Anchors.Center;
 
-            var start = _factory.CreateTextButton(0);
-            start.OffsetFrom = Anchors.Center;
-            start.Offset = new Vector2(0, -80);
-            start.Text = "Continue";
+            var start = createButton("Continue");
             start.MouseUp += (s, e) => GameContext.Hud.Default();
 
-            var save = _factory.CreateTextButton(0);
-            save.OffsetFrom = Anchors.Center;
-            save.Text = "Save";
-            save.MouseUp += (s, e) => {
-                SaveContext.SaveWorld();
+            var save = createButton("Save");
+            save.MouseUp += (s, e) =>
+            {
+                //SaveContext.SaveMapState();
                 GameContext.Hud.Default();
             };
 
-            var exit = _factory.CreateTextButton(0);
-            exit.OffsetFrom = Anchors.Center;
-            exit.Offset = new Vector2(0, 80);
-            exit.Text = "Exit";
+            var exit = createButton("Exit");
 
             var panel = _factory.CreatePanel(4);
             panel.ComputeSize(Size, Autosize.Content);

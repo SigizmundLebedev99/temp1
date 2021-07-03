@@ -3,7 +3,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
 using temp1.Factories;
+using temp1.UI;
 using temp1.UI.Controls;
+using temp1.UI.DrawingPieces;
 
 namespace temp1.Screens
 {
@@ -39,8 +41,8 @@ namespace temp1.Screens
             var label = _factory.CreateLabel(1);
             label.OffsetFrom = Anchors.TopCenter;
             label.Offset = new Vector2(0, 40);
-            label.Text = "My cool game";
-            label.ComputeSize(Vector2.Zero, Autosize.Content);
+            label.Size = new Vector2(300, 0);
+            label.Text.Value = "My cool game";
 
             var content = new ContentControll();
             content.OffsetFrom = Anchors.Center;
@@ -48,7 +50,7 @@ namespace temp1.Screens
             var start = _factory.CreateTextButton(0);
             start.OffsetFrom = Anchors.Center;
             start.Offset = new Vector2(0, -80);
-            start.Text = "New game";
+            start.Text.Value = "New game";
             start.MouseUp += (s, e) =>
             {
                 LoadNewGame();
@@ -56,18 +58,17 @@ namespace temp1.Screens
 
             var options = _factory.CreateTextButton(0);
             options.OffsetFrom = Anchors.Center;
-            options.Text = "Options";
+            options.Text.Value = "Options";
 
             var exit = _factory.CreateTextButton(0);
             exit.OffsetFrom = Anchors.Center;
             exit.Offset = new Vector2(0, 80);
-            exit.Text = "Exit";
+            exit.Text.Value = "Exit";
 
-            var border = _factory.CreatePanel(3);
-            border.Border = new Margin(40, 40);
+            var border = new Control();
             border.ComputeSize(_desktop.Size - new Vector2(25), Autosize.Fill);
+            border.DrawingPiece = new TexturePiece(game.Content.Load<Texture2D>("ui/border"), border.Size.ToPoint(), new Margin(40, 40));
             border.OffsetFrom = Anchors.Center;
-            border.StretchTexture();
 
             var panel = _factory.CreatePanel(4);
             panel.ComputeSize(_desktop.Size, Autosize.Content);

@@ -20,6 +20,7 @@ namespace temp1
         private GraphicsDevice _device;
         private TiledMapRenderer _mapRenderer;
 
+        public string MapName { get; private set; }
         public PathFinder PathFinder { get; private set; }
         public StaticGrid MovementGrid { get; private set; }
 
@@ -35,6 +36,7 @@ namespace temp1
 
         public void LoadMap(string mapName)
         {
+            MapName = mapName;
             _map = GameContext.Content.Load<TiledMap>(mapName);
             _mapRenderer = ConfigureRenderer();
             ConfigureObstacles();
@@ -94,8 +96,8 @@ namespace temp1
                         ParseLayers(group.Layers);
                         continue;
                     }
-                    
-                    if(!(layer is TiledMapTileLayer) || !layer.Name.StartsWith("_b_"))
+
+                    if (!(layer is TiledMapTileLayer) || !layer.Name.StartsWith("_b_"))
                         continue;
 
                     var tiled = (TiledMapTileLayer)layer;

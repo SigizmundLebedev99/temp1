@@ -15,13 +15,13 @@ namespace temp1.UI
             var root = new ContentControll();
             root.Size = Size;
 
-            var inventory = factory.CreateButton<Button>(2);
+            var inventory = factory.CreateButton(2);
             inventory.OffsetFrom = Anchors.BottomRight;
             inventory.Offset = new Vector2(-20, -30);
 
             inventory.MouseUp += (s, e) => GameContext.Hud.OpenInventory(GameContext.Player);
 
-            var toBattle = factory.CreateButton<Button>(8);
+            var toBattle = factory.CreateButton(8);
             toBattle.OffsetFrom = Anchors.BottomRight;
             toBattle.Offset = new Vector2(-80, -30);
 

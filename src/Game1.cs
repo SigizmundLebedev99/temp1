@@ -15,6 +15,8 @@ namespace temp1
         public SpriteBatch Batch => _spriteBatch;
         public GraphicsDeviceManager GDManager => _graphics;
 
+        public static Game1 Instance { get; private set; }
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -22,13 +24,14 @@ namespace temp1
             IsMouseVisible = true;
             _screenManager = new ScreenManager();
             Components.Add(_screenManager);
-            
+
             var controlsFactory = new ControlsFactory(Content);
             Services.AddService(controlsFactory);
         }
 
         protected override void Initialize()
         {
+            Instance = this;
             _graphics.PreferredBackBufferWidth = 1024;
             _graphics.PreferredBackBufferHeight = 600;
             _graphics.ApplyChanges();

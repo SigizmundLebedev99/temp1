@@ -11,9 +11,9 @@ namespace temp1.UI
         public ItemTypeFlags Flags;
 
         private InventoryItem StoredItem;
-        private Panel _backPanel;
+        private Control _backPanel;
 
-        public ItemSlot(Panel backPanel, ItemTypeFlags type)
+        public ItemSlot(Control backPanel, ItemTypeFlags type)
         {
             Flags = type;
             _backPanel = backPanel;

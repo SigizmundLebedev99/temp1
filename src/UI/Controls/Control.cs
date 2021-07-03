@@ -1,6 +1,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using MonoGame.Extended.BitmapFonts;
+using temp1.UI.DrawingPieces;
+using temp1.UI.Text;
 
 namespace temp1.UI.Controls
 {
@@ -24,21 +27,38 @@ namespace temp1.UI.Controls
         Content
     }
 
-    public abstract class Control
+    public class Control
     {
         public Vector2 Offset;
 
-        public Vector2 Size;
+        private Vector2? size;
+
+        public Vector2 Size
+        {
+            get => size ?? DrawingPiece.Bounds.Size.ToVector2();
+            set { size = value; }
+        }
 
         public Anchors OffsetFrom = Anchors.TopLeft;
 
-        public virtual void ComputeSize(Vector2 size, Autosize autosize)
+        private IDrawingPiece drawingPiece;
+        public IDrawingPiece DrawingPiece { get => drawingPiece ?? (drawingPiece = new NullObjectPiece()); set { drawingPiece = value; } }
+
+        public TextPiece Text { get; }
+
+        public Control()
+        {
+            var font = Game1.Instance.Content.Load<BitmapFont>("fonts/minor");
+            Text = new TextPiece(this, font);
+        }
+
+        public virtual void ComputeSize(Vector2 outerSize, Autosize autosize)
         {
             switch (autosize)
             {
                 case Autosize.Fill:
                     {
-                        Size = size - Offset;
+                        Size = outerSize - Offset;
                         break;
                     }
                 default:
@@ -46,9 +66,16 @@ namespace temp1.UI.Controls
             }
         }
 
-        public abstract void Update(GameTime time, MouseState mouse, Vector2 position);
+        public virtual void Update(GameTime time, MouseState mouse, Vector2 position)
+        {
+            DrawingPiece.Update(time);
+        }
 
-        public abstract void Draw(GameTime time, SpriteBatch batch, Vector2 position, float depth = 0);
+        public virtual void Draw(GameTime time, SpriteBatch batch, Vector2 position, float depth = 0)
+        {
+            DrawingPiece.Draw(batch, position, depth);
+            Text.Draw(batch, position, depth);
+        }
 
         public Vector2 ComputePosition(Vector2 position, Vector2 size)
         {

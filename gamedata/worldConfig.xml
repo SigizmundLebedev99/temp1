@@ -112,7 +112,6 @@ Component Storage {
 	Content [
 	]
 }
-ComponentSameAs Serializable 1
 ComponentType Player temp1.Components.Player, temp1
 Component Player
 {
