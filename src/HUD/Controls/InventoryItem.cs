@@ -44,7 +44,7 @@ namespace temp1.UI
             var factory = GameContext.Game.Services.GetService<ControlsFactory>();
 
             Item = stack;
-            sprite = GameContext.Content.GetSprite(stack.ItemType.Sprite);
+            sprite = Content.GetSprite(stack.ItemType.Sprite);
             if((stack.ItemType.Flags & ItemTypeFlags.Consumable) == 0)
                 return;
             //Text.Font = factory.CreateLabel(6);

@@ -8,14 +8,14 @@ namespace temp1.Components
 {
     interface ITrigger
     {
-        void Check(in Entity self, WalkAction action, in Entity actionEntity);
+        void Check(in Entity self, MoveAction action, in Entity actionEntity);
     }
 
     class ActionTrigger : ITrigger
     {
-        public Action<WalkAction, Entity> Invoke;
+        public Action<MoveAction, Entity> Invoke;
 
-        public virtual void Check(in Entity self, WalkAction action, in Entity actionEntity)
+        public virtual void Check(in Entity self, MoveAction action, in Entity actionEntity)
         {
             var selfPosition = self.Get<Position>();
             if (action.To.GridCell() == selfPosition.GridCell)
@@ -48,7 +48,7 @@ namespace temp1.Components
                 Zone = new Rectangle(rect.Position.GridCell(), (Point)(rect.Size.Width == 0 ? new Size2(1, 1) : rect.Size / 32));
         }
 
-        public void Check(in Entity self, WalkAction action, in Entity actionEntity)
+        public void Check(in Entity self, MoveAction action, in Entity actionEntity)
         {
             if (!actionEntity.Has<Player>())
                 return;

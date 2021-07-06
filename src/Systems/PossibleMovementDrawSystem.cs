@@ -20,7 +20,7 @@ namespace temp1.Systems
         public PossibleMovementDrawSystem(World world, SpriteBatch sb) : base(world)
         {
             _spriteBatch = sb;
-            _texture = GameContext.Content.Load<Texture2D>("images/possible_move");
+            _texture = Content.Load<Texture2D>("images/possible_move");
         }
 
         protected override void Update(GameTime state, in Entity entity)

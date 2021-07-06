@@ -26,24 +26,24 @@ namespace temp1.UI
             if(_content.Children.Contains(item))
                 return;
             _content.Children.Add(item);
-            _storage.Content.Add(item.Item);
+            _storage.Items.Add(item.Item);
             item.SetContainer(this);
         }
 
         public override void RemoveItem(InventoryItem item)
         {
             _content.Children.Remove(item);
-            _storage.Content.Remove(item.Item);
+            _storage.Items.Remove(item.Item);
         }
 
         public void BuildItems(Storage storage)
         {
             _storage = storage;
             _content.Children.Clear();
-            for (var i = 0; i < storage.Content.Count; i++)
+            for (var i = 0; i < storage.Items.Count; i++)
             {
                 var item = _factory.CreateButton<InventoryItem>(7);
-                item.Build(storage.Content[i]);
+                item.Build(storage.Items[i]);
                 item.SetContainer(this);
                 _content.Children.Add(item);
             }

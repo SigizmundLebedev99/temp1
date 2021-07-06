@@ -2,7 +2,6 @@ using System;
 using DefaultEcs;
 using DefaultEcs.System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -34,17 +33,15 @@ namespace temp1
 
         public static Entity Player => EntitySets.Player;
 
-        public static ContentManager Content => Game.Content;
-
         private static ISystem<GameTime> SystemsSet;
         private static bool LoadNewMap = true;
         private static Action LoadMapAction = null;
 
-        public static void Init(Game1 game, ContentManager Content)
+        public static void Init(Game1 game)
         {
             Game = game;
             Camera = new OrthographicCamera(game.GraphicsDevice);
-            GameObjects = new GameObjectsFactory(Content);
+            GameObjects = new GameObjectsFactory();
             Combat = new CombatContext();
 
             GameObjects.Initialize();

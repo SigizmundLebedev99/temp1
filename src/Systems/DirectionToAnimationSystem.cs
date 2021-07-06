@@ -31,7 +31,7 @@ namespace temp1.Systems
                 direction = "South";
 
 
-            if (!entity.Has<BaseAction>() || !(entity.Get<BaseAction>() is WalkAction))
+            if (!entity.Has<BaseAction>() || !(entity.Get<BaseAction>() is MoveAction))
             {
                 sprite.Play("idle" + direction);
                 entity.Remove<Direction>();

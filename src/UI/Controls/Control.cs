@@ -48,7 +48,7 @@ namespace temp1.UI.Controls
 
         public Control()
         {
-            var font = Game1.Instance.Content.Load<BitmapFont>("fonts/minor");
+            var font = Content.Load<BitmapFont>("fonts/minor");
             Text = new TextPiece(this, font);
         }
 

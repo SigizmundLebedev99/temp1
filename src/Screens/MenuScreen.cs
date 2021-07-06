@@ -89,7 +89,7 @@ namespace temp1.Screens
         {
             ScreenManager.LoadScreen(new LoadingScreen((Game1)Game, () =>
             {
-                GameContext.Init((Game1)Game, Content);
+                GameContext.Init((Game1)Game);
 
                 SaveContext.LoadGame("gamedata/worldConfig.xml");
 

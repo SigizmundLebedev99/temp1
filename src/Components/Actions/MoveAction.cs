@@ -1,25 +1,25 @@
 using DefaultEcs;
 using Microsoft.Xna.Framework;
+using temp1.Models.Movement;
 
 namespace temp1.Components
 {
-    class WalkAction : BaseAction
+    class MoveAction : BaseAction
     {
-        public Vector2 From;
-        public Vector2 To;
+        public Vector2 From => _movement.From;
+        public Vector2 To => _movement.To;
         public override int PointsTaken => 1;
         public override ActionStatus Status => status;
 
         private ActionStatus status = ActionStatus.Running;
 
         private Position _objToMove;
+        private Models.Movement.Movement _movement;
 
-        public WalkAction(Vector2 from, Vector2 to, Position objToMove, float speed)
+        public MoveAction(Position objToMove, Movement movement)
         {
-            this._speed = speed / (to - from).Length();
-            this.From = from;
-            this.To = to;
             _objToMove = objToMove;
+            _movement = movement;
         }
 
         public override void Start(in Entity entity)
@@ -42,26 +42,14 @@ namespace temp1.Components
 
         public override void Update(GameTime time)
         {
-            _objToMove.Value = Move();
-            if (k >= 1f)
-            {
+            _objToMove.Value = _movement.Move();
+            if (_movement.IsCompleted)
                 status = ActionStatus.Success;
-            }
         }
 
         public override void Abort()
         {
             status = ActionStatus.Canceled;
-        }
-
-        float _speed;
-        float k = 0;
-
-        public Vector2 Move()
-        {
-            k += _speed;
-            var result = this.To * k + this.From * (1 - k);
-            return result;
         }
     }
 }

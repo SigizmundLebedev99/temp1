@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Serialization;
-using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
 using temp1.AI;
 using temp1.Components;
@@ -17,7 +16,6 @@ namespace temp1
     class GameObjectsFactory
     {
         private JsonContentLoader loader = new JsonContentLoader();
-        private ContentManager _content;
         private World _world;
 
         private Dictionary<string, GameObjectTypeInfo> GameObjectTypes;
@@ -25,9 +23,8 @@ namespace temp1
 
         public World World { set { if (value != null) _world = value; } }
 
-        public GameObjectsFactory(ContentManager content)
+        public GameObjectsFactory()
         {
-            _content = content;
             GameObjectTypes = new Dictionary<string, GameObjectTypeInfo>();
         }
 
@@ -38,7 +35,7 @@ namespace temp1
 
         public void Initialize(string gameObjectTypesPath = "game-object-types.json")
         {
-            var mapTypes = _content.Load<GameObjectTypeInfo[]>(gameObjectTypesPath, loader);
+            var mapTypes = Content.Load<GameObjectTypeInfo[]>(gameObjectTypesPath, loader);
             GameObjectTypes = mapTypes.ToDictionary(e => e.TypeName);
             Handlers = new Dictionary<string, Action<Entity, GameObjectTypeInfo, TiledMapObject>>
             {
@@ -64,7 +61,7 @@ namespace temp1
 
             if (objType.Sprite != null)
             {
-                entity.Set(new RenderingObject(_content.GetSprite(objType.Sprite), objType.Sprite.Path));
+                entity.Set(new RenderingObject(Content.GetSprite(objType.Sprite), objType.Sprite.Path));
             }
 
             if (objType.Handler == null || !Handlers.TryGetValue(objType.Handler, out var handler))
@@ -117,7 +114,7 @@ namespace temp1
                     if (type.StackSize < countInStack)
                     {
                         countInStack -= type.StackSize;
-                        storage.Content.Add(new ItemStack
+                        storage.Items.Add(new ItemStack
                         {
                             ItemType = type,
                             Count = type.StackSize
@@ -125,7 +122,7 @@ namespace temp1
                     }
                     else
                     {
-                        storage.Content.Add(new ItemStack
+                        storage.Items.Add(new ItemStack
                         {
                             ItemType = type,
                             Count = countInStack,

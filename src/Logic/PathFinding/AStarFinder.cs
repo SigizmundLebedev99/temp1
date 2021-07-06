@@ -114,10 +114,6 @@ namespace temp1.PathFinding
                             }
                             neighbor.isOpened = true;
                         }
-                        else
-                        {
-
-                        }
                     }
                 }
             }

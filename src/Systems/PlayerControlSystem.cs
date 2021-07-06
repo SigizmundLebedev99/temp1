@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
 using temp1.Components;
 using temp1.Models;
+using temp1.PathFinding;
 using temp1.UI;
 
 namespace temp1.Systems
@@ -14,6 +15,7 @@ namespace temp1.Systems
     class PlayerControlSystem : AEntitySetSystem<GameTime>
     {
         MouseStateExtended mouseState;
+        DefaultPathFinder pathFinder = new DefaultPathFinder();
 
         public PlayerControlSystem(World world) : base(world)
         {
@@ -28,7 +30,6 @@ namespace temp1.Systems
                 return;
             }
 
-            var position = entity.Get<Position>();
             var pointed = GameContext.PointedEntity != null ? GameContext.PointedEntity.Value.Get<Position>() : null;
             BaseAction after = null;
             var mapPosition = GameContext.Camera.ScreenToWorld(mouseState.Position.X, mouseState.Position.Y);
@@ -41,7 +42,7 @@ namespace temp1.Systems
                 return;
             }
 
-            if (GameContext.Map.PathFinder.TryGetPath(position, gridCell, out var first, out var last, 2f))
+            if (pathFinder.TryGetPath(entity, gridCell, out var first, out var last))
             {
                 if (after != null)
                 {

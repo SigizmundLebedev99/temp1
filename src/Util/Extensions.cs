@@ -23,39 +23,13 @@ static class Extensions
         return (position.ToVector2() / 32).ToPoint();
     }
 
+    public static Vector2 MapPosition(this Point position)
+    {
+        return position.ToVector2() * 32 + new Vector2(16);
+    }
+
     public static Point GridCell(this Vector2 position)
     {
         return (position / 32).ToPoint();
-    }
-
-    public static Sprite GetSprite(this ContentManager content, string textureName, Region region = null)
-    {
-        var texture = content.Load<Texture2D>(textureName);
-        return region == null ? new Sprite(texture) : new Sprite(new TextureRegion2D(texture, region));
-    }
-
-    public static AnimatedSprite GetAnimatedSprite(this ContentManager content, string name)
-    {
-        var ss = content.Load<SpriteSheet>(name, new JsonContentLoader());
-        var sprite = new AnimatedSprite(ss);
-        sprite.Play("idle");
-        return sprite;
-    }
-
-    public static Sprite GetSprite(this ContentManager content, RenderObjectInfo spriteInfo)
-    {
-        Sprite sprite;
-
-        if (spriteInfo == null)
-            return null;
-
-        if (spriteInfo.Path.EndsWith(".sf"))
-            sprite = content.GetAnimatedSprite(spriteInfo.Path);
-        else
-            sprite = content.GetSprite(spriteInfo.Path, spriteInfo.Region);
-
-        sprite.Origin = spriteInfo.Origin != null ? spriteInfo.Origin.ToVector2() : Vector2.Zero;
-
-        return sprite;
     }
 }

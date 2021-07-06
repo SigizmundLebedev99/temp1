@@ -21,7 +21,7 @@ namespace temp1.Systems
         public CursorSystem(SpriteBatch batch, World world) : base(world)
         {
             _spriteBatch = batch;
-            mark = GameContext.Content.GetAnimatedSprite("images/mark.sf");
+            mark = Content.GetAnimatedSprite("images/mark.sf");
         }
 
         protected override void Update(GameTime gameTime, in Entity entity)

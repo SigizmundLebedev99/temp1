@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Tiled;
@@ -21,7 +18,6 @@ namespace temp1
         private TiledMapRenderer _mapRenderer;
 
         public string MapName { get; private set; }
-        public PathFinder PathFinder { get; private set; }
         public StaticGrid MovementGrid { get; private set; }
 
         public TiledMap Map { get => _map; }
@@ -37,13 +33,11 @@ namespace temp1
         public void LoadMap(string mapName)
         {
             MapName = mapName;
-            _map = GameContext.Content.Load<TiledMap>(mapName);
+            _map = Content.Load<TiledMap>(mapName);
             _mapRenderer = ConfigureRenderer();
             ConfigureObstacles();
             ConfigureMapObjects();
             ProcessLayers(_map);
-
-            PathFinder = new PathFinder(this);
         }
 
         public TiledMapRenderer ConfigureRenderer()

@@ -21,6 +21,7 @@ namespace temp1
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "assets";
+            temp1.Content.Initialize(Content);
             IsMouseVisible = true;
             _screenManager = new ScreenManager();
             Components.Add(_screenManager);
@@ -40,10 +41,6 @@ namespace temp1
 
             _screenManager.LoadScreen(new MenuScreen(this));
             base.Initialize();
-        }
-
-        protected override void LoadContent()
-        {
         }
     }
 }

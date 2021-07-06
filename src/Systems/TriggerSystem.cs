@@ -15,7 +15,7 @@ namespace temp1.Systems
         protected override void Update(GameTime gameTime, in Entity entity)
         {
             var baseAction = entity.Get<BaseAction>();
-            if(!(baseAction is WalkAction action))
+            if(!(baseAction is MoveAction action))
                 return;
             var triggers = GameContext.EntitySets.Triggers.GetEntities();
             for (var i = 0; i < triggers.Length; i++)

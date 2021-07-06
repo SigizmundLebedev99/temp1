@@ -6,15 +6,15 @@ namespace temp1.Components
 {
     class Storage
     {
-        public List<ItemStack> Content = new List<ItemStack>();
+        public List<ItemStack> Items = new List<ItemStack>();
 
         public void Add(ItemStack slot)
         {
-            var existing = Content.FirstOrDefault(e => e.ItemType == slot.ItemType && e.Count < e.ItemType.StackSize);
+            var existing = Items.FirstOrDefault(e => e.ItemType == slot.ItemType && e.Count < e.ItemType.StackSize);
 
             if (existing == null)
             {
-                Content.Add(slot);
+                Items.Add(slot);
                 return;
             }
 
@@ -22,7 +22,7 @@ namespace temp1.Components
             existing.Count = total > slot.ItemType.StackSize ? slot.ItemType.StackSize : total;
             slot.Count = total - existing.Count;
             if (slot.Count > 0)
-                Content.Add(slot);
+                Items.Add(slot);
         }
     }
 }

@@ -4,15 +4,17 @@ using FluentBehaviourTree;
 using Microsoft.Xna.Framework;
 using temp1.Components;
 using temp1.Models.Serialization;
+using temp1.PathFinding;
 
 namespace temp1.AI
 {
     class RandomMovement : IGameAI
     {
-        Position _objectToMove;
         IBehaviourTreeNode _tree;
         float _time = 0;
         Entity entity;
+
+        DefaultPathFinder PathFinder;
 
         public AIFactory GetFactory()
         {
@@ -21,6 +23,7 @@ namespace temp1.AI
 
         public RandomMovement()
         {
+            PathFinder = new DefaultPathFinder();
             _tree = new BehaviourTreeBuilder()
                 .Sequence("start")
                     .Do("check activity", t =>
@@ -44,7 +47,7 @@ namespace temp1.AI
                         {
                             if (!TryGetPoint(out var point))
                                 return BehaviourTreeStatus.Success;
-                            if (GameContext.Map.PathFinder.TryGetPath(_objectToMove, point, out var first, out var last, 1f))
+                            if (PathFinder.TryGetPath(entity, point, out var first, out var last))
                                 entity.Set<BaseAction>(first);
 
                             return BehaviourTreeStatus.Success;
@@ -63,19 +66,9 @@ namespace temp1.AI
             return true;
         }
 
-        public void Clear()
-        {
-            _objectToMove = null;
-            _tree = null;
-            _time = 0;
-            entity = default;
-        }
-
-        public void Update(GameTime time, Entity entity)
+        public void Update(GameTime time, in Entity entity)
         {
             this.entity = entity;
-            if (this._objectToMove == null)
-                this._objectToMove = entity.Get<Position>();
             _tree.Tick(new TimeData());
         }
     }

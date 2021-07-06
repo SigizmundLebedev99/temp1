@@ -100,7 +100,8 @@ namespace temp1
             .Marshal<IGameAI, AIFactory>(ai => ai.GetFactory())
             .Marshal<GameObjectTypeInfo, GameObjectTypeName>(from => new GameObjectTypeName { Value = from.TypeName })
             .Unmarshal<GameObjectTypeName, GameObjectTypeInfo>(from => GameContext.GameObjects.GetGameObjectTypeInfo(from.Value))
-            .Unmarshal<AIFactory, IGameAI>(factory => factory.Get());
+            .Unmarshal<AIFactory, IGameAI>(factory => factory.Get())
+            .Unmarshal<RenderObjectInfo, RenderingObject>(render => new RenderingObject(Content.GetSprite(render), render.Path));
         }
 
         private static XmlElement GetMapState(XmlDocument document, string mapName)
