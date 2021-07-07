@@ -1,14 +1,4 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
-using MonoGame.Extended.Content;
-using MonoGame.Extended.Input;
-using MonoGame.Extended.Serialization;
-using MonoGame.Extended.Sprites;
-using MonoGame.Extended.TextureAtlases;
-using temp1;
-using temp1.Models;
 using temp1.PathFinding;
 
 static class Extensions

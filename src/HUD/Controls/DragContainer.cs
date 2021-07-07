@@ -33,11 +33,6 @@ namespace temp1.UI
             };
         }
 
-        public override void Update(GameTime time, MouseState mouse, Vector2 position)
-        {
-            base.Update(time, mouse, position);
-        }
-
         public abstract void AddItem(InventoryItem item);
 
         public abstract void RemoveItem(InventoryItem item);

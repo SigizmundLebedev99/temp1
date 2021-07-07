@@ -29,7 +29,7 @@ Component Blocking {
 }
 ComponentType Storage temp1.Components.Storage, temp1
 Component Storage {
-	Content [
+	Items [
 		{
 			ItemType $type temp1.Models.Serialization.GameObjectTypeName, temp1
 			{
@@ -109,7 +109,7 @@ Component RenderObjectInfo {
 	}
 }
 Component Storage {
-	Content [
+	Items [
 	]
 }
 ComponentType Player temp1.Components.Player, temp1

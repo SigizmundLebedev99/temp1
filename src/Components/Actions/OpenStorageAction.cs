@@ -17,8 +17,8 @@ namespace temp1.Components
                 return;
             }
 
-            var right = Storage.Get<Storage>();
-            var left = entity.Get<Storage>();
+            var left = Storage.Get<Storage>();
+            var right = entity.Get<Storage>();
 
             var sprite = Storage.Get<RenderingObject>();
             sprite.Play("open");
