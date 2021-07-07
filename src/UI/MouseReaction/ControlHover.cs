@@ -15,6 +15,8 @@ namespace temp1.UI.MouseReactions
 
         public override void OnEnter(Control control, MouseState state)
         {
+            if(hover == null)
+                return;
             original = control.DrawingPiece;
             control.DrawingPiece = hover;
             base.OnEnter(control, state);
@@ -22,6 +24,8 @@ namespace temp1.UI.MouseReactions
 
         public override void OnLeave(Control control, MouseState state)
         {
+            if(hover == null)
+                return;
             control.DrawingPiece = original;
             base.OnLeave(control, state);
         }

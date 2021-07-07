@@ -16,6 +16,8 @@ namespace temp1.UI.MouseReactions
 
         public override void OnMouseDown(Control control, MouseState state)
         {
+            if(active == null)
+                return;
             original = control.DrawingPiece;
             control.DrawingPiece = active;
             base.OnEnter(control, state);
@@ -23,6 +25,8 @@ namespace temp1.UI.MouseReactions
 
         public override void OnMouseUp(Control control, MouseState state)
         {
+            if(active == null)
+                return;
             control.DrawingPiece = original;
             base.OnMouseDown(control, state);
         }

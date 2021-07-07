@@ -4,9 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Sprites;
 using MonoGame.Extended.TextureAtlases;
 using temp1.Models;
-using temp1.Factories;
 using temp1.UI.Controls;
-using System;
 using temp1.UI.Text;
 
 namespace temp1.UI
@@ -77,7 +75,7 @@ namespace temp1.UI
         public override void Update(GameTime time, MouseState mouse, Vector2 position)
         {
             if (Dragging == this)
-                position = MousePosition = mouse.Position.ToVector2();
+                position = MousePosition = mouse.Position.ToVector2() - Size / 2;
             base.Update(time, mouse, position);
         }
     }
