@@ -28,7 +28,7 @@ namespace temp1.UI
                 if (Dragging != null)
                     return;
                 Dragging = this;
-                MousePosition = e.Position.ToVector2();
+                MousePosition = GetItemPosition(e);
             };
 
             this.MouseUp += (s, e) =>
@@ -75,8 +75,13 @@ namespace temp1.UI
         public override void Update(GameTime time, MouseState mouse, Vector2 position)
         {
             if (Dragging == this)
-                position = MousePosition = mouse.Position.ToVector2() - Size / 2;
+                position = MousePosition = GetItemPosition(mouse);
             base.Update(time, mouse, position);
+        }
+
+        private Vector2 GetItemPosition(MouseState mouse)
+        {
+            return mouse.Position.ToVector2() - Size / 2;
         }
     }
 }

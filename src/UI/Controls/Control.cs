@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -20,24 +21,18 @@ namespace temp1.UI.Controls
         CenterRight
     }
 
-    public enum Autosize
-    {
-        None,
-        Fill,
-        Content
-    }
-
     public class Control
     {
         public Vector2 Offset;
 
         private Vector2? size;
-
         public Vector2 Size
         {
             get => size ?? DrawingPiece.Bounds.Size.ToVector2();
-            set { size = value; }
+            set { size = value; this.OnSizeChanged?.Invoke(); }
         }
+
+        public event Action OnSizeChanged;
 
         public Anchors OffsetFrom = Anchors.TopLeft;
 
@@ -50,20 +45,6 @@ namespace temp1.UI.Controls
         {
             var font = Content.Load<BitmapFont>("fonts/minor");
             Text = new TextPiece(this, font);
-        }
-
-        public virtual void ComputeSize(Vector2 outerSize, Autosize autosize)
-        {
-            switch (autosize)
-            {
-                case Autosize.Fill:
-                    {
-                        Size = outerSize - Offset;
-                        break;
-                    }
-                default:
-                    return;
-            }
         }
 
         public virtual void Update(GameTime time, MouseState mouse, Vector2 position)

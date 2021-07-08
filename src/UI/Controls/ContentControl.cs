@@ -25,28 +25,7 @@ namespace temp1.UI.Controls
             }
         }
 
-        public override void ComputeSize(Vector2 size, Autosize autosize)
-        {
-            switch (autosize)
-            {
-                case Autosize.None:
-                    {
-                        return;
-                    }
-                case Autosize.Fill:
-                    {
-                        Size = size - Offset;
-                        break;
-                    }
-                case Autosize.Content:
-                    {
-                        Size = ComputeContentBounds();
-                        break;
-                    }
-            }
-        }
-
-        protected Vector2 ComputeContentBounds()
+        public void ComputeSize()
         {
             Vector2 size = Vector2.Zero;
             for (var i = 0; i < this.Children.Count; i++)
@@ -58,7 +37,7 @@ namespace temp1.UI.Controls
                 if (childSpace.Y > size.Y)
                     size.Y = childSpace.Y;
             }
-            return size;
+            Size = size;
         }
     }
 }

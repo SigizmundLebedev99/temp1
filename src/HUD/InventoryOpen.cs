@@ -28,7 +28,6 @@ namespace temp1.UI
             items.OffsetFrom = Anchors.Center;
 
             var panel = factory.CreatePanel(4);
-            panel.ComputeSize(Vector2.Zero, Autosize.Content);
             panel.OffsetFrom = Anchors.Center;
 
             items.Size = panel.Size - new Vector2(50);

@@ -19,7 +19,6 @@ namespace temp1.Screens
             var label = _factory.CreateLabel(fontName: "fonts/commodore64");
             label.OffsetFrom = Anchors.Center;
             label.Text.Value = "Loading...";
-            label.ComputeSize(Vector2.Zero, Autosize.Content);
             _desktop.Root.Children.Add(label);
             afterAction = action;
         }

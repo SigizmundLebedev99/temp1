@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
@@ -66,23 +65,27 @@ namespace temp1.Screens
             exit.Text.Value = "Exit";
 
             var border = new Control();
-            border.ComputeSize(_desktop.Size - new Vector2(25), Autosize.Fill);
+            border.Size = _desktop.Size - new Vector2(25);
             border.DrawingPiece = new TexturePiece(game.Content.Load<Texture2D>("ui/border"), border.Size.ToPoint(), new Margin(40, 40));
             border.OffsetFrom = Anchors.Center;
 
             var panel = _factory.CreatePanel(4);
-            panel.ComputeSize(_desktop.Size, Autosize.Content);
+            panel.OffsetFrom = Anchors.Center;
 
             content.Children.Add(panel);
             content.Children.Add(start);
             content.Children.Add(options);
             content.Children.Add(exit);
 
-            content.ComputeSize(root.Size, Autosize.Content);
+            content.ComputeSize();
+
+            var clipView = new ClipView { Size = new Vector2(200, 50), OffsetFrom = Anchors.TopRight, Offset = new Vector2(-50, 50) };
+            clipView.Content.Text.Value = "Is there any way to enable a temporary clipping mask in XNA while using a SpriteBatch? I'm drawing a bunch of Texture2D objects and Sprites in a given rectangle, and I want to make sure that said objects aren't drawn outside of that rectangle. If it's of any help, I'm already drawing my content within a Viewport, I'm not sure if I can draw, for instance, in another Viewport within that Viewport.";
 
             root.Children.Add(border);
             root.Children.Add(label);
             root.Children.Add(content);
+            root.Children.Add(clipView);
         }
 
         void LoadNewGame()

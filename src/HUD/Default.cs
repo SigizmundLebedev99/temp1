@@ -28,7 +28,6 @@ namespace temp1.UI
             toBattle.MouseUp += (s, e) => GameContext.Combat.StartBattle();
 
             var panel = factory.CreatePanel(5);
-            panel.ComputeSize(Vector2.Zero, Autosize.Content);
             panel.OffsetFrom = Anchors.BottomRight;
             var mousePanel = new MouseControl();
             mousePanel.Size = panel.Size;

@@ -16,7 +16,6 @@ namespace temp1.UI
             label.OffsetFrom = Anchors.TopCenter;
             label.Offset = new Vector2(0, 40);
             label.Text.Value = "Save game";
-            label.ComputeSize(Vector2.Zero, Autosize.Content);
 
             var yOffset = -80;
             MouseControl createButton(string text)
@@ -45,15 +44,14 @@ namespace temp1.UI
             var exit = createButton("Exit");
 
             var panel = _factory.CreatePanel(4);
-            panel.ComputeSize(Size, Autosize.Content);
-
+            
             content.Children.Add(panel);
             content.Children.Add(start);
             content.Children.Add(save);
             content.Children.Add(exit);
             content.Children.Add(label);
 
-            content.ComputeSize(Size, Autosize.Content);
+            content.ComputeSize();
 
             Root.Children.Add(content);
             this.Update(new GameTime());

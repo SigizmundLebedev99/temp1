@@ -26,6 +26,8 @@ namespace temp1.UI.Text
         private string text = "";
         public string Value { get => text; set { text = value ?? ""; ComputeTextLayout(); } }
 
+        public Vector2 Size => new Vector2(control.Size.X, paragrathHeight);
+
         public TextPiece(Control control, BitmapFont font)
         {
             if (font == null)
@@ -87,7 +89,7 @@ namespace temp1.UI.Text
             foreach (var word in words)
             {
                 var wordSize = font.MeasureString(word);
-                if (lineWidth + wordSize.Width > control.Size.X && !firstWord)
+                if (lineWidth + wordSize.Width >= control.Size.X && !firstWord)
                     break;
                 else
                 {
