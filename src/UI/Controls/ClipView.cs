@@ -31,7 +31,7 @@ namespace temp1.UI.Controls
             batch.GraphicsDevice.ScissorRectangle = new Rectangle(position.ToPoint(), Size.ToPoint());
             batch.Begin(rasterizerState: _rasterState);
 
-            Content.Draw(time, batch, ComputePosition(position, Size), depth);
+            Content.Draw(time, batch, Content.ComputePosition(position, Size), depth);
 
             batch.End();
             batch.GraphicsDevice.ScissorRectangle = default;

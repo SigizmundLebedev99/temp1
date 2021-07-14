@@ -79,9 +79,10 @@ namespace temp1.Screens
 
             content.ComputeSize();
 
-            var clipView = new ClipView { Size = new Vector2(200, 50), OffsetFrom = Anchors.TopRight, Offset = new Vector2(-50, 50) };
+            var clipView = new Scroll { Size = new Vector2(200, 50), OffsetFrom = Anchors.TopRight, Offset = new Vector2(-50, 50) };
             clipView.Content.Text.Value = "Is there any way to enable a temporary clipping mask in XNA while using a SpriteBatch? I'm drawing a bunch of Texture2D objects and Sprites in a given rectangle, and I want to make sure that said objects aren't drawn outside of that rectangle. If it's of any help, I'm already drawing my content within a Viewport, I'm not sure if I can draw, for instance, in another Viewport within that Viewport.";
-
+            clipView.Content.Size = clipView.Content.Text.Size;
+            
             root.Children.Add(border);
             root.Children.Add(label);
             root.Children.Add(content);
