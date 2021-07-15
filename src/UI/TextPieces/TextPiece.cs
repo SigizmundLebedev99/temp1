@@ -89,7 +89,7 @@ namespace temp1.UI.Text
             foreach (var word in words)
             {
                 var wordSize = font.MeasureString(word);
-                if (lineWidth + wordSize.Width >= control.Size.X && !firstWord)
+                if (lineWidth + wordSize.Width >= control.Size.X * 0.85f && !firstWord)
                     break;
                 else
                 {

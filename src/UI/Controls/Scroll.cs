@@ -21,7 +21,7 @@ namespace temp1.UI.Controls
             set
             {
                 _scrollOffset = Math.Clamp(value, 0, Size.Y - Slider.Size.Y);
-                Content.Offset = new Vector2(Content.Offset.X, - Content.Size.Y * ScrollOffset / Size.Y);
+                Content.Offset = new Vector2(Content.Offset.X, -(Content.Size.Y - Size.Y) * ScrollOffset / (Size.Y - Slider.Size.Y));
             }
         }
 
