@@ -69,7 +69,7 @@ namespace temp1.UI.Controls
                 Size = new Vector2(15, 30);
                 _scroll = scroll;
                 OffsetFrom = Anchors.TopRight;
-                DrawingPiece = new BackgroundColorPiece(Color.Red, this);
+                Background = new BackgroundColorPiece(Color.Red, this);
                 MouseReaction = new ControlHover(new BackgroundColorPiece(Color.BlueViolet, this));
             }
 

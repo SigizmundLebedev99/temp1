@@ -23,7 +23,7 @@ namespace temp1.UI
                 var button = _factory.CreateTextButton(0);
                 button.OffsetFrom = Anchors.Center;
                 button.Offset = new Vector2(0, yOffset);
-                //button.Text = text;
+                button.Text.Value = text;
                 yOffset += 80;
                 return button;
             }

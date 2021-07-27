@@ -64,7 +64,7 @@ namespace temp1.UI
 
             depth = Dragging == this ? 0.1f : depth + 0.01f;
 
-            base.DrawingPiece.Draw(batch, position, depth);
+            base.Background.Draw(batch, position, depth);
 
             if (sprite != null)
                 batch.Draw(sprite.TextureRegion, position + Size / 2 - ((Vector2)sprite.TextureRegion.Size / 2), Color.White, 0, Vector2.Zero, Vector2.One, SpriteEffects.None, depth + 0.01f);

@@ -18,8 +18,8 @@ namespace temp1.UI.MouseReactions
         {
             if(active == null)
                 return;
-            original = control.DrawingPiece;
-            control.DrawingPiece = active;
+            original = control.Background;
+            control.Background = active;
             base.OnEnter(control, state);
         }
 
@@ -27,7 +27,7 @@ namespace temp1.UI.MouseReactions
         {
             if(active == null)
                 return;
-            control.DrawingPiece = original;
+            control.Background = original;
             base.OnMouseDown(control, state);
         }
     }

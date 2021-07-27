@@ -17,8 +17,8 @@ namespace temp1.UI.MouseReactions
         {
             if(hover == null)
                 return;
-            original = control.DrawingPiece;
-            control.DrawingPiece = hover;
+            original = control.Background;
+            control.Background = hover;
             base.OnEnter(control, state);
         }
 
@@ -26,7 +26,7 @@ namespace temp1.UI.MouseReactions
         {
             if(hover == null)
                 return;
-            control.DrawingPiece = original;
+            control.Background = original;
             base.OnLeave(control, state);
         }
     }

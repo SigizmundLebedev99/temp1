@@ -28,7 +28,7 @@ namespace temp1.UI.Controls
         private Vector2? size;
         public Vector2 Size
         {
-            get => size ?? DrawingPiece.Bounds.Size.ToVector2();
+            get => size ?? Background.Bounds.Size.ToVector2();
             set { size = value; this.OnSizeChanged?.Invoke(); }
         }
 
@@ -36,8 +36,8 @@ namespace temp1.UI.Controls
 
         public Anchors OffsetFrom = Anchors.TopLeft;
 
-        private IDrawingPiece drawingPiece;
-        public IDrawingPiece DrawingPiece { get => drawingPiece ?? (drawingPiece = new NullObjectPiece()); set { drawingPiece = value; } }
+        private IDrawingPiece _background;
+        public IDrawingPiece Background { get => _background ?? (_background = new NullObjectPiece()); set { _background = value; } }
 
         public TextPiece Text { get; }
 
@@ -49,12 +49,12 @@ namespace temp1.UI.Controls
 
         public virtual void Update(GameTime time, MouseState mouse, Vector2 position)
         {
-            DrawingPiece.Update(time);
+            Background.Update(time);
         }
 
         public virtual void Draw(GameTime time, SpriteBatch batch, Vector2 position, float depth = 0)
         {
-            DrawingPiece.Draw(batch, position, depth);
+            Background.Draw(batch, position, depth);
             Text.Draw(batch, position, depth);
         }
 

@@ -59,7 +59,7 @@ namespace temp1.Factories
         public MouseControl CreateButton(int resourceSet)
         {
             var button = new MouseControl();
-            button.DrawingPiece = LoadTxr(resourceSet, 0);
+            button.Background = LoadTxr(resourceSet, 0);
             button.MouseReaction.AddReaction(new ControlHover(LoadTxr(resourceSet, 1)));
             button.MouseReaction.AddReaction(new ControlActive(LoadTxr(resourceSet, 2)));
             return button;
@@ -68,7 +68,7 @@ namespace temp1.Factories
         public T CreateButton<T>(int resourceSet) where T : MouseControl, new()
         {
             var button = new T();
-            button.DrawingPiece = LoadTxr(resourceSet, 0);
+            button.Background = LoadTxr(resourceSet, 0);
             button.MouseReaction.AddReaction(new ControlHover(LoadTxr(resourceSet, 1)));
             button.MouseReaction.AddReaction(new ControlActive(LoadTxr(resourceSet, 2)));
             return button;
@@ -77,7 +77,7 @@ namespace temp1.Factories
         public MouseControl CreateTextButton(int resourceSet)
         {
             var button = new MouseControl();
-            button.DrawingPiece = LoadTxr(resourceSet, 0);
+            button.Background = LoadTxr(resourceSet, 0);
             button.MouseReaction.AddReaction(new ControlHover(LoadTxr(resourceSet, 1)));
             button.MouseReaction.AddReaction(new ControlActive(LoadTxr(resourceSet, 2)));
             return button;
@@ -104,7 +104,7 @@ namespace temp1.Factories
             else
                 texture = new TexturePiece(_content.Load<Texture2D>(textureName));
                 
-            panel.DrawingPiece = texture;
+            panel.Background = texture;
             return panel;
         }
 
