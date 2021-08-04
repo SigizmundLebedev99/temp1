@@ -40,7 +40,6 @@ namespace temp1.Screens
             var label = _factory.CreateLabel(1);
             label.OffsetFrom = Anchors.TopCenter;
             label.Offset = new Vector2(0, 40);
-            label.Size = new Vector2(300, 0);
             label.Text.Value = "My cool game";
 
             var content = new ContentControll();
@@ -66,7 +65,7 @@ namespace temp1.Screens
 
             var border = new Control();
             border.Size = _desktop.Size - new Vector2(25);
-            border.Background = new TexturePiece(game.Content.Load<Texture2D>("ui/border"), border.Size.ToPoint(), new Margin(40, 40));
+            border.Background = new TexturePiece(game.Content.Load<Texture2D>("ui/background"), new DrawOptions(border.Size));
             border.OffsetFrom = Anchors.Center;
 
             var panel = _factory.CreatePanel(4);

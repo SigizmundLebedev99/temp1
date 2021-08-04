@@ -10,23 +10,20 @@ namespace temp1.UI.Text
 {
     public class TextPiece
     {
-        private TextAlign vertical = TextAlign.Center;
-        public TextAlign Vertical { get => vertical; set { vertical = value; ComputeTextLayout(); } }
-
-        private TextAlign horizontal = TextAlign.Center;
-        public TextAlign Horizontal { get => horizontal; set { horizontal = value; ComputeTextLayout(); } }
+        public TextAlign Vertical { get; set; } = TextAlign.Center;
+        public TextAlign Horizontal { get; set; } = TextAlign.Center;
 
         private BitmapFont font;
         public BitmapFont Font { get => font; set { font = value; ComputeTextLayout(); } }
 
         private Control control;
         private List<TextSpan> paragrath = new List<TextSpan>();
-        private float paragrathHeight;
 
-        private string text = "";
-        public string Value { get => text; set { text = value ?? ""; ComputeTextLayout(); } }
+        private string _text = "";
+        public string Value { get => _text; set { _text = value ?? ""; ComputeTextLayout(); } }
 
-        public Vector2 Size => new Vector2(control.Size.X, paragrathHeight);
+        private Vector2 _size = new Vector2();
+        public Vector2 Size => _size;
 
         public TextPiece(Control control, BitmapFont font)
         {
@@ -48,20 +45,24 @@ namespace temp1.UI.Text
 
         public void Draw(SpriteBatch batch, Vector2 position, Vector2 scale, float rotation, float depth = 0)
         {
-            var pOffset = new Vector2(0, ComputeOffset(paragrathHeight, control.Size.Y, Vertical));
+            if (_text == String.Empty)
+                return;
+            var paragrathOffset = new Vector2(0, ComputeOffset(_size.Y, control.Size.Y, Vertical));
             for (var i = 0; i < paragrath.Count; i++)
             {
                 var span = paragrath[i];
-                batch.DrawString(font, span.Text, position + span.Offset + pOffset, Color.White, rotation, Vector2.Zero, scale, SpriteEffects.None, depth);
+                var spanOffset = new Vector2(ComputeOffset(span.Width, control.Size.X, Horizontal), i * span.Height);
+                batch.DrawString(font, span.Text, position + spanOffset + paragrathOffset, Color.White, rotation, Vector2.Zero, scale, SpriteEffects.None, depth);
             }
         }
 
         public void ComputeTextLayout()
         {
-            var lines = text.Split('\n');
+            var lines = _text.Split('\n');
             paragrath.Clear();
 
-            float lineY = 0;
+            float totalHeight = 0;
+            float maxWidth = 0;
             foreach (var line in lines)
             {
                 var words = line.Split(' ').AsSpan();
@@ -69,13 +70,14 @@ namespace temp1.UI.Text
                     continue;
                 while (words.Length > 0)
                 {
-                    var span = CutOffLine(words, lineY, out int wordsConsumed);
+                    var span = CutOffLine(words, totalHeight, out int wordsConsumed);
                     paragrath.Add(span);
-                    lineY += span.Height;
+                    maxWidth = Math.Max(span.Width, maxWidth);
+                    totalHeight += span.Height;
                     words = words.Slice(wordsConsumed);
                 }
             }
-            paragrathHeight = lineY;
+            _size = new Vector2(maxWidth, totalHeight);
         }
 
         private TextSpan CutOffLine(Span<string> words, float lineY, out int wordsConsumed)
@@ -108,7 +110,6 @@ namespace temp1.UI.Text
 
             return new TextSpan
             {
-                Offset = new Vector2(ComputeOffset(lineWidth, control.Size.X, Horizontal), lineY),
                 Width = lineWidth,
                 Height = lineHeight,
                 Text = line.ToString()
@@ -132,6 +133,5 @@ namespace temp1.UI.Text
         public string Text;
         public float Width;
         public float Height;
-        public Vector2 Offset;
     }
 }

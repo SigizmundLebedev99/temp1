@@ -10,6 +10,8 @@ namespace temp1.UI
         public int Vertical { get => Top + Bottom; }
         public int Horizontal { get => Left + Right; }
 
+        public static Margin Zero => new Margin(0,0);
+
         public Margin(int top, int right, int bottom, int left)
         {
             Top = top;

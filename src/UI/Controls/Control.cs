@@ -28,7 +28,10 @@ namespace temp1.UI.Controls
         private Vector2? size;
         public Vector2 Size
         {
-            get => size ?? Background.Bounds.Size.ToVector2();
+            get
+            {
+                return size ?? (Background is NullObjectPiece ? Text.Size : Background.Size);
+            }
             set { size = value; this.OnSizeChanged?.Invoke(); }
         }
 

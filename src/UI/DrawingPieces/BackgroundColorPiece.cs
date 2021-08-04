@@ -17,11 +17,7 @@ namespace temp1.UI.DrawingPieces
             this.control = control;
         }
 
-        public int Width => 0;
-
-        public Rectangle Bounds => new Rectangle();
-
-        public int Height => 0;
+        public Vector2 Size => new Vector2();
 
         public void Dispose()
         {
@@ -31,16 +27,6 @@ namespace temp1.UI.DrawingPieces
         public void Draw(SpriteBatch batch, Vector2 position, float depth = 0)
         {
             batch.Draw(texture, position, null, Color.White, 0, Vector2.Zero, control.Size, SpriteEffects.None, depth);
-        }
-
-        public void Draw(SpriteBatch batch, Vector2 position, Vector2 scale, float depth = 0)
-        {
-            this.Draw(batch, position);
-        }
-
-        public void Draw(SpriteBatch batch, Vector2 position, Vector2 scale, float rotation, float depth = 0)
-        {
-            this.Draw(batch, position);
         }
 
         public void Update(GameTime time)
