@@ -30,7 +30,7 @@ namespace temp1.UI.Controls
         {
             get
             {
-                return size ?? (Background is NullObjectPiece ? Text.Size : Background.Size);
+                return size ?? Background.Size ?? Text.Size;
             }
             set { size = value; this.OnSizeChanged?.Invoke(); }
         }

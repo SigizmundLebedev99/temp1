@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
@@ -44,24 +45,28 @@ namespace temp1.Screens
 
             var content = new ContentControll();
             content.OffsetFrom = Anchors.Center;
+            var offset = new Vector2(0, -90);
 
-            var start = _factory.CreateTextButton(0);
-            start.OffsetFrom = Anchors.Center;
-            start.Offset = new Vector2(0, -80);
-            start.Text.Value = "New game";
-            start.MouseUp += (s, e) =>
+            MouseControl AddButton(string text, Action onClick)
             {
-                LoadNewGame();
-            };
+                var button = _factory.CreateTextButton(0);
+                button.OffsetFrom = Anchors.Center;
+                button.Offset = offset;
+                button.Text.Value = text;
+                button.MouseUp += (s, e) => onClick();
+                offset.Y += 45;
+                return button;
+            }
 
-            var options = _factory.CreateTextButton(0);
-            options.OffsetFrom = Anchors.Center;
-            options.Text.Value = "Options";
+            var start = AddButton("New game", LoadNewGame);
 
-            var exit = _factory.CreateTextButton(0);
-            exit.OffsetFrom = Anchors.Center;
-            exit.Offset = new Vector2(0, 80);
-            exit.Text.Value = "Exit";
+            var load = AddButton("Load game", () => {
+                ScreenManager.LoadScreen(new SavesScreen(game));
+            });
+
+            var options = AddButton("Options", () => {});
+
+            var exit = AddButton("Exit", () => Game.Exit());
 
             var border = new Control();
             border.Size = _desktop.Size - new Vector2(25);
@@ -73,6 +78,7 @@ namespace temp1.Screens
 
             content.Children.Add(panel);
             content.Children.Add(start);
+            content.Children.Add(load);
             content.Children.Add(options);
             content.Children.Add(exit);
 

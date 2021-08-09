@@ -6,23 +6,6 @@ using MonoGame.Extended.Tiled;
 
 namespace temp1.Components
 {
-    interface ITrigger
-    {
-        void Check(in Entity self, MoveAction action, in Entity actionEntity);
-    }
-
-    class ActionTrigger : ITrigger
-    {
-        public Action<MoveAction, Entity> Invoke;
-
-        public virtual void Check(in Entity self, MoveAction action, in Entity actionEntity)
-        {
-            var selfPosition = self.Get<Position>();
-            if (action.To.GridCell() == selfPosition.GridCell)
-                Invoke?.Invoke(action, actionEntity);
-        }
-    }
-
     class Portal : ITrigger
     {
         private Rectangle Zone;

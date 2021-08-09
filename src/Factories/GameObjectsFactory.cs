@@ -66,7 +66,7 @@ namespace temp1
 
             if (objType.Handler == null || !Handlers.TryGetValue(objType.Handler, out var handler))
                 return entity;
-            entity.Set(objType);
+            //entity.Set(objType);
             handler(entity, objType, tiledMapObj);
 
             return entity;

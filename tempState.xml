@@ -1,5 +1,5 @@
 <config current_map="tiled/map">
-    <map name="tiled/map">    
+  <map name="tiled/map">
 Entity 1
 ComponentType Position temp1.Components.Position, rpg
 Component Position {
@@ -91,30 +91,33 @@ Component Cursor {
 Entity 2
 Component Position {
 	Value {
-		X 1040
-		Y 592
+		X 784
+		Y 442
 	}
 }
 Component RenderObjectInfo {
-	Path "images/player.sf"
+	Path "images/enemy.sf"
 	Origin {
 		X 26
 		Y 65
 	}
 	Region {
-		X 52
-		Y 146
+		X 312
+		Y 0
 		Width 52
 		Height 73
 	}
 }
-Component Storage {
-	Items [
-	]
-}
-ComponentType Player temp1.Components.Player, rpg
-Component Player
-{
+Component GameObjectType Enemy
+ComponentSameAs Serializable 1
+Component Cursor {
+	Bounds {
+		X -26
+		Y -65
+		Width 52
+		Height 73
+	}
+	SpriteName "sword"
 }
 ComponentType ActionPoints temp1.Components.ActionPoints, rpg
 Component ActionPoints {
@@ -124,8 +127,25 @@ Component ActionPoints {
 ComponentType AllowedToAct temp1.Components.AllowedToAct, rpg
 Component AllowedToAct {
 }
-    </map>
-    
-    <map name="tiled/cave">
-    </map>
+ComponentType AIFactory temp1.Models.Serialization.AIFactory, rpg
+Component AIFactory $type temp1.Models.Serialization.RandomMovementAIFactory, rpg
+{
+}
+ComponentType String System.String, System.Private.CoreLib
+Component String null
+ComponentType Direction temp1.Components.Direction, rpg
+Component Direction {
+	from {
+		X 784
+		Y 464
+	}
+	to {
+		X 784
+		Y 432
+	}
+	angle 0
+}
+</map>
+  <map name="tiled/cave">
+  </map>
 </config>

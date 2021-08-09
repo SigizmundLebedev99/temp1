@@ -12,9 +12,11 @@ namespace temp1.UI.Controls
         Horizontal
     }
 
-    class WrapContent : ContentControll
+    class StackPanel : ContentControll
     {
         public Orientation Orientation;
+
+        public bool Wrap;
 
         public override void Draw(GameTime time, SpriteBatch batch, Vector2 position, float depth = 0)
         {
@@ -32,7 +34,8 @@ namespace temp1.UI.Controls
             var maxHeight = 0f;
             for (var i = 0; i < Children.Count; i++)
             {
-                if(position.X + Children[i].Size.X > start + Size.X){
+                if (position.X + Children[i].Size.X > start + Size.X)
+                {
                     position.X = start;
                     position.Y += maxHeight;
                     maxHeight = 0;

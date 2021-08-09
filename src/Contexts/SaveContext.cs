@@ -9,12 +9,14 @@ using temp1.Models.Serialization;
 using System.Text;
 using System;
 using System.Buffers;
+using System.Collections.Generic;
 
 namespace temp1
 {
     static class SaveContext
     {
         const string TempFile = "tempState.xml";
+        const string savesFolder = "saves/";
 
         public static void LoadGame(string saveFile)
         {
@@ -24,11 +26,27 @@ namespace temp1
             LoadMap();
         }
 
+        public static void LoadGame(FileInfo saveFile)
+        {
+            if (File.Exists(TempFile))
+                File.Delete(TempFile);
+            saveFile.CopyTo(TempFile);
+            LoadMap();
+        }
+
         public static void SaveGame(string saveName)
         {
-            if (!File.Exists(TempFile))
-                return;
-            File.Copy(TempFile, "gamedata/saves/" + saveName + ".xml");
+            var gameDataXml = LoadXml();
+            SaveMapState(gameDataXml);
+            File.Copy(TempFile, savesFolder + saveName + ".xml");
+        }
+
+        public static IEnumerable<FileInfo> GetSaves()
+        {
+            var dir = new DirectoryInfo(savesFolder);
+            if (!dir.Exists)
+                dir.Create();
+            return dir.GetFiles();
         }
 
         public static void SwitchMap(string newMap)
@@ -80,24 +98,27 @@ namespace temp1
             var textSerializer = new TextSerializer(context);
 
             var entities = GameContext.EntitySets.Serializable.GetEntities().ToArray();
-            var buffer = ArrayPool<byte>.Shared.Rent(4 * 1024);
 
-            using var stream = new MemoryStream(buffer);
+            using var stream = new MemoryStream();
 
             textSerializer.Serialize(stream, entities);
 
             var element = GetMapState(gameDataXml, GameContext.Map.MapName);
 
-            element.InnerText = Encoding.UTF8.GetString(buffer, 0, (int)stream.Position);
-
-            ArrayPool<byte>.Shared.Return(buffer);
+            element.InnerText = Encoding.UTF8.GetString(stream.ToArray());
         }
 
         private static TextSerializationContext GetSetializationContext()
         {
             return new TextSerializationContext()
-
+            .Marshal<BaseAction, string>(_ => null)
             .Marshal<IGameAI, AIFactory>(ai => ai.GetFactory())
+            .Marshal<RenderingObject, RenderObjectInfo>(from => new RenderObjectInfo()
+            {
+                Path = from.ResourceName,
+                Region = from.Bounds,
+                Origin = new Origin { X = from.Origin.X, Y = from.Origin.Y }
+            })
             .Marshal<GameObjectTypeInfo, GameObjectTypeName>(from => new GameObjectTypeName { Value = from.TypeName })
             .Unmarshal<GameObjectTypeName, GameObjectTypeInfo>(from => GameContext.GameObjects.GetGameObjectTypeInfo(from.Value))
             .Unmarshal<AIFactory, IGameAI>(factory => factory.Get())

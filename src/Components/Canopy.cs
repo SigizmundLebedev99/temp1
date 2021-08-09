@@ -1,4 +1,3 @@
-
 using MonoGame.Extended.Tiled;
 
 namespace temp1.Components

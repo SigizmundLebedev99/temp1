@@ -27,7 +27,7 @@ namespace temp1.UI
 
             var leftFrame = new ContentControll();
 
-            var leftItems = new WrapContent();
+            var leftItems = new StackPanel();
             leftItems.OffsetFrom = Anchors.Center;
 
             var leftPanel = factory.CreatePanel(4);
@@ -52,7 +52,7 @@ namespace temp1.UI
 
             var rightFrame = new ContentControll();
 
-            var rightItems = new WrapContent();
+            var rightItems = new StackPanel();
             rightItems.OffsetFrom = Anchors.Center;
 
             var rightPanel = factory.CreatePanel(4);

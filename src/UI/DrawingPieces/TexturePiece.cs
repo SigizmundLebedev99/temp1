@@ -28,14 +28,14 @@ namespace temp1.UI.DrawingPieces
             this.options = options;
         }
 
-        public Vector2 Size => options.Size ?? texture.Bounds.Size.ToVector2();
+        public Vector2? Size => options.Size ?? texture.Bounds.Size.ToVector2();
 
         public void Dispose()
         { }
 
         public void Draw(SpriteBatch batch, Vector2 position, float depth = 0)
         {
-            var destination = new Rectangle(position.ToPoint(), (Size * options.Scale).ToPoint());
+            var destination = new Rectangle(position.ToPoint(), (Size.Value * options.Scale).ToPoint());
             if (options.Mode == StretchMode.Repeat)
                 Draw(batch, texture, options.Source, destination, true);
             else

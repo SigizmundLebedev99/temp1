@@ -24,7 +24,7 @@ namespace temp1.UI
             frame.OffsetFrom = Anchors.Center;
 
             #region inventory
-            var items = new WrapContent();
+            var items = new StackPanel();
             items.OffsetFrom = Anchors.Center;
 
             var panel = factory.CreatePanel(4);

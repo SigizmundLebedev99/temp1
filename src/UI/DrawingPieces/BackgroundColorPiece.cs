@@ -17,7 +17,7 @@ namespace temp1.UI.DrawingPieces
             this.control = control;
         }
 
-        public Vector2 Size => new Vector2();
+        public Vector2? Size => null;
 
         public void Dispose()
         {
